@@ -1,26 +1,29 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+// src/App.tsx
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+import React, { useState } from 'react';
+import './App.css'; 
+import SplashScreen from "./components/SplashScreen/SplashScreen";
+import LoginManager from "./components/LoginManager/LoginManager"; 
+
+const App: React.FC = () => {
+    // État pour contrôler l'affichage
+    const [isSplashVisible, setIsSplashVisible] = useState(true);
+
+    // Fonction pour changer l'état au clic sur le logo
+    const handleLogoClick = () => {
+        setIsSplashVisible(false); // Passe à l'écran de connexion
+    };
+
+    if (isSplashVisible) {
+        // Affiche l'écran de démarrage. Au clic, il appelle handleLogoClick
+        return <SplashScreen onLogoClick={handleLogoClick} />;
+    }
+
+    // Affiche UNIQUEMENT le LoginManager. 
+    // Le LoginManager doit gérer son propre fond blanc, centrage et taille 100vh.
+    return (
+        <LoginManager /> 
+    );
 }
 
 export default App;

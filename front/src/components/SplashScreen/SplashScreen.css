@@ -1,0 +1,62 @@
+/* src/components/SplashScreen/SplashScreen.css */
+
+.splash-container {
+  /* PAS de position: fixed; car le composant sera retiré */
+  width: 100vw;
+  height: 100vh;
+  
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  
+  background-color: white; 
+  /* PAS de z-index: 9999; car il ne superpose rien */
+}
+
+.splash-content {
+  /* 👈 ESSENTIEL : Indique que l'élément est cliquable */
+  cursor: pointer; 
+  /* Centrage du contenu à l'intérieur du container */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.splash-logo {
+  /* Dimensions du logo pour qu'il soit bien visible */
+  max-width: 400px; /* Taille maximale pour le logo, ajustez si besoin */
+  height: auto;
+  margin-bottom: 20px; /* Espace sous le logo */
+  
+  /* (Optionnel) Animation légère */
+  animation: fadeInScale 1s ease-out;
+}
+
+/* Styles pour le texte "INDUSTRIE" et "BÂTIR POUR VIVRE" */
+.splash-text-industrie {
+  font-size: 2em; /* Taille plus grande pour "INDUSTRIE" */
+  font-weight: bold;
+  color: #666; /* Gris légèrement plus foncé */
+  margin-bottom: 5px; /* Petit espace avant la ligne */
+  letter-spacing: 2px; /* Espacement des lettres pour le style */
+}
+
+.splash-line {
+  width: 100px; /* Longueur de la ligne verte */
+  height: 3px;
+  background-color: #008080; /* Vert turquoise, ajustez si besoin pour coller au logo */
+  margin-bottom: 15px; /* Espace sous la ligne */
+}
+
+.splash-slogan {
+  font-size: 1.5em; /* Taille pour le slogan */
+  font-weight: normal;
+  color: #008080; /* Couleur verte pour le slogan */
+  letter-spacing: 1px;
+}
+
+@keyframes fadeInScale {
+  from { opacity: 0; transform: scale(0.8); }
+  to { opacity: 1; transform: scale(1); }
+}

@@ -1,0 +1,132 @@
+/* src/LoginManager.css */
+
+.login-manager-container {
+  /* 1. Dimensions : Prend toute la hauteur et largeur de la fenêtre */
+  width: 100vw; 
+  height: 100vh; /* 👈 ESSENTIEL pour éviter la barre de défilement verticale */
+  
+  /* 2. Centrage du contenu (Login Box) */
+  display: flex;
+  flex-direction: column; 
+  justify-content: center; /* Centrage vertical */
+  align-items: center;    /* Centrage horizontal */
+  
+  /* 3. Style visuel */
+  background-color: white; /* Fond blanc comme demandé */
+  color: black; 
+  padding: 0; /* Suppression du padding pour maximiser la zone de centrage */
+  
+  /* 4. Anti-défilement */
+  overflow: hidden; /* 👈 ESSENTIEL pour empêcher toute barre de défilement */
+}
+
+.flag-lock-container {
+  /* Assurez-vous que les drapeaux et cadenas ne poussent pas l'élément centré */
+  position: absolute; /* Positionnement absolu par rapport au conteneur */
+  top: 40px;
+  width: 90%;
+  max-width: 1000px;
+  display: flex;
+  justify-content: space-between;
+}
+
+.flag {
+  font-size: 2.5em;
+}
+
+.lock {
+  font-size: 2.5em;
+}
+
+.login-box-wrapper {
+  /* Le wrapper pour centrer le formulaire et le logo */
+  background-color: transparent; 
+  color: black;
+  border-radius: 10px;
+  padding: 40px 60px;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  width: 90%;
+  max-width: 1000px;
+  /* Retirez toute marge verticale qui pourrait causer un débordement */
+  margin-top: 0;
+  margin-bottom: 0;
+}
+
+.login-title {
+  font-size: 1.8em;
+  font-weight: bold;
+  margin-bottom: 30px;
+}
+
+.input-group {
+  display: flex;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.icon {
+  font-size: 1.5em;
+  margin-right: 10px;
+  color: #666; /* Couleur de l'icône de personne */
+}
+
+.input-field {
+  flex-grow: 1;
+  padding: 15px;
+  background-color: #e0e0e0; /* Couleur de fond des champs (gris clair) */
+  border: none;
+  border-radius: 8px;
+  font-size: 1em;
+}
+
+/* Bouton Connexion */
+.connexion-button {
+  width: 150px;
+  padding: 10px;
+  background-color: #f7931e; /* Orange du logo Bouygues ou un orange/rose doux */
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 1.1em;
+  margin-top: 10px;
+  cursor: pointer;
+  box-shadow: 0 4px #d87000;
+  transition: background-color 0.2s;
+}
+
+.connexion-button:hover {
+  background-color: #d87000;
+}
+
+/* Section Logo */
+.logo-area {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  border-left: 1px solid #ccc; /* Séparateur vertical invisible */
+  padding-left: 40px;
+}
+
+.login-logo {
+  max-width: 350px;
+  height: auto;
+  margin-bottom: 20px;
+}
+
+.login-industrie {
+  font-size: 1.5em;
+  font-weight: bold;
+  color: #666; 
+  margin-bottom: 5px;
+}
+
+.login-line {
+  width: 100%;
+  max-width: 250px;
+  height: 3px;
+  background-color: #008080; /* Vert turquoise */
+}
