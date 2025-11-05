@@ -1,8 +1,12 @@
-import React from 'react';
 import logo from './logo.svg';
 import './App.css';
+import PopupCommentaire from './popup-commentaire/popup-commentaire';
+import { useState } from 'react';
 
 function App() {
+
+  const [visible, setVisible] = useState(false);
+
   return (
     <div className="App">
       <header className="App-header">
@@ -19,6 +23,20 @@ function App() {
           Learn React
         </a>
       </header>
+
+      <div>
+      {!visible && (
+      <button onClick={() => setVisible(true)}>
+        Ouvrir le popup
+      </button>
+      )}
+
+      {visible && (
+        <PopupCommentaire onClose = {() => setVisible(false)}/>
+      )}
+    </div>
+
+      
     </div>
   );
 }

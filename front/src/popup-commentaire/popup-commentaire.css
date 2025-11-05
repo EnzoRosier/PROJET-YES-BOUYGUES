@@ -1,0 +1,12 @@
+.popup-commentaire {
+  position: fixed;
+  bottom: 4%;
+  right: 3% ;
+  width: 92%;
+  height: 92%;
+  background-color: purple;
+  border: 1% solid #ccc;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  border-radius: 5px;
+  z-index: 1000;
+}
