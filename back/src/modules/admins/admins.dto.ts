@@ -22,7 +22,7 @@ export declare class CreateAdminsDto {
   admins: CreateAdminDto[];
 }
 
-// Mise à jour d'un livre
+// Mise à jour d'un admin
 export declare class UpdateAdminDto {
   @IsString()
   @IsOptional()

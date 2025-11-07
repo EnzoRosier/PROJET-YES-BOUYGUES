@@ -25,7 +25,9 @@ export class AdminRepository {
 
   //création d'un admin
   public async createAdmin(admin: CreateAdminDto): Promise<AdminModel> {
-    // Maintenant on peut créer une nouvelle entrée d'un livre et la sauvegarder
+    // Maintenant on peut créer une nouvelle entrée d'un admin et la sauvegarder
+
+    var hashedPassword=admin.password
     const newAdmin = this.adminRepository.create({
       mail: admin.mail,
       password: admin.password,
