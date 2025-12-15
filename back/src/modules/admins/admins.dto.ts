@@ -1,4 +1,10 @@
-import { IsBoolean, IsInt, IsOptional, IsString } from 'class-validator';
+import {
+  IsArray,
+  IsBoolean,
+  IsInt,
+  IsOptional,
+  IsString,
+} from 'class-validator';
 
 // Creation d'un admin
 export declare class CreateAdminDto {
@@ -12,6 +18,9 @@ export declare class CreateAdminDto {
   lastName: string;
   @IsBoolean()
   isSuperAdmin: boolean;
+  @IsOptional()
+  @IsArray()
+  worksiteIds?: string[];
 }
 
 // Création de plusieurs admins
@@ -32,4 +41,7 @@ export declare class UpdateAdminDto {
   password: string;
   @IsString()
   adminId: string;
+  @IsOptional()
+  @IsArray()
+  worksiteIds?: string[];
 }

@@ -1,4 +1,11 @@
-import { BaseEntity, Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import {
+  BaseEntity,
+  Column,
+  Entity,
+  OneToMany,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
+import { WorksiteEntity } from './worksite.entity';
 @Entity('admins')
 export class AdminEntity extends BaseEntity {
   @PrimaryGeneratedColumn('uuid')
@@ -18,4 +25,7 @@ export class AdminEntity extends BaseEntity {
 
   @Column({ name: 'isSuperAdmin', type: 'boolean' })
   isSuperAdmin: boolean;
+
+  @OneToMany(() => WorksiteEntity, (worksite) => worksite.respoChantier)
+  worksites: WorksiteEntity[];
 }

@@ -1,0 +1,46 @@
+ADMIN REQUESTS
+
+--- RECUP ADMINS ---
+GET
+localhost:3000/admins
+
+--- RECUP 1 ADMIN AVEC ID ---
+GET
+localhost:3000/admins/[idAdmin]
+
+--- CREATE ADMIN ---
+POST
+localhost:3000/admins
+{
+  "mail": "super.mario@gmail.com",
+  "password": "yowaddup37",
+  "firstName": "Mario",
+  "lastName": "Super",
+  "isSuperAdmin": true
+  "worksiteIds": [IdWorksite] (OPTIONAL)
+}
+
+WORKSITE REQUESTS
+
+--- RECUP WORKSITES ---
+GET
+localhost:3000/worksite
+
+--- RECUP 1 WORKSITE AVEC ID ---
+GET
+localhost:3000/worksite/[idWorksite]
+
+--- CREATE WORKSITE ---
+POST
+localhost:3000/worksite/new
+BODY : 
+{
+  "nom": "yowaddup",
+  "addresse": "69 rue waddup",
+  "description": "Un super site",
+  "dateFin": "2026-01-01",
+  "nomClient": "Joe Biden",
+  "nomRespoSec": "Joe Biden2",
+  "nbCollaborateur": 233,
+  "joursSansAccident": 1
+}
