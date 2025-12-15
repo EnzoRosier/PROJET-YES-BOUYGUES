@@ -22,4 +22,6 @@ export class AdminPresenter {
       isSuperAdmin: data.isSuperAdmin,
     });
   }
+
+  
 }

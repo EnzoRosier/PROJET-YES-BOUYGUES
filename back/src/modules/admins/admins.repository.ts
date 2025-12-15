@@ -28,7 +28,7 @@ export class AdminRepository {
   public async createAdmin(admin: CreateAdminDto): Promise<AdminModel> {
     // Maintenant on peut créer une nouvelle entrée d'un admin et la sauvegarder
 
-    const saltRounds=11;
+    const saltRounds=12;
     const hashedPassword = await bcrypt.hash(admin.password, saltRounds);
     //var hashedPassword = admin.password;
     const newAdmin = this.adminRepository.create({
@@ -41,5 +41,10 @@ export class AdminRepository {
     const returnedAdmin = this.adminRepository.save(newAdmin);
 
     return returnedAdmin;
+  }
+  public async findByMail(mail: string) {
+    return this.adminRepository.findOne({
+      where: { mail },
+    });
   }
 }
