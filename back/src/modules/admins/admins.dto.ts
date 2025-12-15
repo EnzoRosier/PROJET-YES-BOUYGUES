@@ -1,10 +1,4 @@
-import {
-  IsArray,
-  IsBoolean,
-  IsInt,
-  IsOptional,
-  IsString,
-} from 'class-validator';
+import { IsBoolean, IsEmail, IsInt, IsOptional, IsString, MinLength } from 'class-validator';
 
 // Creation d'un admin
 export declare class CreateAdminDto {
@@ -41,7 +35,12 @@ export declare class UpdateAdminDto {
   password: string;
   @IsString()
   adminId: string;
-  @IsOptional()
-  @IsArray()
-  worksiteIds?: string[];
+}
+//login
+export class LoginDto {
+  @IsEmail()
+  mail: string;
+  @IsString()
+  @MinLength(8)
+  password: string;
 }

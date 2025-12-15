@@ -1,6 +1,6 @@
 import { Body, Controller, Get, Param, Post } from '@nestjs/common';
 //import { patch } from 'axios';
-import { CreateAdminDto } from './admins.dto';
+import { CreateAdminDto, LoginDto } from './admins.dto';
 import { AdminService } from './admins.service';
 import { AdminModel, CreateAdminModel } from './admins.model';
 
@@ -23,5 +23,13 @@ export class AdminController {
     @Body() input: CreateAdminDto,
   ): Promise<CreateAdminModel> {
     return this.adminService.createAdmin(input);
+  }
+
+  @Post('login')
+  async login(@Body() loginDto: LoginDto) {
+    return this.adminService.login(
+      loginDto.mail,
+      loginDto.password,
+    );
   }
 }
