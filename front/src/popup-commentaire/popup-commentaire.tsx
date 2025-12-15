@@ -1,8 +1,11 @@
-import { useState } from 'react';
+import { useState, useRef } from 'react';
 import './popup-commentaire.css';
 
 export default function PopupCommentaire( {onClose}: {onClose: () => void} ) {
   const [commentaire, setCommentaire] = useState("");
+  const [preview, setPreview] = useState<string | null>(null);
+  const audioRef = useRef<HTMLAudioElement>(null);
+
 
   const handleClose = () => {
     setCommentaire(""); // On vide le commentaire s'il y avait un reste pour ne pas gêner les interactions futures
@@ -14,21 +17,48 @@ export default function PopupCommentaire( {onClose}: {onClose: () => void} ) {
 
     // Envoi des infos au serveur
 
-
     onClose(); // On ferme le popup après soumission
   }
 
+  // Gestion de l'aperçu de l'image
+  function handleImage(e: React.ChangeEvent<HTMLInputElement>) {
+    const file = e.target.files?.[0];
+    if (file) {
+      setPreview(URL.createObjectURL(file));
+    }
+  }
+
+  // Lecture du son au montage du composant
+  function lireQuestion() {
+    audioRef.current?.play();
+  }
   return (
     <div className="popup-commentaire">
-      <h1>Popup Commentaire</h1>
-      <p>Ceci est un composant de popup pour les commentaires.</p>
-      <textarea
-        value={commentaire}
-        onChange={(e) => setCommentaire(e.target.value)}
-        placeholder="Écrivez votre commentaire ici..."
-      />
-      <button onClick = {handleClose}>Fermer</button>
-      <button onClick = {handleSubmit}>Envoyer</button>
+      <img src="/ressources/Logo.png" alt="Logo" className="logo-popup"/>
+
+      <h1 className="titre-popup">Décrivez votre problème/remarque
+        <button onClick={lireQuestion} className="bouton-audio">
+          <img src="/ressources/icone-audio.png" alt="Écouter la question"/>
+        </button>
+      </h1>
+      
+      <audio ref={audioRef} src="/ressources/sons/titre-popup.mp3" />
+      
+      <div className="zone-texte">
+        <p>Expliquez ici votre cas :</p>
+        <textarea className="zone-commentaire" value={commentaire} onChange={(e) => setCommentaire(e.target.value)} placeholder="Écrivez votre commentaire..."/>
+        
+        <label htmlFor="upload-image" className="bouton-upload">
+          <img src="/appareil-photo.png" alt="Choisir une image" />
+        </label>
+        <input id="upload-image" className="upload-file" type="file" accept="image/*" onChange={handleImage}/>
+        {preview && (
+          <img src={preview} alt="Aperçu" style={{ maxWidth: "300px", marginTop: "1rem" }}/>
+        )}
+      </div>
+
+      <button className="popup-close" onClick = {handleClose}>Fermer</button>
+      <button className="popup-validate" onClick = {handleSubmit}>Valider</button>
     </div>
   );
 }
