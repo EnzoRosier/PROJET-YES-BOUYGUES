@@ -7,7 +7,7 @@ import { AdminModule } from './modules/admins/admins.module';
 import { WorksiteModule } from './modules/worksite/worksite.module';
 
 @Module({
-  imports: [DatabaseModule,ThrottlerModule.forRoot([{ttl:60000,limit:10,}]), AdminModule,],
+  imports: [DatabaseModule,ThrottlerModule.forRoot([{ttl:60000,limit:10,}]), AdminModule,WorksiteModule],
   controllers: [AppController],
   providers: [AppService],
 })
