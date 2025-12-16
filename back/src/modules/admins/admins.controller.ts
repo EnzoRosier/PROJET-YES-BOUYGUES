@@ -3,6 +3,7 @@ import { Body, Controller, Get, Param, Post } from '@nestjs/common';
 import { CreateAdminDto, LoginDto } from './admins.dto';
 import { AdminService } from './admins.service';
 import { AdminModel, CreateAdminModel } from './admins.model';
+import { Throttle } from '@nestjs/throttler';
 
 @Controller('admins')
 export class AdminController {
@@ -26,6 +27,7 @@ export class AdminController {
   }
 
   @Post('login')
+  @Throttle({ default: { limit: 3, ttl: 60000 } })
   async login(@Body() loginDto: LoginDto) {
     return this.adminService.login(
       loginDto.mail,
