@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { AdminModel } from './admins.model';
+import { AdminModel, CreateAdminModel } from './admins.model';
 import { CreateAdminDto } from './admins.dto';
 import { DataSource } from 'typeorm';
 import { AdminEntity } from '../database/entities/admin.entity';
@@ -25,7 +25,7 @@ export class AdminRepository {
   }
 
   //création d'un admin
-  public async createAdmin(admin: CreateAdminDto): Promise<AdminModel> {
+  public async createAdmin(admin: CreateAdminModel): Promise<AdminModel> {
     // Maintenant on peut créer une nouvelle entrée d'un admin et la sauvegarder
 
     const saltRounds=12;

@@ -1,4 +1,12 @@
-import { IsBoolean, IsEmail, IsInt, IsOptional, IsString, MinLength } from 'class-validator';
+import {
+  IsBoolean,
+  IsEmail,
+  IsInt,
+  IsOptional,
+  IsString,
+  MinLength,
+  IsArray,
+} from 'class-validator';
 
 // Creation d'un admin
 export declare class CreateAdminDto {
@@ -12,6 +20,9 @@ export declare class CreateAdminDto {
   lastName: string;
   @IsBoolean()
   isSuperAdmin: boolean;
+  @IsOptional()
+  @IsArray()
+  worksiteIds?: string[];
 }
 
 // Création de plusieurs admins
