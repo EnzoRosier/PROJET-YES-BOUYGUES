@@ -7,6 +7,8 @@ function App() {
 
   const [visible, setVisible] = useState(false);
 
+  const [commentaire, setCommentaire] = useState("");
+
   return (
     <div className="App">
       <header className="App-header">
@@ -32,7 +34,7 @@ function App() {
       )}
 
       {visible && (
-        <PopupCommentaire onClose = {() => setVisible(false)}/>
+        <PopupCommentaire onClose = {() => setVisible(false)} setCommentaire={setCommentaire} commentaire={commentaire}/>
       )}
     </div>
 
