@@ -15,18 +15,23 @@ function App() {
     <div className="App">
       <Routes>
         <Route path="/" element={<Accueil />} />
+        {/* Ajouter ici les autres routes comme /formulaire, /login, etc. */}
+
       </Routes>
-      <div>
+
+      
+      {/* <div>   Exemple d'utilisation du popup commentaire
       {!visible && (
       <button onClick={() => setVisible(true)}>
         Ouvrir le popup
       </button>
       )}
 
+      
       {visible && (
         <PopupCommentaire onClose = {() => setVisible(false)} setCommentaire={setCommentaire} commentaire={commentaire}/>
       )}
-    </div>
+    </div> */}
 
       
     </div>
