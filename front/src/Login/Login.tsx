@@ -5,9 +5,38 @@ function LoginPage() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
-  const handleLogin = () => {
-    console.log('Login clicked:', { email, password });
-  };
+const handleLogin = async () => {
+  try {
+    const response = await fetch('http://localhost:3001/admins/login', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        mail: email,
+        password: password,
+      }),
+    });
+
+    const data = await response.json();
+    
+    // 👉 le token JWT renvoyé par le backend
+    const token = data.accessToken;
+    console.log(token);
+
+    // ⚠️ simple pour le moment (on en reparlera)
+    localStorage.setItem('jwt', token);
+
+    console.log('JWT reçu :', token);
+
+    // exemple : redirection
+    // navigate('/dashboard');
+
+  } catch (error) {
+    console.log('Erreur login');
+    //alert('Erreur de connexion');
+  }
+};
 
   return (
     <div className="login-page">
