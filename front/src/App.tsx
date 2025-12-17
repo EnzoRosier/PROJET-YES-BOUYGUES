@@ -1,6 +1,7 @@
 import logo from './logo.svg';
 import './App.css';
 import PopupCommentaire from './popup-commentaire/popup-commentaire';
+import Stats from './statistiques/stats';
 import { useState } from 'react';
 
 function App() {
@@ -8,7 +9,7 @@ function App() {
   const [visible, setVisible] = useState(false);
 
   return (
-    <div className="App">
+    /*<div className="App">
       <header className="App-header">
         <img src={logo} className="App-logo" alt="logo" />
         <p>
@@ -34,9 +35,10 @@ function App() {
       {visible && (
         <PopupCommentaire onClose = {() => setVisible(false)}/>
       )}
-    </div>
-
-      
+      </div>   
+    </div>*/
+    <div>
+      <Stats />
     </div>
   );
 }
