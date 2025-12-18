@@ -1,9 +1,11 @@
 import { useState } from 'react';
+import { useNavigate} from 'react-router-dom';
 import './Login.css';
 
 function LoginPage() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const navigate = useNavigate();
 
   const handleLogin = async () => {
     try {
@@ -35,9 +37,13 @@ function LoginPage() {
 
         if (me.isSuperAdmin) {
           console.log('crinje');
+          navigate('/super-admin');
         } else {
           console.log('cronje');
+          navigate('/admin');
         }
+
+        
       }
 
     } catch (error) {

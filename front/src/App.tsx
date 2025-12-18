@@ -2,8 +2,10 @@ import logo from './logo.svg';
 import './App.css';
 import { Routes, Route } from 'react-router-dom';
 import PopupCommentaire from './popup-commentaire/popup-commentaire';
+import Stats from './statistiques/stats';
 import Accueil from './accueil/accueil';
 import LoginPage from './Login/Login';
+import AdminTickets from './admin-tickets/admin-tickets';
 import { useState } from 'react';
 
 function App() {
@@ -12,24 +14,16 @@ function App() {
 
   const [commentaire, setCommentaire] = useState("");
 
-  //return (
-    return <LoginPage />;
-    // <div className="App">
-    //   <header className="App-header">
-    //     <img src={logo} className="App-logo" alt="logo" />
-    //     <p>
-    //       Edit <code>src/App.tsx</code> and save to reload.
-    //     </p>
-    //     <a
-    //       className="App-link"
-    //       href="https://reactjs.org"
-    //       target="_blank"
-    //       rel="noopener noreferrer"
-    //     >
-    //       Learn React
-    //     </a>
-    //   </header>
-
+    return (
+      <div className="App">
+        <Routes>
+          <Route path="/" element={<Accueil />} />
+          <Route path="/login" element={<LoginPage />} />
+          <Route path="/stats" element={<Stats />} />
+          <Route path="/tickets" element={<AdminTickets />} />
+        </Routes>
+      </div>
+    );
     //   <div>
     //   {!visible && (
     //   <button onClick={() => setVisible(true)}>
