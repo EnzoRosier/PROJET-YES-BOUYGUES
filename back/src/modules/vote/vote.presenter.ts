@@ -4,6 +4,7 @@ export class WorksitePresenter {
   reponse: string;
   commentaire: string;
   date: Date;
+  dateCloture: Date;
   worksite: {
     id: string;
     nom: string;
@@ -20,6 +21,7 @@ export class WorksitePresenter {
       reponse: data.reponse,
       commentaire: data.commentaire,
       date: data.date,
+      dateCloture: data.dateCloture,
       worksite: data.worksite,
     });
   }

@@ -1,5 +1,5 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
-import { DataSource } from 'typeorm';
+import { DataSource, IsNull, Not } from 'typeorm';
 import { WorksiteEntity } from '../database/entities/worksite.entity';
 import { VoteEntity } from '../database/entities/vote.entity';
 import { CreateVoteModel, VoteModel } from './vote.model';
@@ -47,6 +47,25 @@ export class VoteRepository {
     });
   }
 
+  //récupère tout les vote d'un worksite
+  public async getTicketWorksiteId(input: string): Promise<VoteModel[]> {
+    const worksite = await this.worksiteRepository.findOne({
+      where: { id: input },
+    });
+    if (worksite == null) {
+      throw new BadRequestException('worksite not found');
+    }
+    return this.voteRepository.find({
+      where: {
+        dateCloture: Not(IsNull()),
+        worksite: {
+          id: input,
+        },
+      },
+      relations: { worksite: true },
+    });
+  }
+
   //création d'un vote
   public async createVote(vote: CreateVoteDto): Promise<CreateVoteModel> {
     if (typeof vote.worksiteId !== 'string') {
@@ -62,6 +81,7 @@ export class VoteRepository {
       reponse: vote.reponse,
       commentaire: vote.commentaire,
       date: vote.date,
+      dateCloture: vote.dateCloture,
       worksite: worksite,
     });
     const returnedVote = this.voteRepository.save(newVote);
