@@ -6,11 +6,24 @@ import { ThrottlerModule } from '@nestjs/throttler';
 import { AdminModule } from './modules/admins/admins.module';
 import { WorksiteModule } from './modules/worksite/worksite.module';
 import { VoteModule } from './modules/vote/vote.module';
+import { ConfigModule } from '@nestjs/config';
 
 @Module({
   imports: [
+    ConfigModule.forRoot({
+      isGlobal: true,
+      envFilePath: '.env',
+    }),
+
     DatabaseModule,
-    ThrottlerModule.forRoot([{ ttl: 60000, limit: 10 }]),
+
+    ThrottlerModule.forRoot([
+      {
+        ttl: 60000,
+        limit: 10,
+      },
+    ]),
+
     AdminModule,
     WorksiteModule,
     VoteModule,

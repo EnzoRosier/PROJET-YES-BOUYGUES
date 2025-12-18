@@ -40,10 +40,6 @@ function LoginPage() {
         }
       }
 
-
-      // exemple : redirection
-      // navigate('/dashboard');
-
     } catch (error) {
       console.log('Erreur login');
     }

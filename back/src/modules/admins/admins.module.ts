@@ -1,14 +1,27 @@
 import { Module } from '@nestjs/common';
+import { JwtModule } from '@nestjs/jwt';
+import { ConfigModule, ConfigService } from '@nestjs/config';
 import { AdminRepository } from './admins.repository';
 import { AdminController } from './admins.controller';
 import { AdminService } from './admins.service';
-import { JwtModule } from '@nestjs/jwt';
 
 @Module({
   imports: [
-    JwtModule.register({
-      secret: process.env.JWT_SECRET,
-      signOptions: { expiresIn: '15m' },
+    JwtModule.registerAsync({
+      imports: [ConfigModule],
+      inject: [ConfigService],
+      useFactory: (config: ConfigService) => {
+        const secret = config.get<string>('JWT_SECRET');
+
+        if (!secret) {
+          throw new Error('JWT_SECRET is missing');
+        }
+
+        return {
+          secret,
+          signOptions: { expiresIn: '1h' },
+        };
+      },
     }),
   ],
   controllers: [AdminController],
