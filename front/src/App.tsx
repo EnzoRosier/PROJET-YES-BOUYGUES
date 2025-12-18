@@ -1,6 +1,8 @@
 import logo from './logo.svg';
 import './App.css';
+import { Routes, Route } from 'react-router-dom';
 import PopupCommentaire from './popup-commentaire/popup-commentaire';
+import Accueil from './accueil/accueil';
 import LoginPage from './Login/Login';
 import { useState } from 'react';
 

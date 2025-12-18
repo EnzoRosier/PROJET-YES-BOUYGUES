@@ -3,9 +3,11 @@ import {
   Column,
   Entity,
   ManyToOne,
+  OneToMany,
   PrimaryGeneratedColumn,
 } from 'typeorm';
 import { AdminEntity } from './admin.entity';
+import { VoteEntity } from './vote.entity';
 @Entity('worksite')
 export class WorksiteEntity extends BaseEntity {
   @PrimaryGeneratedColumn('uuid')
@@ -37,4 +39,7 @@ export class WorksiteEntity extends BaseEntity {
 
   @ManyToOne(() => AdminEntity, (admin) => admin.worksites)
   respoChantier: AdminEntity;
+
+  @OneToMany(() => VoteEntity, (vote) => vote.worksite)
+  votes: VoteEntity[];
 }

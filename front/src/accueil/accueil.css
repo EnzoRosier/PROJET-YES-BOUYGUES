@@ -1,0 +1,43 @@
+.logo-popup {
+  position:  absolute;
+  top : 3%; 
+  right : 3%;
+  width: 10%;
+  height : auto
+}
+
+.bouton-formulaire {
+    position : absolute;
+    bottom : 5%;
+    left : 30%;
+    width: 40%;
+    height : auto;
+    padding : 2%;
+    font-size: 30px;
+    background-color: #E75113;
+    border-radius: 35px;
+    color: white;
+    cursor : pointer;
+}
+
+.bouton-login {
+    position : absolute;
+    top : 5%;
+    left : 5%;
+    width : 5%;
+    height : auto;
+    padding : 2%;
+    font-size: 30px;
+    color: white;
+    cursor : pointer;
+    background-color: transparent;
+    border : none;
+}
+
+.icone-login{
+  position: absolute;
+  left : 0%;
+  top : 0%;
+  width: 100%;
+  height : auto;
+}
