@@ -62,7 +62,10 @@ BODY (exemple) :
 	"commentaire": "test",
 	"date": "2026-01-01",
 	"worksiteId": "627ecf0f-9aba-488c-9e53-54a40792cbfa"
+  "dateCloture": "2026-01-01" (OPTIONAL)
 }
+
+note : un vite est considéré comme un ticket si il y'a une date de cloture, la date de cloture défini l'état de la requete (ouverte si date pas passé et inversement)
 
 --- Get Vote by ID ---
 GET
@@ -71,3 +74,7 @@ localhost:3000/worksite/[idVote]
 --- Get All Votes Of a Worksite ---
 GET
 localhost:3000/vote/getByWorksite/[idWorksite]
+
+--- Get All Ticket of a website by ID ---
+GET
+localhost:3000/vote/ticket/[idWorksite]

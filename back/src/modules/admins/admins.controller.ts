@@ -49,11 +49,9 @@ export class AdminController {
   @Get('me')
   async me(@Req() req) {
     const token = req.cookies?.access_token;
-
     if (!token) {
       throw new UnauthorizedException();
     }
-
     return this.adminService.getMeFromToken(token);
   }
 
