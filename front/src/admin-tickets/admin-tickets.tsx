@@ -8,7 +8,7 @@ export default function AdminTickets() {
     const checkLoggedIn = async () => {
         // vérifier si l'utilisateur est connecté
         try {
-            const response = await fetch('http://localhost:3000/admins/me', {
+            const response = await fetch('http://localhost:3001/admins/me', {
                 method: 'GET',
                 credentials: 'include',
             });
