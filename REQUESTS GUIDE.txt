@@ -2,15 +2,15 @@ ADMIN REQUESTS
 
 --- RECUP ADMINS ---
 GET
-localhost:3000/admins
+localhost:3001/admins
 
 --- RECUP 1 ADMIN AVEC ID ---
 GET
-localhost:3000/admins/[idAdmin]
+localhost:3001/admins/[idAdmin]
 
 --- CREATE ADMIN ---
 POST
-localhost:3000/admins
+localhost:3001/admins
 BODY (exemple) :
 {
   "mail": "super.mario@gmail.com",
@@ -25,15 +25,15 @@ WORKSITE REQUESTS
 
 --- RECUP WORKSITES ---
 GET
-localhost:3000/worksite
+localhost:3001/worksite
 
 --- RECUP 1 WORKSITE AVEC ID ---
 GET
-localhost:3000/worksite/[idWorksite]
+localhost:3001/worksite/[idWorksite]
 
 --- CREATE WORKSITE ---
 POST
-localhost:3000/worksite/new
+localhost:3001/worksite/new
 BODY (exemple) : 
 {
   "nom": "yowaddup",
@@ -50,11 +50,11 @@ VOTE REQUESTS
 
 --- RECUP VOTES ---
 GET
-localhost:3000/vote
+localhost:3001/vote
 
 --- CREATE VOTE ---
 POST
-localhost:3000/vote/new
+localhost:3001/vote/new
 BODY (exemple) :
 {
 	"numQuestion": "1",
@@ -69,12 +69,12 @@ note : un vite est considéré comme un ticket si il y'a une date de cloture, la
 
 --- Get Vote by ID ---
 GET
-localhost:3000/worksite/[idVote]
+localhost:3001/worksite/[idVote]
 
 --- Get All Votes Of a Worksite ---
 GET
-localhost:3000/vote/getByWorksite/[idWorksite]
+localhost:3001/vote/getByWorksite/[idWorksite]
 
 --- Get All Ticket of a website by ID ---
 GET
-localhost:3000/vote/ticket/[idWorksite]
+localhost:3001/vote/ticket/[idWorksite]
