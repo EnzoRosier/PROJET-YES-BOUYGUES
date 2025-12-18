@@ -10,6 +10,8 @@ export declare class CreateVoteDto {
   commentaire: string;
   @IsDate()
   date: Date;
+  @IsDate()
+  dateCloture: Date;
   @IsString()
   worksiteId: string;
 }
