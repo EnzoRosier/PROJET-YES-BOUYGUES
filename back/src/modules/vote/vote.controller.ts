@@ -24,6 +24,13 @@ export class VoteController {
     return this.voteRepository.getVoteWorksiteId(id);
   }
 
+  @Get('ticket/:id')
+  public async getTicketByWorksiteId(
+    @Param('id') id: string,
+  ): Promise<VoteModel[]> {
+    return this.voteRepository.getTicketWorksiteId(id);
+  }
+
   @Get(':id')
   public async getVote(@Param('id') id: string): Promise<VoteModel | null> {
     return this.voteRepository.getVoteById(id);

@@ -7,6 +7,7 @@ export type VoteModel = {
   reponse: string;
   commentaire: string;
   date: Date;
+  dateCloture: Date;
   worksite: WorksiteEntity;
 };
 
@@ -15,7 +16,7 @@ export type CreateVoteModel = {
   numQuestion: string;
   reponse: string;
   commentaire: string;
-  date: Date;
+  dateCloture: Date;
   worksite: WorksiteEntity;
 };
 

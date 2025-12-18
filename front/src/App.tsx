@@ -2,7 +2,9 @@ import logo from './logo.svg';
 import './App.css';
 import { Routes, Route } from 'react-router-dom';
 import PopupCommentaire from './popup-commentaire/popup-commentaire';
+import Stats from './statistiques/stats';
 import Accueil from './accueil/accueil';
+import LoginPage from './Login/Login';
 import { useState } from 'react';
 
 function App() {
@@ -11,31 +13,39 @@ function App() {
 
   const [commentaire, setCommentaire] = useState("");
 
-  return (
-    <div className="App">
-      <Routes>
-        <Route path="/" element={<Accueil />} />
-        {/* Ajouter ici les autres routes comme /formulaire, /login, etc. */}
+  //return (
+    return <LoginPage />;
+    // <div className="App">
+    //   <header className="App-header">
+    //     <img src={logo} className="App-logo" alt="logo" />
+    //     <p>
+    //       Edit <code>src/App.tsx</code> and save to reload.
+    //     </p>
+    //     <a
+    //       className="App-link"
+    //       href="https://reactjs.org"
+    //       target="_blank"
+    //       rel="noopener noreferrer"
+    //     >
+    //       Learn React
+    //     </a>
+    //   </header>
 
-      </Routes>
+    //   <div>
+    //   {!visible && (
+    //   <button onClick={() => setVisible(true)}>
+    //     Ouvrir le popup
+    //   </button>
+    //   )}
+
+    //   {visible && (
+    //     <PopupCommentaire onClose = {() => setVisible(false)} setCommentaire={setCommentaire} commentaire={commentaire}/>
+    //   )}
+    // </div>
 
       
-      {/* <div>   Exemple d'utilisation du popup commentaire
-      {!visible && (
-      <button onClick={() => setVisible(true)}>
-        Ouvrir le popup
-      </button>
-      )}
-
-      
-      {visible && (
-        <PopupCommentaire onClose = {() => setVisible(false)} setCommentaire={setCommentaire} commentaire={commentaire}/>
-      )}
-    </div> */}
-
-      
-    </div>
-  );
+    // </div>
+  //);
 }
 
 export default App;
