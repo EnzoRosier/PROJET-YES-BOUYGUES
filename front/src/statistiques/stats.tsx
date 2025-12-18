@@ -1,8 +1,36 @@
 import './stats.css';
 import DonutChart from './donutDiag';
+import { Navigate } from 'react-router-dom';
 import React, {useEffect, useState} from 'react';
 
 export default function Stats() {
+  // Données pour le login
+  const [loggedIn, setLoggedIn] = useState<boolean | null>(null);
+
+  const checkLoggedIn = async () => {
+      // vérifier si l'utilisateur est connecté
+      try {
+          const response = await fetch('http://localhost:3000/admins/me', {
+              method: 'GET',
+              credentials: 'include',
+          });
+          if (response.ok) {
+              const me = await response.json();
+              if(me != null){
+                  setLoggedIn(true);
+              }
+          } else {
+              setLoggedIn(false);
+          }
+      }
+      catch (error) {
+          console.log('Erreur lors de la vérification de la connexion');
+          setLoggedIn(false);
+      }
+  }
+  
+  checkLoggedIn();
+
   // Données pour le diagramme
   const [chartData, setChartData] = useState<Array<{ label: string; value: number; color: string }>>(()=>{
     const newData = [
@@ -41,7 +69,21 @@ export default function Stats() {
   setChartData(normalizedData);
   };
 
-  return (
+  // Gestion de l'état de connexion
+  // Si en cours d'évaluation, on met le chargement.
+  if (loggedIn === null) {
+        return <div className="stats"><h2>Chargement...</h2></div>;
+  }
+
+  // Si pas connecté, on redirige vers la page de login.
+  if (!loggedIn) {
+      console.log("Utilisateur non connecté, redirection vers login");
+      return (<Navigate to="/login" replace />);
+  }
+
+  // Sinon on peut afficher la page normalement.
+  else {  
+    return (
     <div className="stats">
       <header className="stats-header">
         <img src="/ressources/Logo.png" alt="Logo" className="logo" />
@@ -150,4 +192,5 @@ export default function Stats() {
       </div>
     </div>
   );
+}
 }
