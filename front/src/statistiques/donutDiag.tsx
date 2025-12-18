@@ -145,24 +145,13 @@ const DonutChart: React.FC<DonutChartProps> = ({
           <g>
             <text
               x={center}
-              y={center - 15}
-              textAnchor="middle"
-              dominantBaseline="middle"
-              fill="#333"
-              fontSize="16"
-              fontWeight="bold"
-            >
-              {total}
-            </text>
-            <text
-              x={center}
               y={center + 10}
               textAnchor="middle"
               dominantBaseline="middle"
               fill="#666"
               fontSize="12"
             >
-              Total
+              Titre du diagramme
             </text>
           </g>
         )}

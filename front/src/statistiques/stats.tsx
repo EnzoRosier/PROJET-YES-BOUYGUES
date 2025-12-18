@@ -67,36 +67,21 @@ export default function Stats() {
                 showCenterText={chartOptions.showCenterText}
               />
             </div>
-            
-            <div className="chart-controls">
-              <button onClick={updateData} className="btn btn-primary">
-                Générer Nouvelles Données
-              </button>
-              
-              <div className="options">
-                <label className="option">
-                  <input 
-                    type="checkbox" 
-                    checked={chartOptions.showLabels}
-                    onChange={(e) => setChartOptions({
-                      ...chartOptions,
-                      showLabels: e.target.checked
-                    })}
-                  />
-                  Afficher les labels
-                </label>
-                
-                <label className="option">
-                  <input 
-                    type="checkbox" 
-                    checked={chartOptions.showCenterText}
-                    onChange={(e) => setChartOptions({
-                      ...chartOptions,
-                      showCenterText: e.target.checked
-                    })}
-                  />
-                  Texte au centre
-                </label>
+            <div className="mini-chart">
+              <h4>Diagramme en Barres</h4>
+              <div className="bar-chart-preview">
+                {chartData.map((item, index) => (
+                  <div key={index} className="bar-container">
+                    <div 
+                      className="bar" 
+                      style={{ 
+                        height: `${item.value * 1.5}px`,
+                        backgroundColor: item.color
+                      }}
+                    />
+                    <div className="bar-label">{item.label}</div>
+                  </div>
+                ))}
               </div>
             </div>
           </div>
@@ -104,60 +89,6 @@ export default function Stats() {
 
         {/* Section de données détaillées */}
         <section className="data-section">
-          <div className="data-card">
-            <h3>Données Détaillées</h3>
-            <table className="data-table">
-              <thead>
-                <tr>
-                  <th>Élément</th>
-                  <th>Valeur</th>
-                  <th>Pourcentage</th>
-                  <th>Couleur</th>
-                </tr>
-              </thead>
-              <tbody>
-                {chartData.map((item, index) => (
-                  <tr key={index}>
-                    <td>
-                      <div className="item-info">
-                        <span 
-                          className="color-indicator" 
-                          style={{ backgroundColor: item.color }}
-                        />
-                        {item.label}
-                      </div>
-                    </td>
-                    <td className="value">{item.value.toFixed(2)}</td>
-                    <td className="percentage">
-                      <div className="percentage-bar">
-                        <div 
-                          className="bar-fill" 
-                          style={{ 
-                            width: `${item.value}%`,
-                            backgroundColor: item.color
-                          }}
-                        />
-                        <span className="bar-text">{item.value.toFixed(1)}%</span>
-                      </div>
-                    </td>
-                    <td>
-                      <code>{item.color}</code>
-                    </td>
-                  </tr>
-                ))}
-                <tr className="total-row">
-                  <td colSpan={2}><strong>Total</strong></td>
-                  <td colSpan={2}>
-                    <strong>
-                      {chartData.reduce((sum, item) => sum + item.value, 0).toFixed(1)}%
-                    </strong>
-                  </td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-
-          {/* Résumé des statistiques */}
           <div className="summary-card">
             <h3>Résumé des Statistiques</h3>
             <div className="summary-grid">
@@ -210,30 +141,11 @@ export default function Stats() {
               </ul>
             </div>
           </div>
-        </section>
-
-        {/* Section des différents types de diagrammes */}
-        <section className="other-charts">
-          <h3>Autres Visualisations</h3>
-          <div className="charts-grid">
-            <div className="mini-chart">
-              <h4>Diagramme en Barres</h4>
-              <div className="bar-chart-preview">
-                {chartData.map((item, index) => (
-                  <div key={index} className="bar-container">
-                    <div 
-                      className="bar" 
-                      style={{ 
-                        height: `${item.value * 1.5}px`,
-                        backgroundColor: item.color
-                      }}
-                    />
-                    <div className="bar-label">{item.label}</div>
-                  </div>
-                ))}
-              </div>
+          <div className="chart-controls">
+              <button onClick={updateData} className="btn btn-primary">
+                Générer Nouvelles Données (Bouton de test pour le changement de nombres)
+              </button>
             </div>
-          </div>
         </section>
       </div>
     </div>
