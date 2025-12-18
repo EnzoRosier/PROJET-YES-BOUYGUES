@@ -1,22 +1,22 @@
 import { Body, Controller, Get, Param, Post } from '@nestjs/common';
 import { WorksiteRepository } from './worksite.repository';
 import { CreateWorksiteModel, WorksiteModel } from './worksite.model';
-import { ChangeRespoChantierDto, CreateWorksitenDto } from './worksite.dto';
+import { ChangeRespoChantierDto, CreateWorksiteDto } from './worksite.dto';
 
 @Controller('worksite')
 export class WorksiteController {
   constructor(private readonly worksiteRepository: WorksiteRepository) {}
 
   @Get()
-  public async listAdmins(): Promise<WorksiteModel[]> {
+  public async listWorksite(): Promise<WorksiteModel[]> {
     return this.worksiteRepository.getWorksites();
   }
 
   @Post('new')
-  public async createAdmin(
-    @Body() input: CreateWorksitenDto,
+  public async createWorksite(
+    @Body() input: CreateWorksiteDto,
   ): Promise<CreateWorksiteModel> {
-    return this.worksiteRepository.createAdmin(input);
+    return this.worksiteRepository.createWorksite(input);
   }
 
   @Post('changeRespo')
@@ -27,7 +27,7 @@ export class WorksiteController {
   }
 
   @Get(':id')
-  public async getAdmin(
+  public async getWorksiteById(
     @Param('id') id: string,
   ): Promise<WorksiteModel | null> {
     return this.worksiteRepository.getWorksiteById(id);

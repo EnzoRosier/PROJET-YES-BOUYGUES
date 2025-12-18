@@ -1,8 +1,11 @@
 import { useState, useRef } from 'react';
 import './popup-commentaire.css';
 
-export default function PopupCommentaire( {onClose}: {onClose: () => void} ) {
-  const [commentaire, setCommentaire] = useState("");
+export default function PopupCommentaire( {onClose, setCommentaire, commentaire} : {
+    onClose: () => void, 
+    setCommentaire: (commentaire: string) => void, 
+    commentaire: string}) 
+  {
   const [preview, setPreview] = useState<string | null>(null);
   const audioRef = useRef<HTMLAudioElement>(null);
 
@@ -15,13 +18,13 @@ export default function PopupCommentaire( {onClose}: {onClose: () => void} ) {
   const handleSubmit = () => {
     console.log("Commentaire envoyé :", commentaire);
 
-    // Envoi des infos au serveur
+    // Envoi des infos à la page principale
 
     onClose(); // On ferme le popup après soumission
   }
 
   // Gestion de l'aperçu de l'image
-  function handleImage(e: React.ChangeEvent<HTMLInputElement>) {
+  const handleImage = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
       setPreview(URL.createObjectURL(file));
@@ -29,7 +32,7 @@ export default function PopupCommentaire( {onClose}: {onClose: () => void} ) {
   }
 
   // Lecture du son au montage du composant
-  function lireQuestion() {
+  const lireQuestion = () => {
     audioRef.current?.play();
   }
   return (

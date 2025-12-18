@@ -2,15 +2,16 @@ ADMIN REQUESTS
 
 --- RECUP ADMINS ---
 GET
-localhost:3000/admins
+localhost:3001/admins
 
 --- RECUP 1 ADMIN AVEC ID ---
 GET
-localhost:3000/admins/[idAdmin]
+localhost:3001/admins/[idAdmin]
 
 --- CREATE ADMIN ---
 POST
-localhost:3000/admins
+localhost:3001/admins
+BODY (exemple) :
 {
   "mail": "super.mario@gmail.com",
   "password": "yowaddup37",
@@ -24,23 +25,56 @@ WORKSITE REQUESTS
 
 --- RECUP WORKSITES ---
 GET
-localhost:3000/worksite
+localhost:3001/worksite
 
 --- RECUP 1 WORKSITE AVEC ID ---
 GET
-localhost:3000/worksite/[idWorksite]
+localhost:3001/worksite/[idWorksite]
 
 --- CREATE WORKSITE ---
 POST
-localhost:3000/worksite/new
-BODY : 
+localhost:3001/worksite/new
+BODY (exemple) : 
 {
   "nom": "yowaddup",
-  "addresse": "69 rue waddup",
+  "addresse": "12 rue waddup",
   "description": "Un super site",
   "dateFin": "2026-01-01",
-  "nomClient": "Joe Biden",
-  "nomRespoSec": "Joe Biden2",
+  "nomClient": "Bob",
+  "nomRespoSec": "Bobby",
   "nbCollaborateur": 233,
   "joursSansAccident": 1
 }
+
+VOTE REQUESTS
+
+--- RECUP VOTES ---
+GET
+localhost:3001/vote
+
+--- CREATE VOTE ---
+POST
+localhost:3001/vote/new
+BODY (exemple) :
+{
+	"numQuestion": "1",
+	"reponse": "Oui",
+	"commentaire": "test",
+	"date": "2026-01-01",
+	"worksiteId": "627ecf0f-9aba-488c-9e53-54a40792cbfa"
+  "dateCloture": "2026-01-01" (OPTIONAL)
+}
+
+note : un vite est considéré comme un ticket si il y'a une date de cloture, la date de cloture défini l'état de la requete (ouverte si date pas passé et inversement)
+
+--- Get Vote by ID ---
+GET
+localhost:3001/worksite/[idVote]
+
+--- Get All Votes Of a Worksite ---
+GET
+localhost:3001/vote/getByWorksite/[idWorksite]
+
+--- Get All Ticket of a website by ID ---
+GET
+localhost:3001/vote/ticket/[idWorksite]

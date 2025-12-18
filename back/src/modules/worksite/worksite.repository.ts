@@ -2,7 +2,7 @@ import { BadRequestException, Injectable } from '@nestjs/common';
 import { DataSource } from 'typeorm';
 import { WorksiteEntity } from '../database/entities/worksite.entity';
 import { WorksiteModel } from './worksite.model';
-import { ChangeRespoChantierDto, CreateWorksitenDto } from './worksite.dto';
+import { ChangeRespoChantierDto, CreateWorksiteDto } from './worksite.dto';
 import { AdminEntity } from '../database/entities/admin.entity';
 
 @Injectable()
@@ -17,7 +17,7 @@ export class WorksiteRepository {
 
   //liste des worksites
   public async getWorksites(): Promise<WorksiteModel[]> {
-    return this.worksiteRepository.find();
+    return this.worksiteRepository.find({ relations: { respoChantier: true } });
   }
   //récupère un worksite par son ID
   public async getWorksiteById(id: string): Promise<WorksiteModel | null> {
@@ -28,16 +28,16 @@ export class WorksiteRepository {
   }
 
   //création d'un worksite
-  public async createAdmin(
-    worksite: CreateWorksitenDto,
+  public async createWorksite(
+    worksite: CreateWorksiteDto,
   ): Promise<WorksiteModel> {
-    if (typeof worksite.adminId !== 'string') {
-      throw new BadRequestException('dinosaurID not specified');
-    }
+    let admin = undefined;
 
-    const admin = await this.adminRepository.findOneOrFail({
-      where: { id: worksite.adminId },
-    });
+    if (typeof worksite.adminId === 'string') {
+      admin = await this.adminRepository.findOneOrFail({
+        where: { id: worksite.adminId },
+      });
+    }
 
     const newAdmin = this.worksiteRepository.create({
       nom: worksite.nom,

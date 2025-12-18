@@ -39,13 +39,33 @@ export class AdminService {
 
     const payload = {
       sub: admin.id,
-      role: admin.isSuperAdmin ? 'SUPER_ADMIN' : 'ADMIN',
     };
     //jwt token pour faire l'authetification
     return {
       accessToken: this.jwtService.sign(payload),
     };
   }
+
+    async getMeFromToken(token: string) {
+    if (!token || typeof token !== 'string') {
+      throw new UnauthorizedException('Token manquant ou invalide');
+    }
+
+    const payload = this.jwtService.verify(token);
+
+    const admin = await this.adminRepository.getAdminById(payload.sub);
+
+    if (!admin) {
+      throw new UnauthorizedException();
+    }
+
+    return {
+      id: admin.id,
+      mail: admin.mail,
+      isSuperAdmin: admin.isSuperAdmin,
+    };
+  }
+
 
 
 
