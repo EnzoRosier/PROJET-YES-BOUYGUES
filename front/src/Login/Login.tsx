@@ -5,38 +5,50 @@ function LoginPage() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
-const handleLogin = async () => {
-  try {
-    const response = await fetch('http://localhost:3001/admins/login', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        mail: email,
-        password: password,
-      }),
-    });
+  const handleLogin = async () => {
+    try {
+      const response = await fetch('http://localhost:3001/admins/login', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        credentials: 'include', 
+        body: JSON.stringify({
+          mail: email,
+          password: password,
+        }),
+      });
 
-    const data = await response.json();
-    
-    // 👉 le token JWT renvoyé par le backend
-    const token = data.accessToken;
-    console.log(token);
+      if (!response.ok) {
+        throw new Error('Login failed');
+      }
 
-    // ⚠️ simple pour le moment (on en reparlera)
-    localStorage.setItem('jwt', token);
 
-    console.log('JWT reçu :', token);
+      console.log('Login OK, cookie reçu');
 
-    // exemple : redirection
-    // navigate('/dashboard');
+      const meResponse = await fetch('http://localhost:3001/admins/me', {
+        credentials: 'include',
+      });
 
-  } catch (error) {
-    console.log('Erreur login');
-    //alert('Erreur de connexion');
-  }
-};
+      if (meResponse.ok) {
+        const me = await meResponse.json();
+
+        if (me.isSuperAdmin) {
+          console.log('crinje');
+        } else {
+          console.log('cronje');
+        }
+      }
+
+
+      // exemple : redirection
+      // navigate('/dashboard');
+
+    } catch (error) {
+      console.log('Erreur login');
+    }
+  };
+
 
   return (
     <div className="login-page">
