@@ -9,6 +9,7 @@ import EnvironnementTravail from './environnement-travail/environnement-travail'
 import AmbianceSociale from './ambiance-sociale/ambiance-sociale';
 import EquipementTravail from './equipement-travail/equipement-travail';
 import EnergieDangereuse from './energie-dangereuse/energie-dangereuse';
+import AutreRisque from './autre-risque/autre-risque';
 import { useState } from 'react';
 import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
 
@@ -63,6 +64,10 @@ function HomePage() {
           <Link to="/energie-dangereuse" style={{color: 'white', textDecoration: 'underline', marginTop: '10px', display: 'inline-block'}}>
             Voir l'énergie dangereuse
           </Link>
+          <br />
+          <Link to="/autre-risque" style={{color: 'white', textDecoration: 'underline', marginTop: '10px', display: 'inline-block'}}>
+            Voir les autres risques
+          </Link>
         </div>
       </header>
 
@@ -96,6 +101,7 @@ function App() {
         <Route path="/ambiance-sociale" element={<AmbianceSociale />} />
         <Route path="/equipement-travail" element={<EquipementTravail />} />
         <Route path="/energie-dangereuse" element={<EnergieDangereuse />} />
+        <Route path="/autre-risque" element={<AutreRisque />} />
       </Routes>
     </Router>
   );
