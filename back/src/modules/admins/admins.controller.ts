@@ -2,7 +2,7 @@ import { Body, Controller, Get, Param, Post } from '@nestjs/common';
 //import { patch } from 'axios';
 import { CreateAdminDto, LoginDto } from './admins.dto';
 import { AdminService } from './admins.service';
-import { AdminModel, CreateAdminModel } from './admins.model';
+import { AdminModel, CreateAdminModel, MeModel } from './admins.model';
 import { Throttle } from '@nestjs/throttler';
 import { Response } from 'express';
 import { Res } from '@nestjs/common';
@@ -47,7 +47,7 @@ export class AdminController {
   }
 
   @Get('me')
-  async me(@Req() req) {
+  async me(@Req() req): Promise<MeModel> {
     const token = req.cookies?.access_token;
     if (!token) {
       throw new UnauthorizedException();
