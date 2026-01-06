@@ -1,6 +1,6 @@
 import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { CreateAdminDto } from './admins.dto';
-import { AdminModel, CreateAdminModel } from './admins.model';
+import { AdminModel, CreateAdminModel, MeModel } from './admins.model';
 import { AdminRepository } from './admins.repository';
 import * as bcrypt from 'bcrypt';
 import { JwtService } from '@nestjs/jwt';
@@ -26,6 +26,10 @@ export class AdminService {
   }
 
   public createAdmin(Admin: CreateAdminDto): Promise<CreateAdminModel> {
+
+    if (this.adminRepository.findByMail(Admin.mail)) {
+      throw new UnauthorizedException('mail already used');
+    }
     return this.adminRepository.createAdmin(Admin);
   }
 
@@ -54,7 +58,7 @@ export class AdminService {
     };
   }
 
-    async getMeFromToken(token: string) { 
+    async getMeFromToken(token: string): Promise<MeModel> {
     if (!token || typeof token !== 'string') {
       throw new UnauthorizedException('Token manquant ou invalide');
     }
@@ -71,6 +75,7 @@ export class AdminService {
       id: admin.id,
       mail: admin.mail,
       isSuperAdmin: admin.isSuperAdmin,
+      worksites: admin.worksites,
     };
   }
 

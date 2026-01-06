@@ -16,10 +16,6 @@ export default function PopupCommentaire( {onClose, setCommentaire, commentaire}
   }
 
   const handleSubmit = () => {
-    console.log("Commentaire envoyé :", commentaire);
-
-    // Envoi des infos à la page principale
-
     onClose(); // On ferme le popup après soumission
   }
 
