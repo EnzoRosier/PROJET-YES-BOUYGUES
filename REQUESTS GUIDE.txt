@@ -31,6 +31,15 @@ localhost:3001/worksite
 GET
 localhost:3001/worksite/[idWorksite]
 
+--- CHANGE RESPO WORKSITE ---
+POST
+localhost:3001/worksite/changeRespo
+BODY (exemple) : 
+{
+  "idWorksite": [IdWorksite],
+  "idAmdin": [IdAdmin],
+}
+
 --- CREATE WORKSITE ---
 POST
 localhost:3001/worksite/new
