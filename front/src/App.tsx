@@ -6,6 +6,7 @@ import Stats from './statistiques/stats';
 import Accueil from './accueil/accueil';
 import LoginPage from './Login/Login';
 import AdminTickets from './admin-tickets/admin-tickets';
+import AdminList from './Gestion-admin/SuperAdminList';
 import { useState } from 'react';
 
 function App() {
@@ -21,6 +22,7 @@ function App() {
           <Route path="/login" element={<LoginPage />} />
           <Route path="/stats" element={<Stats />} />
           <Route path="/tickets" element={<AdminTickets />} />
+          <Route path='/AdminList' element={<AdminList />} />
         </Routes>
       </div>
     );

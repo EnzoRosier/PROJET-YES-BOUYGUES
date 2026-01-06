@@ -29,6 +29,17 @@ export default function AdminList() {
     
     checkLoggedIn();
 
+    const GetAdminList = async () => {
+         const response = await fetch('http://localhost:3001/admins', {
+                method: 'GET',
+                credentials: 'include',
+            });
+            console.log(response);
+            console.log("sexe");
+    }
+
+    GetAdminList();
+
  // Si en cours d'évaluation, on met le chargement.
     if (loggedIn === null) {
         return <div className="admin-tickets"><h2>Chargement...</h2></div>;
@@ -40,10 +51,14 @@ export default function AdminList() {
         }
     // Sinon on peut afficher la page normalement.
     else {
+        
         return(
+            
         <div className="admin-tickets">
-            <h2>Page Admin Tickets</h2>
+            <h2>binje</h2>
         </div>
         );
     }
+
+
 }

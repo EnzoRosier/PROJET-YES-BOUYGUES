@@ -9,7 +9,11 @@ import { JwtService } from '@nestjs/jwt';
 export class AdminService {
   constructor(private readonly adminRepository: AdminRepository,private readonly jwtService: JwtService) {}
 
-  public async getAdmins(): Promise<AdminModel[]> {
+  public async getAdmins(req): Promise<AdminModel[]> {
+    const infoMe = await this.getMeFromToken(req);
+    if (!infoMe.isSuperAdmin) {
+      throw new UnauthorizedException();
+    }
     return this.adminRepository.getAdmins();
   }
 
@@ -47,7 +51,9 @@ export class AdminService {
   }
 
     async getMeFromToken(token: string) {
+      console.log("token :", token);  
     if (!token || typeof token !== 'string') {
+      console.log("sex");
       throw new UnauthorizedException('Token manquant ou invalide');
     }
 
