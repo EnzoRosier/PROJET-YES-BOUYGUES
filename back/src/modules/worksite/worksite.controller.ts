@@ -19,9 +19,9 @@ export class WorksiteController {
     @Req() req
   ): Promise<CreateWorksiteModel> {
     const token = req.cookies?.access_token;
-        if (!token) {
-          throw new UnauthorizedException();
-        }
+    if (!token) {
+      throw new UnauthorizedException();
+    }
     return this.worksiteService.createWorksite(input, req);
   }
 
