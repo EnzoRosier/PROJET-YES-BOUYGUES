@@ -6,7 +6,7 @@ export default function AdminTickets() {
     const [loggedIn, setLoggedIn] = useState<boolean | null>(null);
     const [dataTickets, setDataTickets] = useState<any>(null);
     const navigate = useNavigate();
-    const worksiteId = "ca64ca4e-b886-48a7-8133-d2348bedd0bd"; // À remplacer par l'ID du chantier sélectionné
+    const [worksiteId, setWorksiteId] = useState<string>(); // Remplacez par l'ID du chantier souhaité
 
     const checkLoggedIn = async () => {
         // vérifier si l'utilisateur est connecté
@@ -19,6 +19,7 @@ export default function AdminTickets() {
                 const me = await response.json();
                 if(me != null){
                     setLoggedIn(true);
+                    console.log("Utilisateur connecté :", me);
                 }
             } else {
                 setLoggedIn(false);
