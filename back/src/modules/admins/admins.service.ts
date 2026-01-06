@@ -9,7 +9,15 @@ import { JwtService } from '@nestjs/jwt';
 export class AdminService {
   constructor(private readonly adminRepository: AdminRepository,private readonly jwtService: JwtService) {}
 
-  public async getAdmins(): Promise<AdminModel[]> {
+  public async getAdmins(req): Promise<AdminModel[]> {
+    const token = req.cookies?.access_token;
+    if (!token) {
+      throw new UnauthorizedException();
+    }
+    const infoMe = await this.getMeFromToken(token);
+    if (!infoMe.isSuperAdmin) {
+      throw new UnauthorizedException();
+    }
     return this.adminRepository.getAdmins();
   }
 

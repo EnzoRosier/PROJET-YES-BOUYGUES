@@ -9,6 +9,7 @@ import Accueil from './accueil/accueil';
 import LoginPage from './Login/Login';
 import AdminTickets from './admin-tickets/admin-tickets';
 import AccueilAdmin from './accueil-admin/accueil-admin';
+import AdminList from './Gestion-admin/SuperAdminList';
 import { useState } from 'react';
 
 function App() {
@@ -29,6 +30,7 @@ function App() {
           <Route path="/risk-info/:label" element={<RiskInfo />} />
           <Route path="/admin" element={<AccueilAdmin />} />
           <Route path="/admin-tickets" element={<AdminTickets />} />
+          <Route path='/AdminList' element={<AdminList />} />
         </Routes>
       </div>
     );
