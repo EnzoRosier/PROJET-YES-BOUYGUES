@@ -18,6 +18,10 @@ export class AdminService {
   }
 
   public createAdmin(Admin: CreateAdminDto): Promise<CreateAdminModel> {
+
+    if (this.adminRepository.findByMail(Admin.mail)) {
+      throw new UnauthorizedException('mail already used');
+    }
     return this.adminRepository.createAdmin(Admin);
   }
 
