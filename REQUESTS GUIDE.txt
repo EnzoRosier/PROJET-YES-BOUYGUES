@@ -36,8 +36,8 @@ POST
 localhost:3001/worksite/changeRespo
 BODY (exemple) : 
 {
-  "idWorksite": [IdWorksite],
-  "idAmdin": [IdAdmin],
+  "idWorksite": IdWorksite,
+  "idAdmin": IdAdmin,
 }
 
 --- CREATE WORKSITE ---
