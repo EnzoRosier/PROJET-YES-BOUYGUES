@@ -1,0 +1,124 @@
+/* src/components/SuperAdminDashboard/SuperAdminDashboard.css */
+
+.superadmin-dashboard-container {
+    min-height: 100vh;
+    background-color: #f7f7f7; /* Fond clair */
+    font-family: Arial, sans-serif;
+}
+
+.dashboard-header-bar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 20px;
+    background-color: white; /* Barre d'en-tête */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.dashboard-header-bar .flag, .dashboard-header-bar .lock {
+    font-size: 2em; /* Pour les emojis */
+}
+
+/* Le contenu principal (centré) */
+.superadmin-content-area {
+    display: flex;
+    justify-content: center;
+    padding: 30px 20px;
+}
+
+.chantier-card-superadmin {
+    background-color: white;
+    padding: 25px;
+    border-radius: 15px;
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    max-width: 550px;
+    text-align: center;
+}
+
+.chantier-image-main {
+    width: 100%;
+    height: auto;
+    max-height: 250px;
+    object-fit: cover;
+    border-radius: 10px;
+    margin-bottom: 20px;
+}
+
+.chantier-title {
+    font-size: 1.8em;
+    color: #333;
+    margin-bottom: 25px;
+}
+
+/* Grille pour les métadonnées (Localisation, Durée, etc.) */
+.metadata-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px 20px;
+    text-align: left;
+    margin-bottom: 25px;
+    font-size: 0.95em;
+    color: #555;
+}
+
+.metadata-grid p {
+    margin: 0;
+}
+
+/* Boutons d'Action (SuperAdmin) */
+.admin-buttons-group {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    margin-bottom: 30px;
+}
+
+.btn-action {
+    padding: 12px 10px;
+    border: none;
+    border-radius: 5px;
+    font-size: 1em;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.btn-action.primary {
+    background-color: #007bff; /* Bleu standard */
+    color: white;
+}
+
+.btn-action.secondary {
+    background-color: #28a745; /* Vert/secondaire */
+    color: white;
+}
+
+.reset-button {
+    /* Style pour le bouton "Changer de chantier" dans l'en-tête */
+    background-color: transparent; 
+    border: none;
+    color: #007bff;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+/* Progression */
+.progress-metrics {
+    text-align: left;
+    color: #555;
+}
+
+.progress-bar-container {
+    background-color: #e9ecef;
+    border-radius: 5px;
+    overflow: hidden;
+    height: 10px;
+    margin: 5px 0 15px 0;
+}
+
+.progress-bar {
+    height: 100%;
+    background-color: #007bff; /* Bleu de progression */
+    transition: width 0.5s ease;
+}

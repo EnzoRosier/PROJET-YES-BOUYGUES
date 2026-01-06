@@ -1,0 +1,66 @@
+/* src/components/ChantierSelector/ChantierSelector.css */
+
+.chantier-selector-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    background-color: white;
+    font-family: Arial, sans-serif;
+    padding: 20px;
+}
+
+.logo-top {
+    margin-bottom: 20px;
+}
+
+.small-logo {
+    width: 150px; /* Taille réduite du logo */
+}
+
+.selector-title {
+    color: #ff6600; /* Couleur dominante de Bouygues Bâtiment (Orange) */
+    font-size: 2em;
+    margin-bottom: 30px;
+}
+
+.chantier-card {
+    background-color: #f7f7f7;
+    padding: 20px;
+    border-radius: 15px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    width: 90%;
+    max-width: 450px;
+    text-align: center;
+}
+
+.chantier-image-selector {
+    width: 100%;
+    height: auto;
+    border-radius: 10px;
+    margin-bottom: 20px;
+}
+
+.chantier-input {
+    width: 80%;
+    padding: 12px;
+    border: none;
+    border-radius: 8px;
+    background-color: #e0e0e0;
+    font-size: 1.1em;
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.validate-button {
+    background-color: #007bff; /* Bleu de validation */
+    color: white;
+    padding: 12px 40px;
+    border: none;
+    border-radius: 8px;
+    font-size: 1.2em;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    margin-top: 20px;
+}
