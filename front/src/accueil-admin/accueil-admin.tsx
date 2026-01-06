@@ -123,8 +123,8 @@ export default function AccueilAdmin() {
                             ))}
                     </div>  
                 )}
-                <button className="bouton-tickets" onClick={() => { navigate('/admin-tickets'); }}>Voir les tickets</button>
-                <button className="bouton-stats" onClick={() => { navigate('/admin-stats'); }}>Consulter les statistiques</button>
+                <button className="bouton-tickets" onClick={() => { navigate('/tickets'); }}>Voir les tickets</button>
+                <button className="bouton-stats" onClick={() => { navigate('/stats'); }}>Consulter les statistiques</button>
                 <button className="bouton-retour" onClick={() => { navigate('/login'); }}>Retour</button>
             </div>
         );
