@@ -21,6 +21,9 @@ export class AdminRepository {
   public async getAdminById(id: string): Promise<AdminModel | null> {
     return this.adminRepository.findOneOrFail({
       where: { id },
+      relations: {
+        worksites: true,
+      }
     });
   }
 
