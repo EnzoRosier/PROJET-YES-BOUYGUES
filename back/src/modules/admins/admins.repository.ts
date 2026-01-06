@@ -1,8 +1,9 @@
 import { Injectable } from '@nestjs/common';
-import { AdminModel } from './admins.model';
+import { AdminModel, CreateAdminModel } from './admins.model';
 import { CreateAdminDto } from './admins.dto';
 import { DataSource } from 'typeorm';
 import { AdminEntity } from '../database/entities/admin.entity';
+import * as bcrypt from 'bcrypt';
 
 @Injectable()
 export class AdminRepository {
@@ -20,15 +21,22 @@ export class AdminRepository {
   public async getAdminById(id: string): Promise<AdminModel | null> {
     return this.adminRepository.findOneOrFail({
       where: { id },
+      relations: {
+        worksites: true,
+      }
     });
   }
 
   //création d'un admin
-  public async createAdmin(admin: CreateAdminDto): Promise<AdminModel> {
-    // Maintenant on peut créer une nouvelle entrée d'un livre et la sauvegarder
+  public async createAdmin(admin: CreateAdminModel): Promise<AdminModel> {
+    // Maintenant on peut créer une nouvelle entrée d'un admin et la sauvegarder
+
+    const saltRounds=12;
+    const hashedPassword = await bcrypt.hash(admin.password, saltRounds);
+    //var hashedPassword = admin.password;
     const newAdmin = this.adminRepository.create({
       mail: admin.mail,
-      password: admin.password,
+      password: hashedPassword,
       firstName: admin.firstName,
       lastName: admin.lastName,
       isSuperAdmin: admin.isSuperAdmin,
@@ -36,5 +44,10 @@ export class AdminRepository {
     const returnedAdmin = this.adminRepository.save(newAdmin);
 
     return returnedAdmin;
+  }
+  public async findByMail(mail: string) {
+    return this.adminRepository.findOne({
+      where: { mail },
+    });
   }
 }
