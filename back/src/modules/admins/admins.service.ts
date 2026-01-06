@@ -54,10 +54,8 @@ export class AdminService {
     };
   }
 
-    async getMeFromToken(token: string) {
-      console.log("token :", token);  
+    async getMeFromToken(token: string) { 
     if (!token || typeof token !== 'string') {
-      console.log("sex");
       throw new UnauthorizedException('Token manquant ou invalide');
     }
 
