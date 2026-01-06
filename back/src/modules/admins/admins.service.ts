@@ -10,7 +10,11 @@ export class AdminService {
   constructor(private readonly adminRepository: AdminRepository,private readonly jwtService: JwtService) {}
 
   public async getAdmins(req): Promise<AdminModel[]> {
-    const infoMe = await this.getMeFromToken(req);
+    const token = req.cookies?.access_token;
+    if (!token) {
+      throw new UnauthorizedException();
+    }
+    const infoMe = await this.getMeFromToken(token);
     if (!infoMe.isSuperAdmin) {
       throw new UnauthorizedException();
     }
