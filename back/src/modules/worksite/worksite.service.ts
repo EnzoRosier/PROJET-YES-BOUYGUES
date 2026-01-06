@@ -1,24 +1,31 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { WorksiteRepository } from './worksite.repository';
 import { CreateWorksiteModel, WorksiteModel } from './worksite.model';
 import { ChangeRespoChantierDto, CreateWorksiteDto } from './worksite.dto';
+import { AdminService } from '../admins/admins.service';
+import { MeModel } from '../admins/admins.model';
 
 @Injectable()
 export class WorksiteService {
-  constructor(private readonly worksiteReposisory: WorksiteRepository) {}
+  constructor(private readonly worksiteReposisory: WorksiteRepository, private readonly adminService: AdminService) {}
 
   public async getWorksites(): Promise<WorksiteModel[]> {
     return this.worksiteReposisory.getWorksites();
   }
 
-  public async getWorskiteById(id: string): Promise<WorksiteModel | undefined> {
+  public async getWorksiteById(id: string): Promise<WorksiteModel | undefined> {
     return this.worksiteReposisory.getWorksiteById(id);
   }
 
-  public createWorskite(
-    Admin: CreateWorksiteDto,
+  public async createWorksite(
+    admin: CreateWorksiteDto,
+    req
   ): Promise<CreateWorksiteModel> {
-    return this.worksiteReposisory.createWorksite(Admin);
+    const infoMe = await this.adminService.getMeFromToken(req);
+    if (!infoMe.isSuperAdmin) {
+      throw new UnauthorizedException();
+    }
+    return this.worksiteReposisory.createWorksite(admin);
   }
 
   public changeRespoChantier(
