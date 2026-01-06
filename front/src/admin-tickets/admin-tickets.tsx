@@ -1,12 +1,12 @@
 import './admin-tickets.css';
 import { useNavigate, Navigate } from 'react-router-dom';
-import { useEffect, useState } from 'react';
+import { use, useEffect, useState } from 'react';
 
 export default function AdminTickets() {
     const [loggedIn, setLoggedIn] = useState<boolean | null>(null);
     const [dataTickets, setDataTickets] = useState<any>(null);
     const navigate = useNavigate();
-    const [worksiteId, setWorksiteId] = useState<string>(); // Remplacez par l'ID du chantier souhaité
+    const [worksiteIds, setWorksiteIds] = useState<string[]>(); // Remplacez par l'ID du chantier souhaité
 
     const checkLoggedIn = async () => {
         // vérifier si l'utilisateur est connecté
@@ -19,7 +19,14 @@ export default function AdminTickets() {
                 const me = await response.json();
                 if(me != null){
                     setLoggedIn(true);
-                    console.log("Utilisateur connecté :", me);
+                    console.log("Connexion vérifiée")
+
+                    // On va récupérer les IDs des chantiers associés à l'admin
+                    let worksiteIdsextracted : string[] = [];
+                    for (let worksite of me.worksites) {
+                        worksiteIdsextracted.push(worksite.id);
+                    }
+                    setWorksiteIds(worksiteIdsextracted); // Pour les stocker ici
                 }
             } else {
                 setLoggedIn(false);
@@ -30,42 +37,40 @@ export default function AdminTickets() {
             setLoggedIn(false);
         }
     }
-    
-    checkLoggedIn();
-
 
     const getAllTickets = async () => {
         try {
-            const response = await fetch(`http://localhost:3001/vote/getByWorksite/${worksiteId}`, {
-                method: 'GET',
-                credentials: 'include',
-            });
-            if (response.ok) {
-                const tickets = await response.json();
-                console.log("Tickets récupérés avec succès", tickets);
-
-                // Désormais on va les réorganiser en fonction de leur id
-                const ticketsById = tickets.reduce((acc : any, el : any) => {
-                    const { id, ...other } = el;
-                    acc[id] = other;
-                    return acc;
-                }, {});
-                console.log("Tickets réorganisés par ID", ticketsById);
-                setDataTickets(ticketsById); // On stocke les tickets réorganisés
+            let ticketsById: any[] = []
+            for (let worksiteId of worksiteIds || []) {
+                const response = await fetch(`http://localhost:3001/vote/getByWorksite/${worksiteId}`, {
+                    method: 'GET',
+                    credentials: 'include',
+                });
+                if (response.ok) {
+                    const tickets = await response.json();
+                    ticketsById = [...ticketsById, ...tickets];
+                }
+                else {
+                    console.log("Erreur lors de la récupération des tickets");
+                }
             }
-            else {
-                console.log("Erreur lors de la récupération des tickets");
-            }
+            setDataTickets(ticketsById);
         } catch (error) {
             console.log('Erreur lors de la récupération des tickets');
         }
     }
 
-    // On appelle la fonction qui récupère tous les tickets au chargement du composant.
-    useEffect(() => {
-        console.log("Chargement des tickets...");
-        getAllTickets();
+    useEffect(() => { // Login
+        console.log("Vérification de la connexion...");
+        checkLoggedIn();
     }, []);
+
+    useEffect(() => { // Récupération des tickets
+        if (worksiteIds && worksiteIds.length > 0) {
+            console.log("Utilisateur connecté, récupération des tickets...");
+            getAllTickets();
+        }
+    }, [worksiteIds]);
 
     // Si en cours d'évaluation, on met le chargement.
     if (loggedIn === null) {
@@ -95,11 +100,9 @@ export default function AdminTickets() {
             <tbody>
                 {Object.entries(dataTickets || {}).map(([id, infos]: [string, any]) => (
                 <tr key={id} onClick={ () => {
-                    console.log("Ticket cliqué :", id, infos);
                     navigate(`/admin-tickets/${id}`); }}>
                     <td>{id}</td>
                     <td>{infos.reponse}</td>
-                    <td>{infos.commentaire}</td>
                     <td>{infos.date}</td>
                     <td>{infos.dateCloture}</td>
                     <td>{infos.worksite.nom}</td>
