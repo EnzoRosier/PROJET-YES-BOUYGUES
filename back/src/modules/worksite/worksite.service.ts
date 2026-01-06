@@ -21,7 +21,11 @@ export class WorksiteService {
     admin: CreateWorksiteDto,
     req
   ): Promise<CreateWorksiteModel> {
-    const infoMe = await this.adminService.getMeFromToken(req);
+    const token = req.cookies?.access_token;
+    if (!token) {
+      throw new UnauthorizedException();
+    }
+    const infoMe = await this.adminService.getMeFromToken(token);
     if (!infoMe.isSuperAdmin) {
       throw new UnauthorizedException();
     }
