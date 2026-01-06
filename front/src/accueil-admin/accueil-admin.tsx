@@ -29,6 +29,27 @@ export default function AccueilAdmin() {
     
     checkLoggedIn();
 
+
+    // On va demander au serveur les informations du chantier pour afficher un récapitulatif.
+    const fetchChantierInfo = async () => {
+        try {
+            const response = await fetch('http://localhost:3001/worksite', {
+                method: 'GET',
+                credentials: 'include',
+            });
+            if (response.ok) {
+                const chantierInfo = await response.json();
+                console.log("Informations du chantier récupérées avec succès");
+
+
+            } else {
+                console.log("Erreur lors de la récupération des informations du chantier");
+            }
+        } catch (error) {
+            console.log("Erreur lors de la récupération des informations du chantier");
+        }
+    };
+
     // Gestion de la connexion
     if (loggedIn === null) {
         return <div className="accueil-admin"><h2>Chargement...</h2></div>;
