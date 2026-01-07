@@ -30,19 +30,6 @@ export default function AdminList() {
             const data = await response.json();
             setAdmins(data);
             console.log(data)
-
-            // Pour chaque admin, récupérer les infos liées à worksiteIds (ou autre ID)
-            data.forEach(async (admin: any) => {
-                const firstId = admin.worksiteIds[0];
-                const res = await fetch(`http://localhost:3001/worksite/${firstId}`, {
-                    method: 'GET',
-                    credentials: 'include',
-                });
-                const detail = await res.json();
-
-                // stocke le résultat par ID
-                setAdminDetails(prev => ({ ...prev, [admin.worksiteIds]: detail }));
-            });
         };
 
 
@@ -89,7 +76,7 @@ export default function AdminList() {
                             >
                                 <td>{admin.firstName + "  " + admin.lastName} </td>
                                 <td>{admin.mail}</td>
-                                <td>{adminDetails[admin.worksiteIds]?.nom || 'Chargement...'}</td>
+                                <td>{admin.roles?.join(", ")}</td>
                             </tr>
                         ))}
                     </tbody>
