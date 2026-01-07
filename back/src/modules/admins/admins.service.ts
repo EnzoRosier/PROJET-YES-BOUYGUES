@@ -39,16 +39,17 @@ export class AdminService {
     if (await this.adminRepository.findByMail(Admin.mail)) {
       throw new UnauthorizedException('mail already used');
     }
-
     let worksistes = []
-    for (let i = 0; i < Admin.worksiteIds.length; i++) {
+    if (Admin.worksiteIds != undefined) {
+      for (let i = 0; i < Admin.worksiteIds.length; i++) {
       const worksiteId = Admin.worksiteIds[i];
       let found = await this.worksiteService.getWorksiteEntityRefById(worksiteId)
       if (found) {
         worksistes.push(found)
       }
     };
-
+    }
+    
     return this.adminRepository.createAdmin(Admin, worksistes);
   }
 
