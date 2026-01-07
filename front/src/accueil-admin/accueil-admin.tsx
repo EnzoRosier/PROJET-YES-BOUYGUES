@@ -62,6 +62,11 @@ export default function AccueilAdmin() {
         }
     };
 
+    const valider_accident = () => {
+        console.log("Validation d'un accident...");
+        // Implémenter la logique de validation d'accident ici
+    }
+
     useEffect(() => { // Login
         console.log("Vérification de la connexion...");
         checkLoggedIn();
@@ -73,8 +78,6 @@ export default function AccueilAdmin() {
             fetchChantierInfo();
         }
     }, [worksiteIds]);
-
-    console.log(dataChantier);
 
     // Gestion de la connexion
     if (loggedIn === null) {
@@ -89,9 +92,10 @@ export default function AccueilAdmin() {
     else {
         return(
             <div className="accueil-admin">
-                <h2>Page Accueil Admin</h2>
+                <img src="/ressources/Logo.png" alt="Logo" className="logo-popup"/>
+                <h2>Sélectionner un chantier</h2>
                 {dataChantier && (
-                <select value={chantierSelectionne ?? ""} onChange={(e) => setChantierSelectionne(e.target.value)}>
+                <select className="select-chantier" value={chantierSelectionne ?? ""} onChange={(e) => setChantierSelectionne(e.target.value)}>
                     <option value="" disabled>
                         Sélectionner un chantier
                     </option>
@@ -117,14 +121,14 @@ export default function AccueilAdmin() {
                                     <p>Client : {chantier.nomClient}</p>
                                     <p>Responsable sécurité : {chantier.nomRespoSec}</p>
                                     <p>Nombre de collaborateurs : {chantier.nbCollaborateur}</p>
-                                    <p>Jours sans accident : {chantier.joursSansAccident}</p>
+                                    <p>Jours sans accident : {chantier.joursSansAccident} <button className="bouton-valider-accident" onClick={valider_accident}> Valider le nombre de jours sans accidents</button></p>
                                     <p>Date de fin : {chantier.dateFin}</p>
                                 </div>
                             ))}
                     </div>  
                 )}
                 <button className="bouton-tickets" onClick={() => { navigate('/tickets'); }}>Voir les tickets</button>
-                <button className="bouton-stats" onClick={() => { navigate('/stats'); }}>Consulter les statistiques</button>
+                <button className="bouton-stats" onClick={() => { navigate('/stats'); }}>Voir les statistiques</button>
                 <button className="bouton-retour" onClick={() => { navigate('/login'); }}>Retour</button>
             </div>
         );
