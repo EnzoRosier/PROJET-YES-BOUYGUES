@@ -13,7 +13,11 @@ export class AdminService {
     return this.adminRepository.getAdmins();
   }
 
-  public async getAdminById(id: string): Promise<AdminModel | undefined> {
+  public async getAdminById(id: string, token: string): Promise<AdminModel | undefined> {
+    const infoMe = await this.getMeFromToken(token);
+    if (!infoMe.isSuperAdmin) {
+      throw new UnauthorizedException();
+    }
     return this.adminRepository.getAdminById(id);
   }
 
