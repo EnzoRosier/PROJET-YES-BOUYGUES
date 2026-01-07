@@ -16,7 +16,11 @@ export class AdminRepository {
 
   //liste des admins
   public async getAdmins(): Promise<AdminModel[]> {
-    return this.adminRepository.find();
+    return this.adminRepository.find({
+      relations: {
+        worksites: true,
+      }
+    });
   }
   //récupère un admin par son ID
   public async getAdminById(id: string): Promise<AdminModel | null> {
