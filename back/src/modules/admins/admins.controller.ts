@@ -14,11 +14,15 @@ export class AdminController {
   constructor(private readonly adminService: AdminService) {}
 
   @Get()
-  public async listAdmins(): Promise<AdminModel[]> {
-    return this.adminService.getAdmins();
+  public async listAdmins(
+    @Req() req
+  ): Promise<AdminModel[]> {
+     const token = req.cookies?.access_token;
+        if (!token) {
+          throw new UnauthorizedException();
+        }
+    return this.adminService.getAdmins(req);
   }
-
-  
 
   @Post()
   public async createAdmin(

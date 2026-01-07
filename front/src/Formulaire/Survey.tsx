@@ -1,5 +1,8 @@
-import React, { useState } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import './Survey.css';
+import './Smiley.css'
+import { Link, useNavigate } from 'react-router-dom';
+import PopupCommentaire from '../popup-commentaire/popup-commentaire';
 
 const smiles = [
   { id: 0, label: 'Très insatisfait', image: '/images/Smiley_Angry.png', color: '#e74c3c' },
@@ -10,63 +13,71 @@ const smiles = [
 const languages = [
   { code: 'fr', name: 'Français', flag: '🇫🇷', short: 'FR' },
   { code: 'en', name: 'English', flag: '🇬🇧', short: 'GB' },
-  { code: 'pt', name: 'Português', flag: '🇵🇹', short: 'PT' },
-  { code: 'tr', name: 'Türkçe', flag: '🇹🇷', short: 'TR' },
-  { code: 'ar', name: 'العربية', flag: '🇸🇦', short: 'SA' },
   { code: 'es', name: 'Español', flag: '🇪🇸', short: 'ES' },
+  { code: 'pt', name: 'Português', flag: '🇵🇹', short: 'PT' },
+  { code: 'ar', name: 'العربية', flag: '🇸🇦', short: 'SA' },
   { code: 'ur', name: 'اردو', flag: '🇵🇰', short: 'PK' },
+  { code: 'pl', name: 'Polski', flag: '🇵🇱', short: 'PL' },
 ];
 
 const questionTexts: Record<string, string> = {
-  fr: 'Pensez-vous être protégé des 6 risques majeurs ?',
-  en: 'Do you feel protected from the 6 major risks?',
-  pt: 'Você se sente protegido contra os 6 maiores riscos?',
-  tr: '6 büyük riskten korunduğunuzu düşünüyor musunuz?',
-  ar: 'هل تشعر أنك محمي من المخاطر الستة الرئيسية؟',
-  es: '¿Se siente protegido de los 6 riesgos principales?',
-  ur: 'کیا آپ محسوس کرتے ہیں کہ آپ 6 بڑے خطرات سے محفوظ ہیں؟',
+  fr: 'Quelle est votre humeur en cette fin de journée ?',
+  en: 'What is your mood at the end of the day?',
+  es: '¿Cuál es su estado de ánimo al final del día?',
+  pt: 'Qual é o seu estado de espírito no final do dia?',
+  ar: 'ما هو مزاجك في نهاية هذا اليوم؟',
+  ur: 'دن کے آخر میں آپ کا مزاج کیسا है؟',
+  pl: 'Jaki jest Twój nastrój pod koniec dnia?',
 };
 
 export default function Survey() {
   const [selected, setSelected] = useState<number | null>(null);
   const [langOpen, setLangOpen] = useState(false);
   const [currentLang, setCurrentLang] = useState('fr');
-  const speakQuestion = (lang: string) => {
-    const text = questionTexts[lang] || questionTexts.fr;
-    if (!('speechSynthesis' in window)) {
-      alert('Synthèse vocale non supportée par votre navigateur.');
-      return;
-    }
-    // Cancel any ongoing utterances
-    window.speechSynthesis.cancel();
-    const utterance = new SpeechSynthesisUtterance(text);
-    const langMap: Record<string, string> = {
-      fr: 'fr-FR',
-      en: 'en-GB',
-      pt: 'pt-PT',
-      tr: 'tr-TR',
-      ar: 'ar-SA',
-      es: 'es-ES',
-      ur: 'ur-PK',
-    };
-    utterance.lang = langMap[lang] || 'fr-FR';
-    // Optionally choose a voice that matches the language
-    const voices = window.speechSynthesis.getVoices();
-    const match = voices.find((v) => v.lang && v.lang.startsWith(utterance.lang.split('-')[0]));
-    if (match) utterance.voice = match;
-    window.speechSynthesis.speak(utterance);
-  };
+  const [visible, setVisible] = useState(false);
+  const [commentaire, setCommentaire] = useState('');
   const [showNoSelectionModal, setShowNoSelectionModal] = useState(false);
+  
+  const navigate = useNavigate();
+
+  const audioRef = useRef<HTMLAudioElement | null>(null);
+
+  useEffect(() => {
+    return () => {
+      if (audioRef.current) {
+        audioRef.current.pause();
+        audioRef.current = null;
+      }
+    };
+  }, []);
+
+  const speakQuestion = (lang: string) => {
+    if (audioRef.current) {
+      audioRef.current.pause();
+      audioRef.current.currentTime = 0;
+    }
+
+    const audioPath = `./ressources/audios/${lang}/${lang}_2.mp3`;
+    alert(audioPath);
+
+    const audio = new Audio(audioPath);
+    audioRef.current = audio;
+
+    audio.play().catch((error) => {
+      console.error("Erreur lors de la lecture du fichier audio :", error);
+      alert("Le fichier audio pour cette langue est introuvable ou illisible.");
+    });
+  };
 
   const handleLangSelect = (code: string) => {
     setCurrentLang(code);
     setLangOpen(false);
   };
 
-
   return (
     <div className="survey-root">
       <img className="brand-badge" src="/images/Bouygues_bat.png" alt="Bouygues" aria-hidden="true" />
+      
       <header className="survey-header">
         <div className="lang-menu">
           <button 
@@ -93,13 +104,9 @@ export default function Survey() {
           )}
         </div>
 
-        <button
-          className="admin-btn"
-          aria-label="Connexion administrateur"
-          onClick={() => alert('Accéder à la connexion admin (à implémenter)')}
-        >
-          <span className="lock">🔒</span>
-        </button>
+        <Link to="../login">
+          <button className="admin-btn">🔒</button>
+        </Link>
       </header>
 
       <main className="survey-main">
@@ -138,18 +145,30 @@ export default function Survey() {
               }
               const selectedSmile = smiles.find(s => s.id === selected);
               alert(`Réponse enregistrée : ${selectedSmile?.label}`);
+              navigate('../riskeval');
             }}
           >
             Confirmer
           </button>
 
-          <input type='button' className="develop" value="Je développe" />
+          <button className="develop" onClick={() => setVisible(true)}>Je développe</button>
         </div>
 
-        <button className="back-btn" aria-label="Retour" onClick={() => alert('Retour (à implémenter)')}>
-          ←
-        </button>
+        <Link to="../">
+          <button className="back-btn" aria-label="Retour">←</button>
+        </Link>
+
+        <div>
+          {visible && (
+            <PopupCommentaire 
+              onClose={() => setVisible(false)} 
+              setCommentaire={setCommentaire} 
+              commentaire={commentaire}
+            />
+          )}
+        </div>
       </main>
+
       {showNoSelectionModal && (
         <div className="modal-overlay" onClick={() => setShowNoSelectionModal(false)}>
           <div

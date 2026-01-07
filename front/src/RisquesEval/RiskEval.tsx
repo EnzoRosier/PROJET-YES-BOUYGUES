@@ -1,8 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import './Survey.css';
+import '../Formulaire/Survey.css';
 import './RiskEval.css';
-import './Smiley.css';
 
 const riskLabels: Record<string, string[]> = {
   fr: [
@@ -35,15 +34,15 @@ const riskLabels: Record<string, string[]> = {
     'Ambiente social',
     'Energia perigosa',
   ],
-  tr: [
-    'Kaldırma riski',
-    'Yüksekte çalışma',
-    'Çarpışma riski',
-    'Stabilite riski',
-    'Çalışma ortamı',
-    'Üretim ekipmanı',
-    'Sosyal ortam',
-    'Tehlikeli enerji',
+  pl: [
+    'Ryzyko podnoszenia',
+    'Prace na wysokości',
+    'Ryzyko kolizji',
+    'Ryzyko stabilności',
+    'Środowisko pracy',
+    'Sprzęt produkcyjny',
+    'Atmosfera społeczna',
+    'Niebezpieczna energia',
   ],
   ar: [
     'خطر الرفع',
@@ -80,21 +79,21 @@ const riskLabels: Record<string, string[]> = {
 const languages = [
   { code: 'fr', name: 'Français', flag: '🇫🇷', short: 'FR' },
   { code: 'en', name: 'English', flag: '🇬🇧', short: 'GB' },
-  { code: 'pt', name: 'Português', flag: '🇵🇹', short: 'PT' },
-  { code: 'tr', name: 'Türkçe', flag: '🇹🇷', short: 'TR' },
-  { code: 'ar', name: 'العربية', flag: '🇸🇦', short: 'SA' },
   { code: 'es', name: 'Español', flag: '🇪🇸', short: 'ES' },
+  { code: 'pt', name: 'Português', flag: '🇵🇹', short: 'PT' },
+  { code: 'ar', name: 'العربية', flag: '🇸🇦', short: 'SA' },
   { code: 'ur', name: 'اردو', flag: '🇵🇰', short: 'PK' },
+  { code: 'pl', name: 'Polski', flag: '🇵🇱', short: 'PL' },
 ];
 
 const questionTexts: Record<string, string> = {
   fr: "Cliquez sur les risques majeurs, pour lesquels vous pensez ne pas être assez protégé",
   en: 'Click on the major risks for which you think you are not sufficiently protected',
-  pt: 'Clique nos riscos principais para os quais você acha que não está suficientemente protegido',
-  tr: 'Kendinizi yeterince korunmadığını düşündüğünüz ana risklere tıklayın',
-  ar: 'ان بڑے خطرات پر کلک کریں جن کے بارے میں آپ کو لگتا ہے کہ آپ کافی حد تک محفوظ نہیں ہیں',
   es: 'Haga clic en los riesgos principales por los que cree que no está suficientemente protegido',
+  pt: 'Clique nos riscos principais para os quais você acha que não está suficientemente protegido',
+  ar: 'ان بڑے خطرات پر کلک کریں جن کے بارے میں آپ کو لگتا ہے کہ آپ کافی حد تک محفوظ نہیں ہیں',
   ur: 'ان اہم خطرات پر کلک کریں جن کے بارے میں آپ سمجھتے ہیں کہ آپ کافی حد تک محفوظ نہیں ہیں',
+  pl: 'Kliknij ryzyka, które uważasz, że nie są wystarczająco chronione',
 };
 
 export default function RiskEval() {
@@ -114,11 +113,11 @@ export default function RiskEval() {
     const langMap: Record<string, string> = {
       fr: 'fr-FR',
       en: 'en-GB',
-      pt: 'pt-PT',
-      tr: 'tr-TR',
-      ar: 'ar-SA',
       es: 'es-ES',
+      pt: 'pt-PT',
+      ar: 'ar-SA',
       ur: 'ur-PK',
+      pl: 'pl-PL',
     };
     utterance.lang = langMap[lang] || 'fr-FR';
     // Optionally choose a voice that matches the language

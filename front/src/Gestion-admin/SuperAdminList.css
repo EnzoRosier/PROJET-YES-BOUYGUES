@@ -1,0 +1,50 @@
+/* tableau */
+.admin-table {
+    width: 100%;
+    border-collapse: collapse;
+    min-width: 600px;
+    border: 3px solid #E75113;
+}
+
+/* cellules */
+.admin-table th,
+.admin-table td {
+    padding: 1rem;
+    text-align: left;
+    border: 2px solid #E75113;
+}
+
+/* header */
+.admin-table thead {
+    background-color: #FFE3D6;
+}
+
+.admin-table th {
+    font-weight: bold;
+}
+
+/* lignes cliquables */
+.table-row {
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+}
+
+.table-row:hover {
+    background-color: #FFF1EA;
+}
+
+.logo-admin {
+    position: absolute;
+    top: 3%;      /* fixe en % par rapport au conteneur */
+    right: 3%;
+    width: 10%;
+    height: auto;
+    z-index: 10;  /* toujours devant le contenu */
+}
+.table-container {
+    width: 100%;
+    overflow-x: auto;
+    padding: 0.5rem;      /* espace autour du tableau */
+    box-sizing: border-box;
+    margin-top: 5%;     /* <-- ajoute cet espace pour descendre le tableau */
+}

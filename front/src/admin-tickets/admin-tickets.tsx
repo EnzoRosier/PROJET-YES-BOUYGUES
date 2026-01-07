@@ -110,7 +110,7 @@ export default function AdminTickets() {
                 ))}
             </tbody>
         </table>
-        <button className="bouton-refresh" onClick={getAllTickets}>Retour</button>
+        <button className="bouton-retour" onClick={() => navigate('/admin')}>Retour</button>
         </div>
         );
     }
