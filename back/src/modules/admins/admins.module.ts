@@ -1,9 +1,10 @@
-import { Module } from '@nestjs/common';
+import { forwardRef, Module } from '@nestjs/common';
 import { JwtModule } from '@nestjs/jwt';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { AdminRepository } from './admins.repository';
 import { AdminController } from './admins.controller';
 import { AdminService } from './admins.service';
+import { WorksiteModule } from '../worksite/worksite.module';
 
 @Module({
   imports: [
@@ -23,6 +24,7 @@ import { AdminService } from './admins.service';
         };
       },
     }),
+    forwardRef(() => WorksiteModule)
   ],
   controllers: [AdminController],
   providers: [AdminService, AdminRepository],

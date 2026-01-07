@@ -27,6 +27,14 @@ export class WorksiteRepository {
     });
   }
 
+  
+  public async getWorksiteEntityRefById(id: string): Promise<WorksiteEntity | null> {
+    return this.worksiteRepository.findOneOrFail({
+      where: { id },
+      relations: { respoChantier: true },
+    });
+  }
+
   //création d'un worksite
   public async createWorksite(
     worksite: CreateWorksiteDto,

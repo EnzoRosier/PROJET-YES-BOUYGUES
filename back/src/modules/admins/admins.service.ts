@@ -1,13 +1,18 @@
-import { Injectable, UnauthorizedException } from '@nestjs/common';
+import { forwardRef, Inject, Injectable, UnauthorizedException } from '@nestjs/common';
 import { CreateAdminDto } from './admins.dto';
 import { AdminModel, CreateAdminModel, MeModel } from './admins.model';
 import { AdminRepository } from './admins.repository';
 import * as bcrypt from 'bcrypt';
 import { JwtService } from '@nestjs/jwt';
+import { WorksiteService } from '../worksite/worksite.service';
 
 @Injectable()
 export class AdminService {
-  constructor(private readonly adminRepository: AdminRepository,private readonly jwtService: JwtService) {}
+  constructor(private readonly adminRepository: AdminRepository,
+    @Inject(forwardRef(() => WorksiteService))
+    private worksiteService: WorksiteService,
+
+    private readonly jwtService: JwtService) {}
 
   public async getAdmins(req): Promise<AdminModel[]> {
     const token = req.cookies?.access_token;
@@ -29,12 +34,22 @@ export class AdminService {
     return this.adminRepository.getAdminById(id);
   }
 
-  public createAdmin(Admin: CreateAdminDto): Promise<CreateAdminModel> {
+  public async createAdmin(Admin: CreateAdminDto): Promise<CreateAdminModel> {
 
-    if (this.adminRepository.findByMail(Admin.mail)) {
+    if (await this.adminRepository.findByMail(Admin.mail)) {
       throw new UnauthorizedException('mail already used');
     }
-    return this.adminRepository.createAdmin(Admin);
+
+    let worksistes = []
+    for (let i = 0; i < Admin.worksiteIds.length; i++) {
+      const worksiteId = Admin.worksiteIds[i];
+      let found = await this.worksiteService.getWorksiteEntityRefById(worksiteId)
+      if (found) {
+        worksistes.push(found)
+      }
+    };
+
+    return this.adminRepository.createAdmin(Admin, worksistes);
   }
 
   async login(mail: string, password: string) {
