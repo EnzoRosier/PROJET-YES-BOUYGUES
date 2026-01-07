@@ -1,6 +1,6 @@
 import { Body, Controller, Get, Param, Post } from '@nestjs/common';
 import { VoteRepository } from './vote.repository';
-import { CreateVoteModel, VoteModel } from './vote.model';
+import { CreateVoteModel, StatsWorksiteModel, VoteModel } from './vote.model';
 import { CreateVoteDto } from './vote.dto';
 
 @Controller('vote')
@@ -22,6 +22,11 @@ export class VoteController {
   @Get('getByWorksite/:id')
   public async getByWorksiteId(@Param('id') id: string): Promise<VoteModel[]> {
     return this.voteRepository.getVoteWorksiteId(id);
+  }
+
+  @Get('getStatsOf/:id')
+  public async getStatOf(@Param('id') id: string): Promise<StatsWorksiteModel> {
+    return this.voteRepository.getStatOf(id);
   }
 
   @Get('ticket/:id')
