@@ -1,0 +1,140 @@
+
+.logo-popup {
+  position:  absolute;
+  top : 3%; 
+  right : 3%;
+  width: 10%;
+  height : auto
+}
+/* TITRE PRINCIPAL */
+h2 {
+    font-size: 1.6rem;
+    margin-bottom: 1rem;
+    color: #000;
+    font-weight: 600;
+}
+
+/* SÉLECTEUR */
+.select-chantier {
+    width: 260px;
+    padding: 8px 10px;
+    font-size: 0.95rem;
+    border: 2px solid #E75113;
+    border-radius: 4px;
+    background-color: #fff;
+    color: #000;
+    cursor: pointer;
+    transition: background-color 0.2s ease, border-color 0.2s ease;
+}
+
+.select-chantier:hover {
+    background-color: #f3ebe8;
+}
+
+.select-chantier:focus {
+    outline: none;
+    border-color: #000;
+}
+
+/* CONTENEUR DE DROITE POUR LES INFORMATIONS */
+.chantier-info {
+    margin-top: 2rem;
+    padding: 15px 20px;
+    border: 2px solid #000;
+    border-radius: 6px;
+    background-color: #fff;
+    max-width: 800px;
+
+    /* Centrage horizontal */
+    margin-left: auto;
+    margin-right: auto;
+}
+
+/* TITRE DU BLOC */
+.chantier-info h1 {
+    font-size: 2rem;
+    margin-bottom: 0.8rem;
+    padding-bottom: 0.4rem;
+    border-bottom: 2px solid #E75113;
+    color: #000;
+}
+
+/* LIGNES D’INFORMATIONS */
+.chantier-info p {
+    margin: 4px 0;
+    font-size: 1.5rem;
+    display: flex;
+    justify-content: space-between;
+    border-bottom: 1px solid #E75113;
+    padding-bottom: 4px;
+}
+
+.chantier-info p span.label {
+    font-weight: 600;
+    color: #000;
+}
+
+.chantier-info p span.value {
+    color: #222;
+}
+
+.bouton-tickets {
+    position : absolute;
+    bottom : 5%;
+    left : 5%;
+    width: 37%;
+    height : auto;
+    padding : 2%;
+    font-size: 2.5rem;
+    background-color: #E75113;
+    border-radius: 35px;
+    color: white;
+    cursor : pointer;
+}
+
+.bouton-stats {
+    position : absolute;
+    bottom : 5%;
+    right : 5%;
+    width: 37%;
+    height : auto;
+    padding : 2%;
+    font-size: 2.5rem;
+    background-color: #E75113;
+    border-radius: 35px;
+    color: white;
+    cursor : pointer;
+}
+
+.bouton-retour {
+    position : absolute;
+    top : 5%;
+    left : 5%;
+    width: 10%;
+    height : auto;
+    padding : 2%;
+    font-size: 1.5rem;
+    background-color: #555;
+    border-radius: 35px;
+    color: white;
+    cursor : pointer;
+}
+
+.bouton-valider-accident {
+    margin-left: 20px;
+    padding: 5px 10px;
+    font-size: 1rem;
+    background-color: #28a745;
+    border: none;
+    border-radius: 4px;
+    color: white;
+    cursor: pointer;
+}
+
+/* RESPONSIVITÉ LÉGÈRE */
+@media (max-width: 600px) {
+    .chantier-info {
+        max-width: 100%;
+        margin-left: 0;
+    }
+}
