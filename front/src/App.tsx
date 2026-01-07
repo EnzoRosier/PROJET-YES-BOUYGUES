@@ -1,9 +1,9 @@
 import './App.css';
 import { Routes, Route } from 'react-router-dom';
 import PopupCommentaire from './popup-commentaire/popup-commentaire';
-import Survey from './Survey';
-import RiskEval from './RiskEval';
-import RiskInfo from './RiskInfo';
+import Formulaire from './Formulaire/Survey';
+import RiskEval from './RisquesEval/RiskEval';
+import RiskInfo from './RisquesEval/RiskInfo';
 import Stats from './statistiques/stats';
 import Accueil from './accueil/accueil';
 import LoginPage from './Login/Login';
@@ -25,7 +25,7 @@ function App() {
           <Route path="/login" element={<LoginPage />} />
           <Route path="/stats" element={<Stats />} />
           <Route path="/tickets" element={<AdminTickets />} />
-          <Route path="/Survey" element={<Survey />} />
+          <Route path="/Formulaire" element={<Formulaire />} />
           <Route path="/riskeval" element={<RiskEval />} />
           <Route path="/risk-info/:label" element={<RiskInfo />} />
           <Route path="/admin" element={<AccueilAdmin />} />

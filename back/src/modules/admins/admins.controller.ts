@@ -60,8 +60,12 @@ export class AdminController {
   }
 
   @Get(':id')
-  public async getAdmin(@Param('id') id: string): Promise<AdminModel | null> {
-    return this.adminService.getAdminById(id);
+  public async getAdmin(@Param('id') id: string, @Req() req): Promise<AdminModel | null> {
+    const token = req.cookies?.access_token;
+    if (!token) {
+      throw new UnauthorizedException();
+    }
+    return this.adminService.getAdminById(id, token);
   }
 
 
