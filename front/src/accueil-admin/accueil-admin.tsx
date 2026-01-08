@@ -1,5 +1,5 @@
 import './accueil-admin.css';
-import { Navigate, useNavigate } from "react-router-dom";
+import { data, Navigate, useNavigate } from "react-router-dom";
 import { useState, useEffect } from 'react';
 
 export default function AccueilAdmin() {
@@ -62,9 +62,19 @@ export default function AccueilAdmin() {
         }
     };
 
-    const valider_accident = () => {
+    const valider_accident = async (idChantier: string) => {
         console.log("Validation d'un accident...");
-        // Implémenter la logique de validation d'accident ici
+        const response = await fetch(`http://localhost:3001/worksite/resetAccident/${idChantier}`, {
+            method: 'GET',
+            credentials: 'include',
+        });
+        if (response.ok) {
+            const info = await response.json();
+            console.log("Accident validé :", info);
+            fetchChantierInfo(); // Mettre à jour les infos du chantier après validation
+        } else {
+            console.log("Erreur lors de la récupération des informations du chantier");
+        }
     }
 
     useEffect(() => { // Login
@@ -79,6 +89,12 @@ export default function AccueilAdmin() {
         }
     }, [worksiteIds]);
 
+    useEffect(() => {
+        if (chantierSelectionne === null && dataChantier && dataChantier.length > 0) {
+            setChantierSelectionne(dataChantier[0].id);
+        }
+    }, [dataChantier]);
+
     // Gestion de la connexion
     if (loggedIn === null) {
         return <div className="accueil-admin"><h2>Chargement...</h2></div>;
@@ -92,20 +108,28 @@ export default function AccueilAdmin() {
     else {
         return(
             <div className="accueil-admin">
+                <div className="accueil-admin-main">
                 <img src="/ressources/Logo.png" alt="Logo" className="logo-popup"/>
-                <h2>Sélectionner un chantier</h2>
                 {dataChantier && (
-                <select className="select-chantier" value={chantierSelectionne ?? ""} onChange={(e) => setChantierSelectionne(e.target.value)}>
-                    <option value="" disabled>
-                        Sélectionner un chantier
-                    </option>
-
-                    {dataChantier.map((chantier:any) => (
-                        <option key={chantier.id} value={chantier.id}>
-                        {chantier.nom}
+                <>
+                <h2 className="titre-selecteur">Sélectionner un chantier 
+                    <select className="select-chantier" value={chantierSelectionne ?? ""} onChange={(e) => setChantierSelectionne(e.target.value)}>
+                        <option value="" disabled>
+                            Sélectionner un chantier
                         </option>
-                    ))}
-                </select>
+
+                        {dataChantier.map((chantier:any) => (
+                            <option key={chantier.id} value={chantier.id}>
+                            {chantier.nom}
+                            </option>
+                        ))}
+                    </select>
+                </h2>
+                    <button className="bouton-tickets" onClick={() => { navigate('/tickets'); }}>Voir les tickets</button>
+                </>
+                )}
+                {!dataChantier && (
+                    <h2 className="titre-selecteur">Aucun chantier associé à votre compte, pour en lier un veuillez contacter la personne en charge de ce chantier.</h2>
                 )}
 
                 {chantierSelectionne && (
@@ -121,16 +145,15 @@ export default function AccueilAdmin() {
                                     <p>Client : {chantier.nomClient}</p>
                                     <p>Responsable sécurité : {chantier.nomRespoSec}</p>
                                     <p>Nombre de collaborateurs : {chantier.nbCollaborateur}</p>
-                                    <p>Jours sans accident : {chantier.joursSansAccident} <button className="bouton-valider-accident" onClick={valider_accident}> Valider le nombre de jours sans accidents</button></p>
+                                    <p>Jours sans accident : {chantier.joursSansAccident} <button className="bouton-valider-accident" onClick={() => valider_accident(chantier.id)}> Cliquez ici s'il y a eu un accident</button></p>
                                     <p>Date de fin : {chantier.dateFin}</p>
+                                    <button className="bouton-stats" onClick={() => { navigate('/stats', {state : {idChantier : chantier.id}}); }}>Voir les statistiques</button>
                                 </div>
                             ))}
-                    </div>  
+                    </div>
                 )}
-                <button className="bouton-tickets" onClick={() => { navigate('/tickets'); }}>Voir les tickets</button>
-                <button className="bouton-stats" onClick={() => { navigate('/stats'); }}>Voir les statistiques</button>
-                <button className="bouton-retour" onClick={() => { navigate('/login'); }}>Retour</button>
-            </div>
+                <button className="bouton-retour" onClick={() => { navigate('/login'); }}>Se déconnecter</button>
+            </div></div>
         );
     }
 }
