@@ -29,3 +29,8 @@ export declare class GetAllVotesWorksiteDto {
   @IsString()
   idWorksite: string;
 }
+
+export declare class GetStatWorksiteDto {
+  @IsDate()
+  date: Date;
+}

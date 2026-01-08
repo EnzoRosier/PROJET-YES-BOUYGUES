@@ -95,6 +95,10 @@ localhost:3001/vote/ticket/[idWorksite]
 --- Get Stats of worksite by ID ---
 GET
 localhost:3001/vote/getStatsOf/[idWorksite]
+{
+    "date": "2026-06-07" [OPTIONAL]
+}
+si pas de date prend tout les votes du site
 
 Renvoie un truc du genre : 
 {
