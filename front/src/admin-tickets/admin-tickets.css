@@ -1,0 +1,78 @@
+.admin-tickets {
+    min-height: 100vh;
+    padding: 20px;
+    background: linear-gradient(135deg, #F28C00, #E75113);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.bouton-retour-accueil-admin {
+  margin-top: 10px;
+  padding: 12px;
+  font-size: 16px;
+  font-weight: bold;
+  border: none;
+  border-radius: 6px;
+  background-color: #2b2b45;
+  color: white;
+  cursor: pointer;
+}
+
+.bouton-retour-accueil-admin:hover {
+  background-color: #1e1e2f;
+}
+
+.table-tickets {
+    width: 80%;
+    border-collapse: collapse;
+    margin-top: 13%;
+    margin-left: 10%;
+    background-color: #fff;
+    font-size: 1.3rem;
+}
+
+/* --- TÊTE DE TABLE --- */
+.table-tickets-head .table-tickets-header-row {
+    background-color: #000;
+    color: #fff;
+}
+
+.table-tickets-header {
+    padding: 12px 10px;
+    text-align: left;
+    font-weight: 600;
+    border-bottom: 3px solid #E75113;
+}
+
+/* --- LIGNES --- */
+.table-tickets-row {
+    transition: background-color 0.2s ease, transform 0.1s ease;
+}
+
+.table-tickets-data-row {
+    text-align : left;
+    border-bottom: 1px solid #ccc;
+    cursor: pointer;
+}
+
+.table-tickets-data-row:hover {
+    background-color: #f5e7e0;
+    transform: scale(1.01);
+}
+
+.table-tickets-data-row:active {
+    background-color: #E75113;
+    color: #fff;
+}
+
+/* --- CELLULES --- */
+.table-tickets-cell {
+    padding: 10px 8px;
+    color: #111;
+}
+
+.table-tickets-data-row:active .table-tickets-cell {
+    color: #fff;
+}
