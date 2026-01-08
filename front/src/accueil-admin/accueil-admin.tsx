@@ -51,12 +51,12 @@ export default function AccueilAdmin() {
                 if (response.ok) {
                     const info = await response.json();
                     infosChantier.push(info);
+                    console.log("Infos chantier récupérées");
                 } else {
                     console.log("Erreur lors de la récupération des informations du chantier");
                 }
             }
             setDataChantier(infosChantier);
-            console.log("Infos chantier récupérées :", infosChantier);
         } catch (error) {
             console.log("Erreur lors de la récupération des informations du chantier");
         }
@@ -70,7 +70,7 @@ export default function AccueilAdmin() {
         });
         if (response.ok) {
             const info = await response.json();
-            console.log("Accident validé :", info);
+            console.log("Accident validé :");
             fetchChantierInfo(); // Mettre à jour les infos du chantier après validation
         } else {
             console.log("Erreur lors de la récupération des informations du chantier");
