@@ -63,6 +63,33 @@ export default function AdminTickets() {
         }
     }
 
+    const cloturer_ticket = async (idTicket: string) => {
+        try {
+            let reponse = (document.querySelector('.input-reponse-ticket') as HTMLInputElement).value;
+            const response = await fetch(`http://localhost:3001/vote/respond`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                credentials: 'include',
+                body: JSON.stringify({
+                    id: idTicket,
+                    reponse : reponse,
+                }),
+            });
+            if (response.ok) {
+                console.log("Ticket cloturé avec succès");
+                getAllTickets(); // On rafraîchit la liste des tickets
+                navigate('/tickets'); // On retourne à la liste des tickets
+            }
+            else {
+                console.log("Erreur lors de la clôture du ticket");
+            }
+        } catch (error) {
+            console.log('Erreur lors de la clôture du ticket');
+        }
+    }
+
     useEffect(() => { // Login
         console.log("Vérification de la connexion...");
         checkLoggedIn();
@@ -88,7 +115,7 @@ export default function AdminTickets() {
     else {
         return(
         <div className="admin-tickets">
-        {idTicket && ( // Si on a un id de ticket dans l'URL, on affiche le popup de détail du ticket
+        {idTicket && dataTickets && ( // Si on a un id de ticket dans l'URL, on affiche le popup de détail du ticket
             <div className="admin-tickets-popup">
                 <h2>Détail du ticket {idTicket}</h2>
                 <div className="response-ticket">{dataTickets[idTicket]?.reponse}</div>
