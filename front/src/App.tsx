@@ -9,7 +9,7 @@ import Accueil from './accueil/accueil';
 import LoginPage from './Login/Login';
 import AdminTickets from './admin-tickets/admin-tickets';
 import AccueilAdmin from './accueil-admin/accueil-admin';
-import AdminList from './Gestion-admin/SuperAdminList';
+import AdminList from './ListeAdmin/SuperAdminList';
 import { useState } from 'react';
 
 function App() {
