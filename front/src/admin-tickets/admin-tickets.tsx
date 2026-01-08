@@ -87,30 +87,33 @@ export default function AdminTickets() {
         <div className="admin-tickets">
         <img src="/ressources/Logo.png" alt="Logo" className="logo-popup"/>
         
-        <table>
-            <thead>
-                <tr>
-                <th>Identifiant</th>
-                <th>Commentaire</th>
-                <th>Date</th>
-                <th>Date Cloture</th>
-                <th>Chantier</th>
+        <table className="table-tickets">
+            <thead className="table-tickets-head">
+                <tr className="table-tickets-row table-tickets-header-row">
+                    <th className="table-tickets-header">Identifiant</th>
+                    <th className="table-tickets-header">Commentaire</th>
+                    <th className="table-tickets-header">Date</th>
+                    <th className="table-tickets-header">Date Cloture</th>
+                    <th className="table-tickets-header">Chantier</th>
                 </tr>
             </thead>
-            <tbody>
+            <tbody className="table-tickets-body">
                 {Object.entries(dataTickets || {}).map(([id, infos]: [string, any]) => (
-                <tr key={id} onClick={ () => {
-                    navigate(`/admin-tickets/${id}`); }}>
-                    <td>{id}</td>
-                    <td>{infos.reponse}</td>
-                    <td>{infos.date}</td>
-                    <td>{infos.dateCloture}</td>
-                    <td>{infos.worksite.nom}</td>
+                <tr
+                    key={id}
+                    className="table-tickets-row table-tickets-data-row"
+                    onClick={() => navigate(`/admin-tickets/${id}`)}
+                >
+                <td className="table-tickets-cell">{id}</td>
+                <td className="table-tickets-cell">{infos.reponse}</td>
+                <td className="table-tickets-cell">{infos.date}</td>
+                <td className="table-tickets-cell">{infos.dateCloture}</td>
+                <td className="table-tickets-cell">{infos.worksite.nom}</td>
                 </tr>
                 ))}
             </tbody>
         </table>
-        <button className="bouton-retour" onClick={() => navigate('/admin')}>Retour</button>
+        <button className="bouton-retour-accueil-admin" onClick={() => navigate('/admin')}>Retour</button>
         </div>
         );
     }
