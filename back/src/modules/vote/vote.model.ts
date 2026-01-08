@@ -6,6 +6,7 @@ export type VoteModel = {
   numQuestion: string;
   reponse: string;
   commentaire: string;
+  reponseCommentaire:string;
   date: Date;
   dateCloture: Date;
   worksite: WorksiteEntity;

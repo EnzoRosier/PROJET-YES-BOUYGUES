@@ -16,6 +16,14 @@ export declare class CreateVoteDto {
   worksiteId: string;
 }
 
+// Creation d'un vote
+export declare class RespondVoteDto {
+  @IsString()
+  idVote: string;
+  @IsString()
+  reponse: string;
+}
+
 // Création de plusieurs votes
 export declare class CreateVotesDto {
   @IsOptional()
