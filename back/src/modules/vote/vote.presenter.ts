@@ -3,6 +3,7 @@ export class WorksitePresenter {
   numQuestion: string;
   reponse: string;
   commentaire: string;
+  reponseCommentaire: string;
   date: Date;
   dateCloture: Date;
   worksite: {
@@ -20,6 +21,7 @@ export class WorksitePresenter {
       numQuestion: data.numQuestion,
       reponse: data.reponse,
       commentaire: data.commentaire,
+      reponseCommentaire: data.reponseCommentaire,
       date: data.date,
       dateCloture: data.dateCloture,
       worksite: data.worksite,

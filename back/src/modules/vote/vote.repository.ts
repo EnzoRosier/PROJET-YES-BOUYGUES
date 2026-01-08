@@ -3,7 +3,7 @@ import { DataSource, IsNull, Not } from 'typeorm';
 import { WorksiteEntity } from '../database/entities/worksite.entity';
 import { VoteEntity } from '../database/entities/vote.entity';
 import { CreateVoteModel, StatsWorksiteModel, VoteModel } from './vote.model';
-import { CreateVoteDto, GetStatWorksiteDto } from './vote.dto';
+import { CreateVoteDto, GetStatWorksiteDto, RespondVoteDto } from './vote.dto';
 import { WorksiteModel } from '../worksite/worksite.model';
 import { contains } from 'class-validator';
 
@@ -88,6 +88,19 @@ export class VoteRepository {
     const returnedVote = this.voteRepository.save(newVote);
 
     return returnedVote;
+  }
+
+  public async respondToTicket(input: RespondVoteDto): Promise<VoteModel> {
+    const vote = await this.voteRepository.findOne({
+      where:{id:input.idVote}
+    })
+
+    if (vote == null || vote.dateCloture != null) {
+      throw new BadRequestException('Opened ticket not found');
+    }
+    vote.reponseCommentaire = input.reponse
+    vote.dateCloture = new Date(Date.now())
+    return this.voteRepository.save(vote)
   }
 
   //récupère tout les vote d'un worksite
