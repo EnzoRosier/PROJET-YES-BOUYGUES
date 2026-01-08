@@ -151,7 +151,7 @@ const DonutChart: React.FC<DonutChartProps> = ({
               fill="#666"
               fontSize="12"
             >
-              Titre du diagramme
+              Répartition des humeurs
             </text>
           </g>
         )}

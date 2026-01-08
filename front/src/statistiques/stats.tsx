@@ -5,7 +5,7 @@ import React, {useEffect, useState} from 'react';
 
 export default function Stats() {
   // Données pour le login
-  /*const [loggedIn, setLoggedIn] = useState<boolean | null>(null);
+  const [loggedIn, setLoggedIn] = useState<boolean | null>(null);
 
   const checkLoggedIn = async () => {
       // vérifier si l'utilisateur est connecté
@@ -29,7 +29,7 @@ export default function Stats() {
       }
   }
   
-  checkLoggedIn();*/
+  checkLoggedIn();
 
   // Données pour le diagramme
   const [chartData, setChartData] = useState<Array<{ label: string; value: number; color: string }>>(()=>{
@@ -102,7 +102,7 @@ const calculateAdaptiveScale = (data: Array<{ value: number }>) => {
 
   // Gestion de l'état de connexion
   // Si en cours d'évaluation, on met le chargement.
-  /*if (loggedIn === null) {
+  if (loggedIn === null) {
         return <div className="stats"><h2>Chargement...</h2></div>;
   }
 
@@ -113,7 +113,7 @@ const calculateAdaptiveScale = (data: Array<{ value: number }>) => {
   }
 
   // Sinon on peut afficher la page normalement.
-  else { */
+  else { 
     return (
     <div className="stats">
       <header className="stats-header">
@@ -135,7 +135,7 @@ const calculateAdaptiveScale = (data: Array<{ value: number }>) => {
               />
             </div>
             <div className="mini-chart">
-              <h4>Diagramme en Barres avec Échelle Adaptative</h4>
+              <h4>Diagramme des risques signalés</h4>
               <div className="bar-chart-with-axis">
               {(() => {
                 const { max: scaleMax, ticks } = calculateAdaptiveScale(chartData); 
@@ -169,7 +169,7 @@ const calculateAdaptiveScale = (data: Array<{ value: number }>) => {
                           backgroundColor: item.color
                         }}
                       />
-                      <div className="bar-label">{item.label} : {item.value.toFixed(1)}%</div>
+                      <div className="bar-label">{item.label} : {item.value.toFixed(1)}</div>
                     </div>
                   );
                 })}
@@ -190,4 +190,5 @@ const calculateAdaptiveScale = (data: Array<{ value: number }>) => {
     </div>
     </div>
     );
+}
 }
