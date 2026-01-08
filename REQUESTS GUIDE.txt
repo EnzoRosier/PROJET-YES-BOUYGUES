@@ -40,6 +40,10 @@ BODY (exemple) :
   "idAdmin": IdAdmin,
 }
 
+--- RESET JOUR SANS ACCIDENT ---
+GET
+localhost:3001/worksite/resetAccident/[idWorksite]
+
 --- CREATE WORKSITE ---
 POST
 localhost:3001/worksite/new
@@ -87,3 +91,31 @@ localhost:3001/vote/getByWorksite/[idWorksite]
 --- Get All Ticket of a website by ID ---
 GET
 localhost:3001/vote/ticket/[idWorksite]
+
+--- Get Stats of worksite by ID ---
+GET
+localhost:3001/vote/getStatsOf/[idWorksite]
+{
+    "date": "2026-06-07" [OPTIONAL]
+}
+si pas de date prend tout les votes du site
+
+Renvoie un truc du genre : 
+{
+  "questionHumeur": {
+      "bien": 2,
+      "moyen": 0,
+      "mauvais": 1
+  },
+  "questionRisque": {
+      "levage": 1,
+      "cohesion": 2,
+      "environement": 0,
+      "equipement": 1,
+      "hauteur": 1,
+      "stabilite": 1,
+      "ambiance": 0,
+      "energie": 2,
+      "autre": 0
+  }
+}

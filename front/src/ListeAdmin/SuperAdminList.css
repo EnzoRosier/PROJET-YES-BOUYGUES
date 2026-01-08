@@ -48,3 +48,30 @@
     box-sizing: border-box;
     margin-top: 5%;     /* <-- ajoute cet espace pour descendre le tableau */
 }
+
+.admin-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 1.5rem;
+    margin-top: 2rem;
+}
+
+.add-btn,
+.delete-btn {
+    padding: 1.1rem 2.2rem;   /* taille */
+    font-size: 1.05rem;       /* texte plus lisible */
+    border-radius: 6px;
+    border: none;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.add-btn {
+    background-color: #E75113;
+    color: white;
+}
+
+.delete-btn {
+    background-color: #b00020;
+    color: white;
+}

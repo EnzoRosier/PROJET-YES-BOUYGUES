@@ -20,5 +20,25 @@ export type CreateVoteModel = {
   worksite: WorksiteEntity;
 };
 
+// modèle pour stats worksite
+export type StatsWorksiteModel = {
+  questionHumeur: {
+    bien: number,
+    moyen: number,
+    mauvais: number,
+  }
+  questionRisque: {
+    levage: number,
+    cohesion: number,
+    environement: number,
+    equipement: number,
+    hauteur: number,
+    stabilite: number,
+    ambiance: number,
+    energie: number,
+    autre: number,
+  }
+}
+
 // modèle pour mettre à jour un worksite
 export type UpdateVoteModel = Partial<CreateVoteModel>;

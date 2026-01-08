@@ -6,7 +6,8 @@ export default function AdminList() {
 
     const [loggedIn, setLoggedIn] = useState<boolean | null>(null);
     const [admins, setAdmins] = useState<any[]>([]);      
-    const [adminDetails, setAdminDetails] = useState<{ [key: number]: any }>({});
+    const [selectedAdmin, setSelectedAdmin] = useState<any | null>(null);
+
 
 
     useEffect(() => {
@@ -30,19 +31,6 @@ export default function AdminList() {
             const data = await response.json();
             setAdmins(data);
             console.log(data)
-
-            // Pour chaque admin, récupérer les infos liées à worksiteIds (ou autre ID)
-            data.forEach(async (admin: any) => {
-                const firstId = admin.worksiteIds[0];
-                const res = await fetch(`http://localhost:3001/worksite/${firstId}`, {
-                    method: 'GET',
-                    credentials: 'include',
-                });
-                const detail = await res.json();
-
-                // stocke le résultat par ID
-                setAdminDetails(prev => ({ ...prev, [admin.worksiteIds]: detail }));
-            });
         };
 
 
@@ -74,9 +62,9 @@ export default function AdminList() {
                 <table className="admin-table">
                     <thead>
                         <tr>
-                            <th>Colonne 1</th>
-                            <th>Colonne 2</th>
-                            <th>Colonne 3</th>
+                            <th>Nom Prenom</th>
+                            <th>Email</th>
+                            <th>Chantiers</th>
                         </tr>
                     </thead>
 
@@ -85,16 +73,35 @@ export default function AdminList() {
                             <tr
                                 key={index}
                                 className="table-row"
-                                onClick={() => console.log('Ligne cliquée:', admin)}
+                                onClick={() => setSelectedAdmin(admin)}
+
                             >
                                 <td>{admin.firstName + "  " + admin.lastName} </td>
                                 <td>{admin.mail}</td>
-                                <td>{adminDetails[admin.worksiteIds]?.nom || 'Chargement...'}</td>
+                                <td>{admin.worksites?.map((r:any) =>r.nom).join(", ")}</td>
                             </tr>
                         ))}
                     </tbody>
                 </table>
             </div>
+            <div className="admin-actions">
+                <button
+                    className="add-btn"
+                    onClick={() => console.log('Ajouter admin')}
+                >
+                    Ajouter
+                </button>
+
+                {selectedAdmin && (
+                    <button
+                        className="delete-btn"
+                        onClick={() => console.log(selectedAdmin)}
+                    >
+                        Modifier
+                    </button>
+                )}
+            </div>
+
         </div>
     );
 }
