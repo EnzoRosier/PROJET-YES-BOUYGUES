@@ -38,6 +38,11 @@ export declare class ChangeRespoChantierDto {
   idAdmin: string;
 }
 
+export declare class ResetJourAccidentDto {
+  @IsString()
+  idWorksite: string;
+}
+
 // Mise à jour d'un worksite
 export declare class UpdateAdminDto {
   @IsString()

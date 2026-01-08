@@ -13,8 +13,6 @@ export class WorksiteRepository {
 
   constructor(private readonly dataSource: DataSource) {}
 
-  private worksites: WorksiteModel[] = [];
-
   //liste des worksites
   public async getWorksites(): Promise<WorksiteModel[]> {
     return this.worksiteRepository.find({ relations: { respoChantier: true } });
@@ -61,6 +59,20 @@ export class WorksiteRepository {
     const returnedAdmin = this.worksiteRepository.save(newAdmin);
 
     return returnedAdmin;
+  }
+
+  public async changeAccident(id: string, nb: number): Promise<WorksiteModel> {
+    if (typeof id !== 'string') {
+      throw new BadRequestException('worksiteID not specified');
+    }
+
+    const worksite = await this.worksiteRepository.findOneOrFail({
+      where: { id: id },
+    });
+
+    worksite.joursSansAccident = nb
+    const returnedAdmin = this.worksiteRepository.save(worksite);
+    return returnedAdmin
   }
 
   public async changeRespoChantier(
