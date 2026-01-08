@@ -10,7 +10,7 @@ export default function Stats() {
   const checkLoggedIn = async () => {
       // vérifier si l'utilisateur est connecté
       try {
-          const response = await fetch('http://localhost:3000/admins/me', {
+          const response = await fetch('http://localhost:3001/admins/me', {
               method: 'GET',
               credentials: 'include',
           });
@@ -32,6 +32,7 @@ export default function Stats() {
   checkLoggedIn();
 
   // Données pour le diagramme
+
   const [chartData, setChartData] = useState<Array<{ label: string; value: number; color: string }>>(()=>{
     const newData = [
       { label: 'Satisfait', value: Math.random() * 100, color: '#34A853' },
