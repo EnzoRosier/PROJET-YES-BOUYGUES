@@ -119,3 +119,13 @@ Renvoie un truc du genre :
       "autre": 0
   }
 }
+
+--- Respond to Ticket ---
+POST
+localhost:3001/vote/respond
+{
+    "idVote": "9",
+    "reponse": "yayaya"
+}
+ 
+Répond au ticket avec réponse et clot le ticket
