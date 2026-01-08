@@ -128,7 +128,7 @@ export class VoteRepository {
     ])
     .where('vote.numQuestion = 1')
     .andWhere('vote.worksiteId = :worksiteId', {worksiteId: id})
-    .andWhere('vote.date > :selectDate', {selectDate: input.date})
+    .andWhere('vote.date >= :selectDate', {selectDate: input.date})
     .getRawOne();
 
     res.questionRisque = await this.voteRepository.createQueryBuilder('vote')
