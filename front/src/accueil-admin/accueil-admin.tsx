@@ -62,9 +62,19 @@ export default function AccueilAdmin() {
         }
     };
 
-    const valider_accident = () => {
+    const valider_accident = async (idChantier: string) => {
         console.log("Validation d'un accident...");
-        // Implémenter la logique de validation d'accident ici
+        const response = await fetch(`http://localhost:3001/worksite/resetAccident/${idChantier}`, {
+            method: 'GET',
+            credentials: 'include',
+        });
+        if (response.ok) {
+            const info = await response.json();
+            console.log("Accident validé :", info);
+            fetchChantierInfo(); // Mettre à jour les infos du chantier après validation
+        } else {
+            console.log("Erreur lors de la récupération des informations du chantier");
+        }
     }
 
     useEffect(() => { // Login
@@ -136,7 +146,7 @@ export default function AccueilAdmin() {
                                     <p>Client : {chantier.nomClient}</p>
                                     <p>Responsable sécurité : {chantier.nomRespoSec}</p>
                                     <p>Nombre de collaborateurs : {chantier.nbCollaborateur}</p>
-                                    <p>Jours sans accident : {chantier.joursSansAccident} <button className="bouton-valider-accident" onClick={valider_accident}> Cliquez ici s'il y a eu un accident</button></p>
+                                    <p>Jours sans accident : {chantier.joursSansAccident} <button className="bouton-valider-accident" onClick={() => valider_accident(chantier.id)}> Cliquez ici s'il y a eu un accident</button></p>
                                     <p>Date de fin : {chantier.dateFin}</p>
                                 </div>
                             ))}
