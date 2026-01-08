@@ -1,9 +1,16 @@
 import './stats.css';
 import DonutChart from './donutDiag';
-import { Navigate } from 'react-router-dom';
+import { Navigate,useLocation } from 'react-router-dom';
 import React, {useEffect, useState} from 'react';
 
 export default function Stats() {
+  const location = useLocation();
+  const idChantier = location.state?.idChantier || null;
+  //à supprimer
+  useEffect(() => {
+    console.log("ID chantier pour les stats :", idChantier);
+  }, []);
+
   // Données pour le login
   const [loggedIn, setLoggedIn] = useState<boolean | null>(null);
 
@@ -28,11 +35,20 @@ export default function Stats() {
           setLoggedIn(false);
       }
   }
-  
-  checkLoggedIn();
+  useEffect(() => {
+   checkLoggedIn();
+  }, []);
 
   // Données pour le diagramme
-
+  /*try {
+    const voteResp = await fetch('http://localhost:3001/vote/getStatsOf/'+idChantier, {
+      method: 'GET',
+      credentials: 'include',
+      body:{
+        "date" : Date.now() - 7*24*60*60*1000 // Dernière semaine
+      }
+    )
+  }*/
   const [chartData, setChartData] = useState<Array<{ label: string; value: number; color: string }>>(()=>{
     const newData = [
       { label: 'Satisfait', value: Math.random() * 100, color: '#34A853' },
