@@ -1,11 +1,12 @@
 import './stats.css';
 import DonutChart from './donutDiag';
-import { Navigate,useLocation } from 'react-router-dom';
-import React, {useEffect, useState} from 'react';
+import { Navigate,useLocation, useNavigate } from 'react-router-dom';
+import React, {useEffect, useState, useRef, use} from 'react';
 
 export default function Stats() {
   const location = useLocation();
   const idChantier = location.state?.idChantier || null;
+  const navigate = useNavigate();
   //à supprimer
   useEffect(() => {
     console.log("ID chantier pour les stats :", idChantier);
@@ -39,53 +40,82 @@ export default function Stats() {
    checkLoggedIn();
   }, []);
 
-  // Données pour le diagramme
-  /*try {
-    const voteResp = await fetch('http://localhost:3001/vote/getStatsOf/'+idChantier, {
-      method: 'GET',
-      credentials: 'include',
-      body:{
-        "date" : Date.now() - 7*24*60*60*1000 // Dernière semaine
-      }
-    )
-  }*/
-  const [chartData, setChartData] = useState<Array<{ label: string; value: number; color: string }>>(()=>{
-    const newData = [
-      { label: 'Satisfait', value: Math.random() * 100, color: '#34A853' },
-      { label: 'Neutre', value: Math.random() * 100, color: '#FBBC05' },
-      { label: 'Insatisfait', value: Math.random() * 100, color: '#EA4335' }
-    ];
-    
-    const total = newData.reduce((sum, item) => sum + item.value, 0);
-    return newData.map(item => ({
-      ...item,
-      value: (item.value / total) * 100
-    }));
-  }); // Tableau vide au début
+  // État pour les données du diagramme
+  const [chartData, setChartData] = useState<Array<{ label: string; value: number; color: string }>>([
+    { label: 'Satisfait', value: 0, color: '#34A853' },
+    { label: 'Neutre', value: 0, color: '#FBBC05' },
+    { label: 'Insatisfait', value: 0, color: '#EA4335' }
+  ]);
   
+  // État pour les options du diagramme
   const [chartOptions, setChartOptions] = useState({
     size: 300,
     thickness: 50,
     showLabels: true,
     showCenterText: true
   });
-
-  const updateData = () => {
-  const newData = [
-    { label: 'Satisfait', value: Math.random() * 100, color: '#34A853' },
-    { label: 'Neutre', value: Math.random() * 100, color: '#FBBC05' },
-    { label: 'Insatisfait', value: Math.random() * 100, color: '#EA4335' }
-  ];
-  
-  const total = newData.reduce((sum, item) => sum + item.value, 0);
-  const normalizedData = newData.map(item => ({
-    ...item,
-    value: (item.value / total) * 100
-  }));
-  
-  setChartData(normalizedData);
+  const totalVotes = useRef<number>(0);
+  // Fonction pour récupérer les statistiques depuis l'API
+  const getWorksiteStats = async () => {
+    if (!idChantier) return;
+    
+    try {
+      const response = await fetch(`http://localhost:3001/vote/getStatsOf/${idChantier}`, {
+        method: 'GET',
+        credentials: 'include',
+      });
+      
+      if (response.ok) {
+        const stats = await response.json();
+        console.log("Statistiques reçues :", stats);
+        const bien = stats.questionHumeur.bien || 0;
+        const moyen = stats.questionHumeur.moyen || 0;
+        const mauvais = stats.questionHumeur.mauvais || 0;
+        const total = bien + moyen + mauvais;
+        
+        totalVotes.current = total;
+        // Mettre à jour les données du diagramme avec les valeurs de l'API
+        setChartData([
+          { 
+            label: 'Satisfait', 
+            value: bien || 0, 
+            color: '#34A853' 
+          },
+          { 
+            label: 'Neutre', 
+            value: moyen || 0, 
+            color: '#FBBC05' 
+          },
+          { 
+            label: 'Insatisfait', 
+            value: mauvais || 0, 
+            color: '#EA4335' 
+          }
+        ]);
+      } else {
+        console.error("Erreur API :", response.status);
+      }
+    } catch (error) {
+      console.error("Erreur lors de la récupération des statistiques :", error);
+    }
   };
 
+  // Charger les statistiques
+  useEffect(() => {
+    if (idChantier) {
+      console.log("Chargement des stats pour le chantier :", idChantier);
+      getWorksiteStats();
+    }
+  }, []);
+
+  //fonction pour rafraîchir les données manuellement
+  const refreshData = () => {
+    if (idChantier) {
+      getWorksiteStats();
+    }
+  };
+
+  // Calculer le total pour affichage
 // Echelle du diagramme en barres
 const calculateAdaptiveScale = (data: Array<{ value: number }>) => {
   if (!data || data.length === 0) {
@@ -135,7 +165,11 @@ const calculateAdaptiveScale = (data: Array<{ value: number }>) => {
     <div className="stats">
       <header className="stats-header">
         <img src="/ressources/Logo.png" alt="Logo" className="logo" />
-        <h1>Tableau de Bord - Statistiques</h1>
+        <h1>Statistiques du chantier</h1>
+        <div className="stats-recap">
+          <h2> Nombre de votes sur la dernière semaine : {totalVotes.current}</h2>
+          <h2> Nombre de risques signalés depuis la dernière semaine : </h2> {/* À compléter */}
+        </div>
       </header>
 
     <div className="stats-content">
@@ -186,7 +220,7 @@ const calculateAdaptiveScale = (data: Array<{ value: number }>) => {
                           backgroundColor: item.color
                         }}
                       />
-                      <div className="bar-label">{item.label} : {item.value.toFixed(1)}</div>
+                      <div className="bar-label">{item.label} : {item.value}</div>
                     </div>
                   );
                 })}
@@ -199,11 +233,7 @@ const calculateAdaptiveScale = (data: Array<{ value: number }>) => {
   </div>
   </div>
         </section>
-      <div className="chart-controls">
-          <button onClick={updateData} className="btn btn-primary">
-            Générer Nouvelles Données (Bouton de test pour le changement de nombres)
-          </button>
-      </div>
+        <button className="bouton-retour" onClick={() => { navigate('/admin'); }}>Retour à la page Admin</button>
     </div>
     </div>
     );
