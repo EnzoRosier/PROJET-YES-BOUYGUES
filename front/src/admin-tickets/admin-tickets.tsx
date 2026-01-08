@@ -85,6 +85,7 @@ export default function AdminTickets() {
     else {
         return(
         <div className="admin-tickets">
+        <div className="admin-tickets-main">
         <img src="/ressources/Logo.png" alt="Logo" className="logo-popup"/>
         
         <table className="table-tickets">
@@ -114,7 +115,7 @@ export default function AdminTickets() {
             </tbody>
         </table>
         <button className="bouton-retour-accueil-admin" onClick={() => navigate('/admin')}>Retour</button>
-        </div>
+        </div></div>
         );
     }
 }
