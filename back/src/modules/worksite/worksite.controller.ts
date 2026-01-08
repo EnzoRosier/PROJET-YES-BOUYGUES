@@ -1,7 +1,7 @@
 import { Body, Controller, Get, Param, Post, Req, UnauthorizedException } from '@nestjs/common';
 import { WorksiteRepository } from './worksite.repository';
 import { CreateWorksiteModel, WorksiteModel } from './worksite.model';
-import { ChangeRespoChantierDto, CreateWorksiteDto } from './worksite.dto';
+import { ChangeRespoChantierDto, CreateWorksiteDto, ResetJourAccidentDto } from './worksite.dto';
 import { WorksiteService } from './worksite.service';
 
 @Controller('worksite')
@@ -30,6 +30,13 @@ export class WorksiteController {
     @Body() input: ChangeRespoChantierDto,
   ): Promise<WorksiteModel> {
     return this.worksiteService.changeRespoChantier(input);
+  }
+
+  @Get('resetAccident/:id')
+  public async resetJourAccident(
+    @Param('id') id: string,
+  ): Promise<WorksiteModel | null> {
+    return this.worksiteService.resetJourAccident(id);
   }
 
   @Get(':id')
