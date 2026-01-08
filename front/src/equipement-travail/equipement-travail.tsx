@@ -34,15 +34,6 @@ const EquipementTravail: React.FC = () => {
               <p>
                 Risque d’accident lié à l’utilisation, la défaillance ou la mauvaise maintenance des machines et outils
               </p>
-              <h2>Principaux risques :</h2>
-              <ul>
-                <li><strong>Équipements défectueux :</strong> Matériel endommagé ou usé présentant un danger</li>
-                <li><strong>Mauvaise utilisation :</strong> Usage inapproprié d'outils ou de machines</li>
-                <li><strong>Absence d'EPI :</strong> Non-port des équipements de protection individuelle obligatoires</li>
-                <li><strong>Équipements inadaptés :</strong> Matériel non conforme à la tâche à réaliser</li>
-                <li><strong>Manque d'entretien :</strong> Vérifications et maintenance insuffisantes</li>
-                <li><strong>Formation insuffisante :</strong> Méconnaissance du fonctionnement des équipements</li>
-              </ul>
             </div>
           </div>
         </div>

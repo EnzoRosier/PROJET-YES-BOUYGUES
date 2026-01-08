@@ -31,17 +31,8 @@ const EnvironnementTravail: React.FC = () => {
             <h1>Environnement de Travail</h1>
             <div className="description">
               <p>
-                    Ensemble des risques liés aux conditions du chantier (bruit, poussières, météo, éclairage, espace restreint, etc.)
+                  Ensemble des risques liés aux conditions du chantier (bruit, poussières, météo, éclairage, espace restreint, etc.)
               </p>
-              <h2>Principaux risques :</h2>
-              <ul>
-                <li><strong>Exposition au bruit :</strong> Nuisances sonores pouvant causer des troubles auditifs</li>
-                <li><strong>Poussières et particules :</strong> Inhalation de substances nocives pour les voies respiratoires</li>
-                <li><strong>Conditions météorologiques :</strong> Travail sous forte chaleur, froid intense ou intempéries</li>
-                <li><strong>Éclairage insuffisant :</strong> Risque accru d'accidents par mauvaise visibilité</li>
-                <li><strong>Produits chimiques :</strong> Exposition à des substances dangereuses ou toxiques</li>
-                <li><strong>Ergonomie inadaptée :</strong> Troubles musculo-squelettiques dus à de mauvaises postures</li>
-              </ul>
             </div>
           </div>
         </div>

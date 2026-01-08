@@ -33,13 +33,6 @@ const TravauxHauteur: React.FC = () => {
               <p>
                 Risque de chute de personnes ou de matériel lors d’interventions sur échafaudages, toitures ou plateformes
               </p>
-              <h2>Principaux risques :</h2>
-              <ul>
-                <li><strong>Chute de hauteur :</strong> Risque de chute depuis un échafaudage, une échelle ou une plateforme</li>
-                <li><strong>Effondrement de structure :</strong> Rupture ou instabilité de l'échafaudage ou du support</li>
-                <li><strong>Chute d'objets :</strong> Outils ou matériaux tombant depuis la hauteur</li>
-                <li><strong>Conditions météorologiques :</strong> Vent, pluie ou gel augmentant les risques de glissade</li>
-              </ul>
             </div>
           </div>
         </div>

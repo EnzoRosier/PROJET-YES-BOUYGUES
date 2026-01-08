@@ -31,16 +31,8 @@ const RisqueStabilite: React.FC = () => {
             <h1>Risque de Stabilité</h1>
             <div className="description">
               <p>
-                Danger d’effondrement, de basculement ou de glissement d’éléments de structure, de terrain ou d’équipement
+                Danger d’effondrement, de basculement ou de glissement d’éléments de structure, de terrain ou d’équipements.
               </p>
-              <h2>Principaux risques :</h2>
-              <ul>
-                <li><strong>Effondrement de structures :</strong> Rupture ou affaissement de structures temporaires ou permanentes</li>
-                <li><strong>Renversement d'engins :</strong> Basculement de véhicules ou d'équipements sur sol instable</li>
-                <li><strong>Glissement de terrain :</strong> Mouvement du sol suite à des excavations ou des intempéries</li>
-                <li><strong>Chute de matériaux empilés :</strong> Effondrement de stocks mal stabilisés</li>
-                <li><strong>Déformation de coffrages :</strong> Rupture sous la pression du béton frais</li>
-              </ul>
             </div>
           </div>
         </div>

@@ -34,15 +34,6 @@ const EnergieDangereuse: React.FC = () => {
               <p>
                 Risque de blessure dû à des sources d’énergie non maîtrisées (électrique, hydraulique, pneumatique, thermique, etc.)
               </p>
-              <h2>Principaux risques :</h2>
-              <ul>
-                <li><strong>Électrocution :</strong> Contact avec des câbles ou installations électriques sous tension</li>
-                <li><strong>Électrisation :</strong> Passage du courant électrique à travers le corps</li>
-                <li><strong>Arc électrique :</strong> Explosion ou brûlures graves dues à un court-circuit</li>
-                <li><strong>Énergie mécanique :</strong> Démarrage intempestif de machines ou équipements</li>
-                <li><strong>Énergie hydraulique/pneumatique :</strong> Libération brutale de pression</li>
-                <li><strong>Énergie thermique :</strong> Brûlures par surfaces chaudes ou fluides à haute température</li>
-              </ul>
             </div>
           </div>
         </div>

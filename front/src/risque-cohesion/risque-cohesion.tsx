@@ -31,16 +31,8 @@ const RisqueCohesion: React.FC = () => {
             <h1>Risque de Cohésion</h1>
             <div className="description">
               <p>
-                Risque lié à un manque de coordination ou de communication entre équipes, pouvant provoquer des erreurs ou accidents
+               Risque lié à un manque de coordination ou de communication entre équipes, pouvant provoquer des erreurs ou accidents
               </p>
-              <h2>Principaux risques :</h2>
-              <ul>
-                <li><strong>Manque de communication :</strong> Informations importantes non transmises entre les équipes</li>
-                <li><strong>Coordination défaillante :</strong> Interventions simultanées non planifiées créant des situations dangereuses</li>
-                <li><strong>Incompréhension des consignes :</strong> Barrières linguistiques ou instructions mal comprises</li>
-                <li><strong>Isolement des travailleurs :</strong> Manque de soutien et d'entraide entre collègues</li>
-                <li><strong>Conflits interpersonnels :</strong> Tensions nuisant à la concentration et à la sécurité</li>
-              </ul>
             </div>
           </div>
         </div>

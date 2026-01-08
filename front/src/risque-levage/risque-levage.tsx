@@ -1,12 +1,26 @@
-import React from 'react';
+import React, { useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './risque-levage.css';
 
 const RisqueLevage: React.FC = () => {
   const navigate = useNavigate();
+  const audioRef = useRef<HTMLAudioElement | null>(null);
 
   const handleAudioClick = () => {
-    console.log("Audio button clicked");
+    if (audioRef.current) {
+      // Si l'audio est en train de jouer, on l'arrête
+      if (!audioRef.current.paused) {
+        audioRef.current.pause();
+        audioRef.current.currentTime = 0;
+        return;
+      }
+    }
+    
+    // Créer et jouer le nouvel audio
+    audioRef.current = new Audio('/audio/Français/Français_Diapo_8.mp3');
+    audioRef.current.play().catch(error => {
+      console.error("Erreur lors de la lecture de l'audio:", error);
+    });
   };
 
   return (
@@ -31,15 +45,8 @@ const RisqueLevage: React.FC = () => {
             <h1>Risque de Levage</h1>
             <div className="description">
               <p>
-                Danger lié aux opérations de levage de charges (grues, palans, chariots, etc.).
+                Danger lié aux opérations de levage de charges (grues, palans, chariots, etc.), pouvant entraîner chutes d’objets, écrasements ou collisions
               </p>
-              <h2>Principaux risques :</h2>
-              <ul>
-                <li><strong>Chute de charges :</strong> Risque d'écrasement si les charges ne sont pas correctement arrimées</li>
-                <li><strong>Renversement de l'engin :</strong> Instabilité due à une surcharge ou un terrain inadapté</li>
-                <li><strong>Contact avec des lignes électriques :</strong> Électrocution en cas de contact avec des câbles aériens</li>
-                <li><strong>Heurt de personnes :</strong> Collision entre la charge et le personnel présent</li>
-              </ul>
             </div>
           </div>
         </div>

@@ -33,15 +33,6 @@ const AmbianceSociale: React.FC = () => {
               <p>
                 Risque de tension, stress ou conflit entre travailleurs, pouvant nuire à la sécurité et à la performance collective
               </p>
-              <h2>Principaux risques :</h2>
-              <ul>
-                <li><strong>Harcèlement et discrimination :</strong> Comportements inappropriés créant un climat hostile</li>
-                <li><strong>Isolement social :</strong> Travailleurs exclus ou marginalisés au sein de l'équipe</li>
-                <li><strong>Stress et pression excessive :</strong> Surcharge de travail et exigences irréalistes</li>
-                <li><strong>Conflits interpersonnels :</strong> Tensions et disputes nuisant à la cohésion d'équipe</li>
-                <li><strong>Manque de reconnaissance :</strong> Démotivation due à l'absence de valorisation du travail accompli</li>
-                <li><strong>Communication défaillante :</strong> Incompréhensions et malentendus fréquents</li>
-              </ul>
             </div>
           </div>
         </div>
