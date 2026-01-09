@@ -125,7 +125,7 @@ export default function AccueilAdmin() {
                         ))}
                     </select>
                 </h2>
-                    <button className="bouton-tickets" onClick={() => { navigate('/tickets'); }}>Voir les tickets</button>
+                    <button className="bouton-tickets" onClick={() => { navigate('/tickets', {state : {from : "admin"}}); }}>Voir les tickets</button>
                 </>
                 )}
                 {!dataChantier && (
@@ -147,7 +147,7 @@ export default function AccueilAdmin() {
                                     <p>Nombre de collaborateurs : {chantier.nbCollaborateur}</p>
                                     <p>Jours sans accident : {chantier.joursSansAccident} <button className="bouton-valider-accident" onClick={() => valider_accident(chantier.id)}> Cliquez ici s'il y a eu un accident</button></p>
                                     <p>Date de fin : {chantier.dateFin}</p>
-                                    <button className="bouton-stats" onClick={() => { navigate('/stats', {state : {idChantier : chantier.id}}); }}>Voir les statistiques</button>
+                                    <button className="bouton-stats" onClick={() => { navigate('/stats', {state : {idChantier : chantier.id, from: "admin"}}); }}>Voir les statistiques</button>
                                 </div>
                             ))}
                     </div>
