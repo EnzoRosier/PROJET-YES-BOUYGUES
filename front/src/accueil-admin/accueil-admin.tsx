@@ -1,5 +1,5 @@
 import './accueil-admin.css';
-import { data, Navigate, useNavigate } from "react-router-dom";
+import { Navigate, useNavigate } from "react-router-dom";
 import { useState, useEffect } from 'react';
 
 export default function AccueilAdmin() {
@@ -77,6 +77,29 @@ export default function AccueilAdmin() {
         }
     }
 
+    const definirChantierActuel = async (idChantier: string) => {
+        try{
+            const response = await fetch(`http://localhost:3001/worksite/currentWorksite/${idChantier}`, {
+                method: 'POST',
+                credentials: 'include',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    worksiteId: idChantier,
+                }),
+            });
+            if (response.ok) {
+                const info = await response.json();
+                console.log("Chantier actuel défini :", info);
+            } else {
+                console.log("Erreur lors de la définition du chantier actuel");
+            }
+        }catch (error) {
+            console.log("Erreur lors de la définition du chantier actuel");
+        }
+    }
+
     useEffect(() => { // Login
         console.log("Vérification de la connexion...");
         checkLoggedIn();
@@ -148,6 +171,7 @@ export default function AccueilAdmin() {
                                     <p>Jours sans accident : {chantier.joursSansAccident} <button className="bouton-valider-accident" onClick={() => valider_accident(chantier.id)}> Cliquez ici s'il y a eu un accident</button></p>
                                     <p>Date de fin : {chantier.dateFin}</p>
                                     <button className="bouton-stats" onClick={() => { navigate('/stats', {state : {idChantier : chantier.id}}); }}>Voir les statistiques</button>
+                                    <button className="bouton-selection-chantier" onClick={() => { definirChantierActuel(chantier.id); }}>Définir comme chantier actuel</button>
                                 </div>
                             ))}
                     </div>

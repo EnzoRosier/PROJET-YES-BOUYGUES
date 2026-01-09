@@ -125,6 +125,18 @@
     cursor: pointer;
 }
 
+.bouton-selection-chantier {
+    margin-left: 20px;
+    padding: 12px;
+    font-size: 1rem;
+    font-weight: bold;
+    background-color: #007bff;
+    border: none;
+    border-radius: 4px;
+    color: white;
+    cursor: pointer;
+}
+
 .bouton-retour {
     margin-top: 10px;
     padding: 12px;
