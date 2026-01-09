@@ -139,22 +139,6 @@ const DonutChart: React.FC<DonutChartProps> = ({
           stroke="#e0e0e0"
           strokeWidth="1"
         />
-        
-        {/* Texte au centre */}
-        {showCenterText && (
-          <g>
-            <text
-              x={center}
-              y={center + 10}
-              textAnchor="middle"
-              dominantBaseline="middle"
-              fill="#666"
-              fontSize="12"
-            >
-              Titre du diagramme
-            </text>
-          </g>
-        )}
       </svg>
     </div>
   );
