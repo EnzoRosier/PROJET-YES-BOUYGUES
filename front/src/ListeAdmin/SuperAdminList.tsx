@@ -1,12 +1,15 @@
 import './SuperAdminList.css';
-import { Navigate } from 'react-router-dom';
 import { useEffect, useState } from 'react';
+import { Navigate, useNavigate } from 'react-router-dom';
+
 
 export default function AdminList() {
 
     const [loggedIn, setLoggedIn] = useState<boolean | null>(null);
     const [admins, setAdmins] = useState<any[]>([]);      
     const [selectedAdmin, setSelectedAdmin] = useState<any | null>(null);
+    const navigate = useNavigate();
+
 
 
 
@@ -101,6 +104,14 @@ export default function AdminList() {
                     </button>
                 )}
             </div>
+
+            <button
+                className="bouton-retour"
+                onClick={() => { navigate('/login'); }}
+            >
+                Retour
+            </button>
+
 
         </div>
     );
