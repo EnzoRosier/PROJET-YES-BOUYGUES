@@ -152,7 +152,9 @@ export default function AccueilAdmin() {
                             ))}
                     </div>
                 )}
-                <button className="bouton-retour" onClick={() => { navigate('/login'); }}>Se déconnecter</button>
+                <button className="bouton-retour" onClick={() => { 
+                    document.cookie = "access_token=; expires=Thu, 01 Jan 1970 00:00:00 GMT; path=/; domain=localhost"; // On supprime le token qui nous gardait connecté
+                    navigate('/login'); }}>Se déconnecter</button>
             </div></div>
         );
     }
