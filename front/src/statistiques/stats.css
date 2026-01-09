@@ -46,11 +46,9 @@
 
 /* Récap des statistiques sur la dernière semaine*/
 .stats-recap {
-  background: #f8f9fa;
   padding: 15px;
   border-radius: 8px;
   margin-top: 15px;
-  border-left: 4px solid #007acc;
 }
 
 .stats-recap h2 {
@@ -70,29 +68,15 @@
   padding: 0 20px;
 }
 .period-btn {
-  padding: 10px 20px;
-  border: 2px solid #e0e0e0;
-  background: white;
-  color: #666;
-  border-radius: 6px;
-  font-size: 14px;
-  font-weight: 500;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  min-width: 140px;
-}
-
-.period-btn:hover {
-  border-color: #007acc;
-  color: #007acc;
-  transform: translateY(-2px);
-}
-
-.period-btn.active {
-  background: #007acc;
-  color: white;
-  border-color: #007acc;
-  box-shadow: 0 4px 12px rgba(0, 122, 204, 0.2);
+  margin-top: 10px;
+    padding: 12px;
+    font-size: 16px;
+    font-weight: bold;
+    border: none;
+    border-radius: 6px;
+    background-color: #2b2b45;
+    color: white;
+    cursor: pointer;
 }
 
 .chart-section {

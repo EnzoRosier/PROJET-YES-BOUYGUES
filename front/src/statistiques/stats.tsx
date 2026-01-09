@@ -11,7 +11,7 @@ export default function Stats() {
   // Données pour le login
   const [loggedIn, setLoggedIn] = useState<boolean | null>(null);
   
-  // États pour les données
+  // État de départ pour les diagrammes
   const [donutChartData, setDonutChartData] = useState<Array<{ label: string; value: number; color: string }>>([
     { label: 'Satisfait', value: 0, color: '#34A853' },
     { label: 'Neutre', value: 0, color: '#FBBC05' },
@@ -53,7 +53,7 @@ export default function Stats() {
     return `${year}-${month}-${day}`;
   };
   
-  // Calculer la date de début selon la période
+  // Fonction pour calculer la date de début selon la période
   const calculateStartDate = (range: string): string => {
     const today = new Date();
     const start = new Date();
@@ -75,7 +75,7 @@ export default function Stats() {
     return formatDateYYYYMMDD(start);
   };
   
-  // Vérifier la connexion
+  // Fonction pour vérifier la connexion
   const checkLoggedIn = async () => {
     try {
       const response = await fetch('http://localhost:3001/admins/me', {
@@ -96,7 +96,7 @@ export default function Stats() {
     }
   };
   
-  // Fonction pour récupérer les statistiques depuis l'API
+  // Fonction pour récupérer les statistiques
   const getWorksiteStats = async (period: string = 'week') => {
     if (!idChantier) return;
     
@@ -104,8 +104,6 @@ export default function Stats() {
       const startDate = calculateStartDate(period);
       
       console.log(`Récupération des stats à partir du ${startDate} (${period})`);
-      
-      // Appel API
       const response = await fetch(
         `http://localhost:3001/vote/getStatsOf/${idChantier}`, 
         {
@@ -146,13 +144,14 @@ export default function Stats() {
           totalRisksLastWeek.current = totalRisksCurrentPeriod;
         }
         
-        // Mettre à jour le diagramme donut
+        // Mettre à jour les diagrammes
         setDonutChartData([
           { label: 'Satisfait', value: bien, color: '#34A853' },
           { label: 'Neutre', value: moyen, color: '#FBBC05' },
           { label: 'Insatisfait', value: mauvais, color: '#EA4335' }
         ]);
-        const risksData = [
+
+        setBarChartData([
           { label: 'Levage', value: levage || 0, color: '#FF6B6B' },
           { label: 'Cohésion', value: cohesion || 0, color: '#4ECDC4' },
           { label: 'Environnement', value: environnement || 0, color: '#45B7D1' },
@@ -162,10 +161,7 @@ export default function Stats() {
           { label: 'Ambiance', value: ambiance || 0, color: '#6A4C93' },
           { label: 'Energie', value: energie || 0, color: '#1982C4' },
           { label: 'Autre', value: autre || 0, color: '#8ACB88' }
-        ];
-        
-        setBarChartData(risksData);
-        
+        ]);   
       } else {
         console.error("Erreur API :", response.status);
       }
@@ -196,8 +192,7 @@ export default function Stats() {
         max: 100,
         ticks: [0, 25, 50, 75, 100]
       };
-    }
-    
+    }  
     const maxValue = Math.max(...data.map(item => item.value));
     const intervals = [1, 2, 5, 10, 20, 25, 50, 100];
     let scaleMax = 100;
@@ -207,8 +202,7 @@ export default function Stats() {
         scaleMax = Math.ceil(maxValue / interval) * interval;
         break;
       }
-    }
-    
+    }   
     const numTicks = 5;
     const tickStep = scaleMax / (numTicks - 1);
     const ticks = [];
@@ -217,7 +211,6 @@ export default function Stats() {
       const tickValue = Math.round(i * tickStep);
       ticks.push(tickValue);
     }
-    
     return { max: scaleMax, ticks };
   };
   
@@ -229,8 +222,7 @@ export default function Stats() {
   if (!loggedIn) {
     console.log("Utilisateur non connecté, redirection vers login");
     return (<Navigate to="/login" replace />);
-  }
-  
+  } 
   return (
     <div className="stats">
       <header className="stats-header">
@@ -290,15 +282,15 @@ export default function Stats() {
                     <>
                       <div className="y-axis">
                         <div className="y-ticks">
-                          {ticks.map((tick) => (
-                            <div 
-                              key={`tick-${tick}`} 
-                              className="y-tick"
-                              style={{ bottom: `${(tick / scaleMax) * 100}%` }}
-                            >
-                              <span className="tick-line"></span>
-                              <span className="tick-value">{tick}</span>
-                            </div>
+                          {ticks.map((tick, index) => (
+                          <div 
+                          key={`tick-${index}-${tick}`}  // Utilisez l'index ET la valeur pour garantir l'unicité
+                          className="y-tick"
+                          style={{ bottom: `${(tick / scaleMax) * 100}%` }}
+                          >
+                          <span className="tick-line"></span>
+                          <span className="tick-value">{tick}</span>
+                          </div>
                           ))}
                         </div>
                       </div>
@@ -327,6 +319,7 @@ export default function Stats() {
                 })()}
               </div>
             </div>
+
           </div>
         </section>
         
