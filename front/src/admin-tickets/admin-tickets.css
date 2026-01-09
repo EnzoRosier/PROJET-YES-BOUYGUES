@@ -103,6 +103,16 @@
     z-index: 1000;
 }
 
+.close-popup{
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    font-size: 1.2rem;
+    font-weight: bold;
+    color: #888;
+    cursor: pointer;
+}
+
 /* Titre */
 .admin-tickets-popup h2 {
     margin: 0;
@@ -112,12 +122,9 @@
     color: #222;
 }
 
-.response-vote {
-
-}
-
 /* Date */
 .date-ticket {
+    margin-top: 12px;
     font-size: 0.85rem;
     color: #666;
     text-align: right;
@@ -129,6 +136,20 @@
     font-weight: 500;
     color: #555;
     text-align : right;
+    margin-bottom: 12px;
+}
+
+/* Vote */
+.response-vote {
+    text-align: left;
+    margin : 5px;
+}
+
+/* Commentaire (vide pour l’instant mais prévu) */
+.commentaire-ticket {
+    margin : 5px;
+    text-align: left;
+    min-height: 20px;
 }
 
 /* Bloc contenant la réponse */
@@ -139,11 +160,6 @@
     border: 1px solid #e1e1e1;
     font-size: 0.95rem;
     min-height: 40px;
-}
-
-/* Commentaire (vide pour l’instant mais prévu) */
-.commentaire-ticket {
-    min-height: 20px;
 }
 
 /* Champ input */

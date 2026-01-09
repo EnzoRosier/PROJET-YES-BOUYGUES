@@ -56,14 +56,15 @@ export default function AdminTickets() {
                     console.log("Erreur lors de la récupération des tickets");
                 }
             }
-            setDataTickets(ticketsById);
-            console.log("Tickets récupérés :", ticketsById);
+            const ticketsAvecCommentaire = ticketsById.filter(t => t.commentaire !== null);
+            setDataTickets(ticketsAvecCommentaire);
+            console.log("Tickets récupérés :", ticketsAvecCommentaire);
         } catch (error) {
             console.log('Erreur lors de la récupération des tickets');
         }
     }
 
-    const cloturer_ticket = async (idTicket: string) => {
+    const cloturer_ticket = async (ticket: any) => {
         try {
             let reponse = (document.querySelector('.input-reponse-ticket') as HTMLInputElement).value;
             const response = await fetch(`http://localhost:3001/vote/respond`, {
@@ -73,7 +74,7 @@ export default function AdminTickets() {
                 },
                 credentials: 'include',
                 body: JSON.stringify({
-                    id: idTicket,
+                    idVote: ticket.id,
                     reponse : reponse,
                 }),
             });
@@ -117,6 +118,7 @@ export default function AdminTickets() {
         <div className="admin-tickets">
         {idTicket && dataTickets && ( // Si on a un id de ticket dans l'URL, on affiche le popup de détail du ticket
             <div className="admin-tickets-popup">
+                <div className="close-popup" onClick={() => navigate('/tickets')}>X</div>
                 <h2>Détail du ticket {idTicket}</h2>
                 <div className="date-ticket">Le {dataTickets[idTicket]?.date}</div>
                 <div className="chantier-ticket">Chantier : {dataTickets[idTicket]?.worksite.nom}</div>
@@ -126,21 +128,17 @@ export default function AdminTickets() {
                 )}
                 
                 {dataTickets[idTicket]?.reponseCommentaire && dataTickets[idTicket]?.dateCloture &&(
-                    <>
-                    <p>Réponse aportée le {dataTickets[idTicket]?.dateCloture}</p>
-                    <div className="response-ticket">{dataTickets[idTicket]?.reponseCommentaire}</div>
-                    </>
-                    
-                    
+                    <div className="response-ticket">Ce ticket a été cloturé le {dataTickets[idTicket]?.dateCloture}
+                    <br/>Réponse apportée : <br/>
+                    {dataTickets[idTicket]?.reponseCommentaire}</div>
                 )}
-                {!dataTickets[idTicket]?.reponseCommentaire && dataTickets[idTicket]?.dateCloture && (
+                {dataTickets[idTicket]?.reponseCommentaire == "" && dataTickets[idTicket]?.dateCloture && (
                     <div className="response-ticket">Ce ticket a été cloturé le {dataTickets[idTicket]?.dateCloture}</div>
                 )}
                 {!dataTickets[idTicket]?.dateCloture && (
                     <>
-                        <p>Réponse (Optionnelle)</p>
-                        <input className="input-reponse-ticket" type="text" placeholder="Ajouter un commentaire de clôture"/>
-                        <button className="bouton-cloturer-ticket" onClick={() => cloturer_ticket(idTicket)}>Clôturer le ticket</button>
+                        <input className="input-reponse-ticket" type="text" placeholder="(Optionnel) Ajouter un commentaire de clôture "/>
+                        <button className="bouton-cloturer-ticket" onClick={() => cloturer_ticket(dataTickets[idTicket])}>Clôturer le ticket</button>
                     </>
                 )}
                 
