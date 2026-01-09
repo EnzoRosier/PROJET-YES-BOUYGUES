@@ -3,6 +3,7 @@ import { Navigate } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 
 export default function AjouterAdmin() {
+export default function AjouterAdmin() {
 
     const [loggedIn, setLoggedIn] = useState<boolean | null>(null);
     const [isSuperAdmin, setIsSuperAdmin] = useState<boolean>(false);
@@ -13,6 +14,8 @@ export default function AjouterAdmin() {
     const [worksiteIds, setWorksiteIds] = useState('');
     const [SuperAdmin, setSuperAdmin] = useState(true);
 
+        useEffect(() => {
+        const checkSuperLoggedIn = async () => {
         useEffect(() => {
         const checkSuperLoggedIn = async () => {
             try {
@@ -28,8 +31,17 @@ export default function AjouterAdmin() {
             const me = await response.json();
             setLoggedIn(true);
             setIsSuperAdmin(me.isSuperAdmin); 
+                if (!response.ok) {
+                    setLoggedIn(false);
+                    setIsSuperAdmin(false);
+                return;
+            }
+            const me = await response.json();
+            setLoggedIn(true);
+            setIsSuperAdmin(me.isSuperAdmin); 
             } catch {
                 setLoggedIn(false);
+                setIsSuperAdmin(false);
                 setIsSuperAdmin(false);
             }
         };

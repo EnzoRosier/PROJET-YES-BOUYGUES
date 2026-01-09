@@ -40,6 +40,10 @@ BODY (exemple) :
   "idAdmin": IdAdmin,
 }
 
+--- RESET JOUR SANS ACCIDENT ---
+GET
+localhost:3001/worksite/resetAccident/[idWorksite]
+
 --- CREATE WORKSITE ---
 POST
 localhost:3001/worksite/new
@@ -91,6 +95,10 @@ localhost:3001/vote/ticket/[idWorksite]
 --- Get Stats of worksite by ID ---
 GET
 localhost:3001/vote/getStatsOf/[idWorksite]
+{
+    "date": "2026-06-07" [OPTIONAL]
+}
+si pas de date prend tout les votes du site
 
 Renvoie un truc du genre : 
 {
@@ -111,3 +119,13 @@ Renvoie un truc du genre :
       "autre": 0
   }
 }
+
+--- Respond to Ticket ---
+POST
+localhost:3001/vote/respond
+{
+    "idVote": "9",
+    "reponse": "yayaya"
+}
+ 
+Répond au ticket avec réponse et clot le ticket

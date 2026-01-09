@@ -6,20 +6,29 @@ import { Navigate, useNavigate } from 'react-router-dom';
 export default function AdminList() {
 
     const [loggedIn, setLoggedIn] = useState<boolean | null>(null);
+    const [isSuperAdmin, setIsSuperAdmin] = useState<boolean>(false);
     const [admins, setAdmins] = useState<any[]>([]);      
     const [selectedAdmin, setSelectedAdmin] = useState<any | null>(null);
     const navigate = useNavigate();
 
     useEffect(() => {
-        const checkLoggedIn = async () => {
+        const checkSuperLoggedIn = async () => {
             try {
                 const response = await fetch('http://localhost:3001/admins/me', {
                     method: 'GET',
                     credentials: 'include',
                 });
-                setLoggedIn(response.ok);
+                if (!response.ok) {
+                    setLoggedIn(false);
+                    setIsSuperAdmin(false);
+                return;
+            }
+            const me = await response.json();
+            setLoggedIn(true);
+            setIsSuperAdmin(me.isSuperAdmin); 
             } catch {
                 setLoggedIn(false);
+                setIsSuperAdmin(false);
             }
         };
 
@@ -36,20 +45,20 @@ export default function AdminList() {
 
         
 
-        checkLoggedIn();
+        checkSuperLoggedIn();
         getAdminList();
     }, []);
 
     if (loggedIn === null) {
-        return <div className="admin-tickets"><h2>Chargement...</h2></div>;
+        return <div className="admin-liste"><h2>Chargement...</h2></div>;
     }
 
-    if (!loggedIn) {
+    if (!loggedIn || !isSuperAdmin) {
         return <Navigate to="/login" replace />;
     }
 
     return (
-        <div className="admin-tickets">
+        <div className="admin-liste">
             <img
                 src="/ressources/Logo.png"
                 alt="Logo"

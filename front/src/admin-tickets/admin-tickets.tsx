@@ -1,5 +1,5 @@
 import './admin-tickets.css';
-import { useNavigate, Navigate } from 'react-router-dom';
+import { useNavigate, Navigate, useParams } from 'react-router-dom';
 import { use, useEffect, useState } from 'react';
 
 export default function AdminTickets() {
@@ -7,6 +7,8 @@ export default function AdminTickets() {
     const [dataTickets, setDataTickets] = useState<any>(null);
     const navigate = useNavigate();
     const [worksiteIds, setWorksiteIds] = useState<string[]>(); // Remplacez par l'ID du chantier souhaité
+    const { idTicket } = useParams<{ idTicket: string }>(); // On prend l'id du ticket dans l'URL s'il y en a un
+
 
     const checkLoggedIn = async () => {
         // vérifier si l'utilisateur est connecté
@@ -55,8 +57,36 @@ export default function AdminTickets() {
                 }
             }
             setDataTickets(ticketsById);
+            console.log("Tickets récupérés :", ticketsById);
         } catch (error) {
             console.log('Erreur lors de la récupération des tickets');
+        }
+    }
+
+    const cloturer_ticket = async (idTicket: string) => {
+        try {
+            let reponse = (document.querySelector('.input-reponse-ticket') as HTMLInputElement).value;
+            const response = await fetch(`http://localhost:3001/vote/respond`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                credentials: 'include',
+                body: JSON.stringify({
+                    id: idTicket,
+                    reponse : reponse,
+                }),
+            });
+            if (response.ok) {
+                console.log("Ticket cloturé avec succès");
+                getAllTickets(); // On rafraîchit la liste des tickets
+                navigate('/tickets'); // On retourne à la liste des tickets
+            }
+            else {
+                console.log("Erreur lors de la clôture du ticket");
+            }
+        } catch (error) {
+            console.log('Erreur lors de la clôture du ticket');
         }
     }
 
@@ -85,33 +115,49 @@ export default function AdminTickets() {
     else {
         return(
         <div className="admin-tickets">
+        {idTicket && dataTickets && ( // Si on a un id de ticket dans l'URL, on affiche le popup de détail du ticket
+            <div className="admin-tickets-popup">
+                <h2>Détail du ticket {idTicket}</h2>
+                <div className="response-ticket">{dataTickets[idTicket]?.reponse}</div>
+                <div className="date-ticket">{dataTickets[idTicket]?.date}</div>
+                <div className="chantier-ticket">{dataTickets[idTicket]?.worksite.nom}</div>
+                <div className="commentaire-ticket"></div>
+                <p>Réponse (Optionnelle)</p>
+                <input className="input-reponse-ticket" type="text" placeholder="Ajouter un commentaire de clôture"/>
+                <button className="bouton-cloturer-ticket" onClick={() => cloturer_ticket(idTicket)}>Clôturer le ticket</button>
+            </div>
+        )}
+        <div className="admin-tickets-main">
         <img src="/ressources/Logo.png" alt="Logo" className="logo-popup"/>
         
-        <table>
-            <thead>
-                <tr>
-                <th>Identifiant</th>
-                <th>Commentaire</th>
-                <th>Date</th>
-                <th>Date Cloture</th>
-                <th>Chantier</th>
+        <table className="table-tickets">
+            <thead className="table-tickets-head">
+                <tr className="table-tickets-row table-tickets-header-row">
+                    <th className="table-tickets-header">Identifiant</th>
+                    <th className="table-tickets-header">Réponse</th>
+                    <th className="table-tickets-header">Date</th>
+                    <th className="table-tickets-header">Date Cloture</th>
+                    <th className="table-tickets-header">Chantier</th>
                 </tr>
             </thead>
-            <tbody>
+            <tbody className="table-tickets-body">
                 {Object.entries(dataTickets || {}).map(([id, infos]: [string, any]) => (
-                <tr key={id} onClick={ () => {
-                    navigate(`/admin-tickets/${id}`); }}>
-                    <td>{id}</td>
-                    <td>{infos.reponse}</td>
-                    <td>{infos.date}</td>
-                    <td>{infos.dateCloture}</td>
-                    <td>{infos.worksite.nom}</td>
+                <tr
+                    key={id}
+                    className="table-tickets-row table-tickets-data-row"
+                    onClick={() => navigate(`/tickets/${id}`)}
+                >
+                <td className="table-tickets-cell">{id}</td>
+                <td className="table-tickets-cell">{infos.reponse}</td>
+                <td className="table-tickets-cell">{infos.date}</td>
+                <td className="table-tickets-cell">{infos.dateCloture}</td>
+                <td className="table-tickets-cell">{infos.worksite.nom}</td>
                 </tr>
                 ))}
             </tbody>
         </table>
-        <button className="bouton-retour" onClick={() => navigate('/admin')}>Retour</button>
-        </div>
+        <button className="bouton-retour-accueil-admin" onClick={() => navigate('/admin')}>Retour</button>
+        </div></div>
         );
     }
 }

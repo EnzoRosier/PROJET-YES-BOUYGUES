@@ -3,7 +3,7 @@ import { DataSource, IsNull, Not } from 'typeorm';
 import { WorksiteEntity } from '../database/entities/worksite.entity';
 import { VoteEntity } from '../database/entities/vote.entity';
 import { CreateVoteModel, StatsWorksiteModel, VoteModel } from './vote.model';
-import { CreateVoteDto } from './vote.dto';
+import { CreateVoteDto, GetStatWorksiteDto, RespondVoteDto } from './vote.dto';
 import { WorksiteModel } from '../worksite/worksite.model';
 import { contains } from 'class-validator';
 
@@ -90,11 +90,27 @@ export class VoteRepository {
     return returnedVote;
   }
 
+  public async respondToTicket(input: RespondVoteDto): Promise<VoteModel> {
+    const vote = await this.voteRepository.findOne({
+      where:{id:input.idVote}
+    })
+
+    if (vote == null || vote.dateCloture != null) {
+      throw new BadRequestException('Opened ticket not found');
+    }
+    vote.reponseCommentaire = input.reponse
+    vote.dateCloture = new Date(Date.now())
+    return this.voteRepository.save(vote)
+  }
+
   //récupère tout les vote d'un worksite
-  public async getStatOf(input: string): Promise<StatsWorksiteModel> {
+  public async getStatOf(id: string, input: GetStatWorksiteDto): Promise<StatsWorksiteModel> {
     const worksite = await this.worksiteRepository.findOne({
-      where: { id: input },
+      where: { id: id },
     });
+    if (input.date == null) {
+      input.date = new Date(1999, 1, 1)
+    }
     if (worksite == null) {
       throw new BadRequestException('worksite not found');
     }
@@ -111,7 +127,8 @@ export class VoteRepository {
       'COUNT(CASE WHEN vote.reponse LIKE "%MAUVAIS%" THEN 1 END) as mauvais',
     ])
     .where('vote.numQuestion = 1')
-    .andWhere('vote.worksiteId = :worksiteId', {worksiteId: input})
+    .andWhere('vote.worksiteId = :worksiteId', {worksiteId: id})
+    .andWhere('vote.date >= :selectDate', {selectDate: input.date})
     .getRawOne();
 
     res.questionRisque = await this.voteRepository.createQueryBuilder('vote')
@@ -127,7 +144,8 @@ export class VoteRepository {
       'COUNT(CASE WHEN vote.reponse LIKE "%AUTRE%" THEN 1 END) as autre',
     ])
     .where('vote.numQuestion = 2')
-    .andWhere('vote.worksiteId = :worksiteId', {worksiteId: input})
+    .andWhere('vote.worksiteId = :worksiteId', {worksiteId: id})
+    .andWhere('vote.date >= :selectDate', {selectDate: input.date})
     .getRawOne();
     
     return res

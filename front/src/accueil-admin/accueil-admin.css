@@ -1,4 +1,24 @@
 
+.accueil-admin {
+    min-height: 100vh;
+    padding: 20px;
+    background: linear-gradient(135deg, #F28C00, #E75113);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.accueil-admin-main {
+    position: relative;
+    width: 100%;
+    max-width: 1200px;
+    background: white;
+    border-radius: 16px;
+    padding: 40px;
+    box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+}
+
 .logo-popup {
   position:  absolute;
   top : 3%; 
@@ -6,19 +26,20 @@
   width: 10%;
   height : auto
 }
-/* TITRE PRINCIPAL */
-h2 {
-    font-size: 1.6rem;
-    margin-bottom: 1rem;
-    color: #000;
-    font-weight: 600;
-}
 
 /* SÉLECTEUR */
+.titre-selecteur {
+    color: #000;
+    font-size: 2rem;
+    margin-bottom: 1rem;
+    text-align: left;
+}
+
 .select-chantier {
     width: 260px;
     padding: 8px 10px;
     font-size: 0.95rem;
+    margin-left : 10px;
     border: 2px solid #E75113;
     border-radius: 4px;
     background-color: #fff;
@@ -44,10 +65,6 @@ h2 {
     border-radius: 6px;
     background-color: #fff;
     max-width: 800px;
-
-    /* Centrage horizontal */
-    margin-left: auto;
-    margin-right: auto;
 }
 
 /* TITRE DU BLOC */
@@ -80,44 +97,44 @@ h2 {
 
 .bouton-tickets {
     position : absolute;
-    bottom : 5%;
-    left : 5%;
-    width: 37%;
-    height : auto;
-    padding : 2%;
-    font-size: 2.5rem;
+    bottom : 55%;
+    right : 5%;
+    margin-top: 10px;
+    padding: 12px;
+    font-size: 16px;
+    font-weight: bold;
+    border: none;
+    border-radius: 6px;
     background-color: #E75113;
-    border-radius: 35px;
     color: white;
-    cursor : pointer;
+    cursor: pointer;
 }
 
 .bouton-stats {
     position : absolute;
-    bottom : 5%;
+    bottom : 35%;
     right : 5%;
-    width: 37%;
-    height : auto;
-    padding : 2%;
-    font-size: 2.5rem;
+    margin-top: 10px;
+    padding: 12px;
+    font-size: 16px;
+    font-weight: bold;
+    border: none;
+    border-radius: 6px;
     background-color: #E75113;
-    border-radius: 35px;
     color: white;
-    cursor : pointer;
+    cursor: pointer;
 }
 
 .bouton-retour {
-    position : absolute;
-    top : 5%;
-    left : 5%;
-    width: 10%;
-    height : auto;
-    padding : 2%;
-    font-size: 1.5rem;
-    background-color: #555;
-    border-radius: 35px;
+    margin-top: 10px;
+    padding: 12px;
+    font-size: 16px;
+    font-weight: bold;
+    border: none;
+    border-radius: 6px;
+    background-color: #2b2b45;
     color: white;
-    cursor : pointer;
+    cursor: pointer;
 }
 
 .bouton-valider-accident {
