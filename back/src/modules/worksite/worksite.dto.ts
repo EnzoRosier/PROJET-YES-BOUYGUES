@@ -19,7 +19,7 @@ export declare class CreateWorksiteDto {
   @IsInt()
   joursSansAccident: number;
   @IsString()
-  adminId: string;
+  adminIds: string[];
 }
 
 // Création de plusieurs worksites
@@ -73,5 +73,5 @@ export declare class UpdateAdminDto {
   worksiteId: string;
   @IsString()
   @IsOptional()
-  adminId: string;
+  adminIds: string[];
 }
