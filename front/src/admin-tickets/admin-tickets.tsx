@@ -118,13 +118,32 @@ export default function AdminTickets() {
         {idTicket && dataTickets && ( // Si on a un id de ticket dans l'URL, on affiche le popup de détail du ticket
             <div className="admin-tickets-popup">
                 <h2>Détail du ticket {idTicket}</h2>
-                <div className="response-ticket">{dataTickets[idTicket]?.reponse}</div>
-                <div className="date-ticket">{dataTickets[idTicket]?.date}</div>
-                <div className="chantier-ticket">{dataTickets[idTicket]?.worksite.nom}</div>
-                <div className="commentaire-ticket"></div>
-                <p>Réponse (Optionnelle)</p>
-                <input className="input-reponse-ticket" type="text" placeholder="Ajouter un commentaire de clôture"/>
-                <button className="bouton-cloturer-ticket" onClick={() => cloturer_ticket(idTicket)}>Clôturer le ticket</button>
+                <div className="date-ticket">Le {dataTickets[idTicket]?.date}</div>
+                <div className="chantier-ticket">Chantier : {dataTickets[idTicket]?.worksite.nom}</div>
+                <div className="response-vote">A voté : {dataTickets[idTicket]?.reponse}</div>
+                {dataTickets[idTicket]?.commentaire && (
+                    <div className="commentaire-ticket">Commentaire : {dataTickets[idTicket]?.commentaire}</div>
+                )}
+                
+                {dataTickets[idTicket]?.reponseCommentaire && dataTickets[idTicket]?.dateCloture &&(
+                    <>
+                    <p>Réponse aportée le {dataTickets[idTicket]?.dateCloture}</p>
+                    <div className="response-ticket">{dataTickets[idTicket]?.reponseCommentaire}</div>
+                    </>
+                    
+                    
+                )}
+                {!dataTickets[idTicket]?.reponseCommentaire && dataTickets[idTicket]?.dateCloture && (
+                    <div className="response-ticket">Ce ticket a été cloturé le {dataTickets[idTicket]?.dateCloture}</div>
+                )}
+                {!dataTickets[idTicket]?.dateCloture && (
+                    <>
+                        <p>Réponse (Optionnelle)</p>
+                        <input className="input-reponse-ticket" type="text" placeholder="Ajouter un commentaire de clôture"/>
+                        <button className="bouton-cloturer-ticket" onClick={() => cloturer_ticket(idTicket)}>Clôturer le ticket</button>
+                    </>
+                )}
+                
             </div>
         )}
         <div className="admin-tickets-main">
