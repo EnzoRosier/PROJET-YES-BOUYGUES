@@ -75,3 +75,8 @@ export declare class UpdateAdminDto {
   @IsOptional()
   adminIds: string[];
 }
+
+export declare class SetCurrentWorksiteDto {
+  @IsString()
+  worksiteId: string;
+}

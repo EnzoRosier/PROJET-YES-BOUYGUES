@@ -59,6 +59,17 @@ BODY (exemple) :
   "joursSansAccident": 1
 }
 
+--- SET CURRENT WORKSITE ---
+POST
+localhost:3001/worksite/currentWorksite
+{
+  "worksiteId": "ce13ccf7-7e73-400f-bbf3-b194b6ca59d6"
+}
+
+--- GET CURRENT WORKSITE ---
+GET
+localhost:3001/worksite/currentWorksite
+
 VOTE REQUESTS
 
 --- RECUP VOTES ---
