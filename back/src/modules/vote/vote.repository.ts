@@ -58,7 +58,6 @@ export class VoteRepository {
     }
     return this.voteRepository.find({
       where: {
-        dateCloture: Not(IsNull()),
         worksite: {
           id: input,
         },

@@ -2,6 +2,8 @@ import {
   BaseEntity,
   Column,
   Entity,
+  JoinTable,
+  ManyToMany,
   ManyToOne,
   OneToMany,
   PrimaryGeneratedColumn,
@@ -37,9 +39,20 @@ export class WorksiteEntity extends BaseEntity {
   @Column({ name: 'joursSansAccident', type: 'int' })
   joursSansAccident: number;
 
-  @ManyToOne(() => AdminEntity, (admin) => admin.worksites)
-  respoChantier: AdminEntity;
+  @ManyToMany(() => AdminEntity, (admin) => admin.worksites, {onDelete: "SET NULL"})
+  @JoinTable({
+    name: "worksite_admin_id",
+    joinColumn: {
+      name: "worksite",
+      referencedColumnName: "id"
+    },
+    inverseJoinColumn: {
+      name: "admins",
+      referencedColumnName: "id"
+    }
+  })
+  respoChantier: AdminEntity[];
 
-  @OneToMany(() => VoteEntity, (vote) => vote.worksite)
+  @OneToMany(() => VoteEntity, (vote) => vote.worksite,{onDelete: "CASCADE"})
   votes: VoteEntity[];
 }

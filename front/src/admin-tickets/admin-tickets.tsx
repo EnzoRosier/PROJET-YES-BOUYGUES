@@ -1,5 +1,5 @@
 import './admin-tickets.css';
-import { useNavigate, Navigate } from 'react-router-dom';
+import { useNavigate, Navigate, useParams } from 'react-router-dom';
 import { use, useEffect, useState } from 'react';
 
 export default function AdminTickets() {
@@ -7,6 +7,8 @@ export default function AdminTickets() {
     const [dataTickets, setDataTickets] = useState<any>(null);
     const navigate = useNavigate();
     const [worksiteIds, setWorksiteIds] = useState<string[]>(); // Remplacez par l'ID du chantier souhaité
+    const { idTicket } = useParams<{ idTicket: string }>(); // On prend l'id du ticket dans l'URL s'il y en a un
+
 
     const checkLoggedIn = async () => {
         // vérifier si l'utilisateur est connecté
@@ -54,9 +56,38 @@ export default function AdminTickets() {
                     console.log("Erreur lors de la récupération des tickets");
                 }
             }
-            setDataTickets(ticketsById);
+            const ticketsAvecCommentaire = ticketsById.filter(t => t.commentaire !== null);
+            setDataTickets(ticketsAvecCommentaire);
+            console.log("Tickets récupérés :", ticketsAvecCommentaire);
         } catch (error) {
             console.log('Erreur lors de la récupération des tickets');
+        }
+    }
+
+    const cloturer_ticket = async (ticket: any) => {
+        try {
+            let reponse = (document.querySelector('.input-reponse-ticket') as HTMLInputElement).value;
+            const response = await fetch(`http://localhost:3001/vote/respond`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                credentials: 'include',
+                body: JSON.stringify({
+                    idVote: ticket.id,
+                    reponse : reponse,
+                }),
+            });
+            if (response.ok) {
+                console.log("Ticket cloturé avec succès");
+                getAllTickets(); // On rafraîchit la liste des tickets
+                navigate('/tickets'); // On retourne à la liste des tickets
+            }
+            else {
+                console.log("Erreur lors de la clôture du ticket");
+            }
+        } catch (error) {
+            console.log('Erreur lors de la clôture du ticket');
         }
     }
 
@@ -85,6 +116,34 @@ export default function AdminTickets() {
     else {
         return(
         <div className="admin-tickets">
+        {idTicket && dataTickets && ( // Si on a un id de ticket dans l'URL, on affiche le popup de détail du ticket
+            <div className="admin-tickets-popup">
+                <div className="close-popup" onClick={() => navigate('/tickets')}>X</div>
+                <h2>Détail du ticket {idTicket}</h2>
+                <div className="date-ticket">Le {dataTickets[idTicket]?.date}</div>
+                <div className="chantier-ticket">Chantier : {dataTickets[idTicket]?.worksite.nom}</div>
+                <div className="response-vote">A voté : {dataTickets[idTicket]?.reponse}</div>
+                {dataTickets[idTicket]?.commentaire && (
+                    <div className="commentaire-ticket">Commentaire : {dataTickets[idTicket]?.commentaire}</div>
+                )}
+                
+                {dataTickets[idTicket]?.reponseCommentaire && dataTickets[idTicket]?.dateCloture &&(
+                    <div className="response-ticket">Ce ticket a été cloturé le {dataTickets[idTicket]?.dateCloture}
+                    <br/>Réponse apportée : <br/>
+                    {dataTickets[idTicket]?.reponseCommentaire}</div>
+                )}
+                {dataTickets[idTicket]?.reponseCommentaire == "" && dataTickets[idTicket]?.dateCloture && (
+                    <div className="response-ticket">Ce ticket a été cloturé le {dataTickets[idTicket]?.dateCloture}</div>
+                )}
+                {!dataTickets[idTicket]?.dateCloture && (
+                    <>
+                        <input className="input-reponse-ticket" type="text" placeholder="(Optionnel) Ajouter un commentaire de clôture "/>
+                        <button className="bouton-cloturer-ticket" onClick={() => cloturer_ticket(dataTickets[idTicket])}>Clôturer le ticket</button>
+                    </>
+                )}
+                
+            </div>
+        )}
         <div className="admin-tickets-main">
         <img src="/ressources/Logo.png" alt="Logo" className="logo-popup"/>
         
@@ -92,7 +151,7 @@ export default function AdminTickets() {
             <thead className="table-tickets-head">
                 <tr className="table-tickets-row table-tickets-header-row">
                     <th className="table-tickets-header">Identifiant</th>
-                    <th className="table-tickets-header">Commentaire</th>
+                    <th className="table-tickets-header">Réponse</th>
                     <th className="table-tickets-header">Date</th>
                     <th className="table-tickets-header">Date Cloture</th>
                     <th className="table-tickets-header">Chantier</th>
@@ -103,7 +162,7 @@ export default function AdminTickets() {
                 <tr
                     key={id}
                     className="table-tickets-row table-tickets-data-row"
-                    onClick={() => navigate(`/admin-tickets/${id}`)}
+                    onClick={() => navigate(`/tickets/${id}`)}
                 >
                 <td className="table-tickets-cell">{id}</td>
                 <td className="table-tickets-cell">{infos.reponse}</td>

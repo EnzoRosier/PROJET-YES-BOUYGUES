@@ -10,6 +10,7 @@ import LoginPage from './Login/Login';
 import AdminTickets from './admin-tickets/admin-tickets';
 import AccueilAdmin from './accueil-admin/accueil-admin';
 import AdminList from './ListeAdmin/SuperAdminList';
+import AccueilSuperAdmin from './accueil-super-admin/accueil-super-admin';
 import { useState } from 'react';
 
 function App() {
@@ -24,13 +25,14 @@ function App() {
           <Route path="/" element={<Accueil />} />
           <Route path="/login" element={<LoginPage />} />
           <Route path="/stats" element={<Stats />} />
+          <Route path="/tickets/:idTicket" element={<AdminTickets />} />
           <Route path="/tickets" element={<AdminTickets />} />
           <Route path="/Formulaire" element={<Formulaire />} />
           <Route path="/riskeval" element={<RiskEval />} />
           <Route path="/risk-info/:label" element={<RiskInfo />} />
           <Route path="/admin" element={<AccueilAdmin />} />
-          <Route path="/admin-tickets" element={<AdminTickets />} />
           <Route path='/AdminList' element={<AdminList />} />
+          <Route path="/super-admin" element={<AccueilSuperAdmin />} />
         </Routes>
       </div>
     );

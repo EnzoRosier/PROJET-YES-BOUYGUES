@@ -11,7 +11,7 @@ export type WorksiteModel = {
   nomRespoSec: string;
   nbCollaborateur: number;
   joursSansAccident: number;
-  respoChantier: AdminModel;
+  respoChantier: AdminModel[];
 };
 
 // modèle pour créer un worksite
@@ -24,7 +24,7 @@ export type CreateWorksiteModel = {
   nomRespoSec: string;
   nbCollaborateur: number;
   joursSansAccident: number;
-  respoChantier: AdminModel;
+  respoChantier: AdminModel[];
 };
 
 // modèle pour mettre à jour un worksite
