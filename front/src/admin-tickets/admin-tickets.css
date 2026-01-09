@@ -174,17 +174,12 @@
     transition: border-color 0.2s ease;
 }
 
-.input-reponse-ticket:focus {
-    border-color: #4a7bd0;
-    outline: none;
-}
-
 /* Bouton */
 .bouton-cloturer-ticket {
     margin-top: 8px;
     padding: 12px;
 
-    background-color: #2859a6;
+    background-color: #E75113;
     color: #ffffff;
 
     border: none;
