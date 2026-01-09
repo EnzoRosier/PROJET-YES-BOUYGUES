@@ -44,6 +44,41 @@
   gap: 30px;
 }
 
+/* Récap des statistiques sur la dernière semaine*/
+.stats-recap {
+  padding: 15px;
+  border-radius: 8px;
+  margin-top: 15px;
+}
+
+.stats-recap h2 {
+  margin: 8px 0;
+  font-size: 16px;
+  color: #333;
+  font-weight: 500;
+}
+
+/*Boutons de changement de période */
+
+.period-selector {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  margin: 20px 0;
+  padding: 0 20px;
+}
+.period-btn {
+  margin-top: 10px;
+    padding: 12px;
+    font-size: 16px;
+    font-weight: bold;
+    border: none;
+    border-radius: 6px;
+    background-color: #2b2b45;
+    color: white;
+    cursor: pointer;
+}
+
 .chart-section {
   background: white;
   border-radius: 15px;
@@ -73,6 +108,13 @@
   float: left;
 }
 
+.chart-wrapper h3 {
+  text-align: center;
+  margin-bottom: 15px;
+  color: #333;
+  font-size: 18px;
+}
+
 .mini-chart {
   display: flex;
   flex-direction: column;
@@ -87,12 +129,10 @@
 }
 
 .mini-chart h4 {
-  margin-top: 0;
-  margin-bottom: 20px;
-  color: #333;
   text-align: center;
-  width: 100%;
-  font-size: 1.1rem;
+  margin-bottom: 15px;
+  color: #333;
+  font-size: 16px;
 }
 
 .bar-chart-with-axis {

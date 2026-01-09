@@ -1,6 +1,7 @@
 import './SuperAdminList.css';
-import { Navigate } from 'react-router-dom';
 import { useEffect, useState } from 'react';
+import { Navigate, useNavigate } from 'react-router-dom';
+
 
 export default function AdminList() {
 
@@ -8,8 +9,7 @@ export default function AdminList() {
     const [isSuperAdmin, setIsSuperAdmin] = useState<boolean>(false);
     const [admins, setAdmins] = useState<any[]>([]);      
     const [selectedAdmin, setSelectedAdmin] = useState<any | null>(null);
-
-
+    const navigate = useNavigate();
 
     useEffect(() => {
         const checkSuperLoggedIn = async () => {
@@ -96,7 +96,7 @@ export default function AdminList() {
             <div className="admin-actions">
                 <button
                     className="add-btn"
-                    onClick={() => console.log('Ajouter admin')}
+                    onClick={() => { navigate('/AjouterAdmin'); }}
                 >
                     Ajouter
                 </button>
@@ -110,6 +110,14 @@ export default function AdminList() {
                     </button>
                 )}
             </div>
+
+            <button
+                className="bouton-retour"
+                onClick={() => { navigate('/login'); }}
+            >
+                Retour
+            </button>
+
 
         </div>
     );
