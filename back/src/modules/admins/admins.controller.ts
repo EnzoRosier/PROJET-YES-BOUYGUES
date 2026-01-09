@@ -1,12 +1,12 @@
 import { Body, Controller, Get, Param, Post } from '@nestjs/common';
-//import { patch } from 'axios';
-import { CreateAdminDto, LoginDto } from './admins.dto';
+import { CreateAdminDto, LoginDto, UpdateAdminDto } from './admins.dto';
 import { AdminService } from './admins.service';
 import { AdminModel, CreateAdminModel, MeModel } from './admins.model';
 import { Throttle } from '@nestjs/throttler';
 import { Response } from 'express';
 import { Res } from '@nestjs/common';
 import { Req, UnauthorizedException } from '@nestjs/common';
+import { UpdateResult } from 'typeorm';
 
 
 @Controller('admins')
@@ -26,6 +26,14 @@ export class AdminController {
 
   @Post()
   public async createAdmin(
+    @Body() input: CreateAdminDto,
+  ): Promise<CreateAdminModel> {
+    return this.adminService.createAdmin(input);
+  }
+
+  @Post()
+  public async updateAdmin(
+    @Req() req,
     @Body() input: CreateAdminDto,
   ): Promise<CreateAdminModel> {
     return this.adminService.createAdmin(input);
@@ -59,6 +67,24 @@ export class AdminController {
     return this.adminService.getMeFromToken(token);
   }
 
+  @Post('delete/:id')
+  public async deleteAdmin(@Param('id') id: string, @Req() req): Promise<void> {
+    const token = req.cookies?.access_token;
+    if (!token) {
+      throw new UnauthorizedException();
+    }
+    return this.adminService.deleteAdmin(id, token);
+  }
+
+  @Post('edit/:id')
+  public async editAdmin(@Param('id') id: string, @Req() req, @Body() input: UpdateAdminDto): Promise<AdminModel | null> {
+    const token = req.cookies?.access_token;
+    if (!token) {
+      throw new UnauthorizedException();
+    }
+    return this.adminService.editAdmin(id,input, token);
+  }
+
   @Get(':id')
   public async getAdmin(@Param('id') id: string, @Req() req): Promise<AdminModel | null> {
     const token = req.cookies?.access_token;
@@ -67,6 +93,8 @@ export class AdminController {
     }
     return this.adminService.getAdminById(id, token);
   }
+
+  
 
 
 }

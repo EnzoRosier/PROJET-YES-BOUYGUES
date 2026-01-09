@@ -37,9 +37,9 @@ export class WorksiteEntity extends BaseEntity {
   @Column({ name: 'joursSansAccident', type: 'int' })
   joursSansAccident: number;
 
-  @ManyToOne(() => AdminEntity, (admin) => admin.worksites)
+  @ManyToOne(() => AdminEntity, (admin) => admin.worksites, {onDelete: "SET NULL"})
   respoChantier: AdminEntity;
 
-  @OneToMany(() => VoteEntity, (vote) => vote.worksite)
+  @OneToMany(() => VoteEntity, (vote) => vote.worksite,{onDelete: "CASCADE"})
   votes: VoteEntity[];
 }

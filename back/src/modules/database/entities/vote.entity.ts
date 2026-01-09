@@ -21,6 +21,9 @@ export class VoteEntity extends BaseEntity {
   @Column({ name: 'commentaire', type: 'varchar' })
   commentaire: string;
 
+  @Column({ name: 'reponseCommentaire', type: 'varchar', nullable: true })
+  reponseCommentaire: string;
+
   @Column({ name: 'date', type: 'date' })
   date: Date;
 

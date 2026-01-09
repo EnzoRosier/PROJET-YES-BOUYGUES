@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { AdminModel, CreateAdminModel } from './admins.model';
-import { CreateAdminDto } from './admins.dto';
-import { DataSource } from 'typeorm';
+import { CreateAdminDto, UpdateAdminDto } from './admins.dto';
+import { DataSource, UpdateResult } from 'typeorm';
 import { AdminEntity } from '../database/entities/admin.entity';
 import * as bcrypt from 'bcrypt';
 import { WorksiteEntity } from '../database/entities/worksite.entity';
@@ -56,5 +56,19 @@ export class AdminRepository {
     return this.adminRepository.findOne({
       where: { mail },
     });
+  }
+
+  async editAdmin(id: string, input: UpdateAdminDto): Promise<AdminModel> {
+    if (input.password) {
+      const saltRounds=12;
+      const hashedPassword = await bcrypt.hash(input.password, saltRounds);
+      input.password = hashedPassword
+    }
+    await this.adminRepository.update(id, input)
+    return await this.getAdminById(id)
+  }
+
+  async deleteAdmin(id: string) : Promise<void> {
+    await this.adminRepository.delete(id)
   }
 }

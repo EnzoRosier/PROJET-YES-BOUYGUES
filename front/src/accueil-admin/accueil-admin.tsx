@@ -51,20 +51,30 @@ export default function AccueilAdmin() {
                 if (response.ok) {
                     const info = await response.json();
                     infosChantier.push(info);
+                    console.log("Infos chantier récupérées");
                 } else {
                     console.log("Erreur lors de la récupération des informations du chantier");
                 }
             }
             setDataChantier(infosChantier);
-            console.log("Infos chantier récupérées :", infosChantier);
         } catch (error) {
             console.log("Erreur lors de la récupération des informations du chantier");
         }
     };
 
-    const valider_accident = () => {
+    const valider_accident = async (idChantier: string) => {
         console.log("Validation d'un accident...");
-        // Implémenter la logique de validation d'accident ici
+        const response = await fetch(`http://localhost:3001/worksite/resetAccident/${idChantier}`, {
+            method: 'GET',
+            credentials: 'include',
+        });
+        if (response.ok) {
+            const info = await response.json();
+            console.log("Accident validé :");
+            fetchChantierInfo(); // Mettre à jour les infos du chantier après validation
+        } else {
+            console.log("Erreur lors de la récupération des informations du chantier");
+        }
     }
 
     useEffect(() => { // Login
@@ -116,7 +126,6 @@ export default function AccueilAdmin() {
                     </select>
                 </h2>
                     <button className="bouton-tickets" onClick={() => { navigate('/tickets'); }}>Voir les tickets</button>
-                    <button className="bouton-stats" onClick={() => { navigate('/stats'); }}>Voir les statistiques</button>
                 </>
                 )}
                 {!dataChantier && (
@@ -136,8 +145,9 @@ export default function AccueilAdmin() {
                                     <p>Client : {chantier.nomClient}</p>
                                     <p>Responsable sécurité : {chantier.nomRespoSec}</p>
                                     <p>Nombre de collaborateurs : {chantier.nbCollaborateur}</p>
-                                    <p>Jours sans accident : {chantier.joursSansAccident} <button className="bouton-valider-accident" onClick={valider_accident}> Cliquez ici s'il y a eu un accident</button></p>
+                                    <p>Jours sans accident : {chantier.joursSansAccident} <button className="bouton-valider-accident" onClick={() => valider_accident(chantier.id)}> Cliquez ici s'il y a eu un accident</button></p>
                                     <p>Date de fin : {chantier.dateFin}</p>
+                                    <button className="bouton-stats" onClick={() => { navigate('/stats', {state : {idChantier : chantier.id}}); }}>Voir les statistiques</button>
                                 </div>
                             ))}
                     </div>

@@ -5,7 +5,7 @@ import { ChangeRespoChantierDto, CreateWorksiteDto, ResetJourAccidentDto } from 
 import { AdminService } from '../admins/admins.service';
 import { MeModel } from '../admins/admins.model';
 import { WorksiteEntity } from '../database/entities/worksite.entity';
-import { Cron } from '@nestjs/schedule';
+import { Cron, CronExpression } from '@nestjs/schedule';
 
 @Injectable()
 export class WorksiteService {
@@ -53,7 +53,7 @@ export class WorksiteService {
     return this.worksiteReposisory.changeAccident(input, 0);
   }
 
-  @Cron('1 * * * *')
+  @Cron(CronExpression.EVERY_DAY_AT_1AM)
   async updateJourAccident() {
     console.log("Update jour sans accident")
     let worksites = await this.getWorksites()

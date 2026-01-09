@@ -1,10 +1,11 @@
 import { forwardRef, Inject, Injectable, UnauthorizedException } from '@nestjs/common';
-import { CreateAdminDto } from './admins.dto';
+import { CreateAdminDto, UpdateAdminDto } from './admins.dto';
 import { AdminModel, CreateAdminModel, MeModel } from './admins.model';
 import { AdminRepository } from './admins.repository';
 import * as bcrypt from 'bcrypt';
 import { JwtService } from '@nestjs/jwt';
 import { WorksiteService } from '../worksite/worksite.service';
+import { UpdateResult } from 'typeorm';
 
 @Injectable()
 export class AdminService {
@@ -78,7 +79,7 @@ export class AdminService {
     };
   }
 
-    async getMeFromToken(token: string): Promise<MeModel> {
+  async getMeFromToken(token: string): Promise<MeModel> {
     if (!token || typeof token !== 'string') {
       throw new UnauthorizedException('Token manquant ou invalide');
     }
@@ -99,7 +100,22 @@ export class AdminService {
     };
   }
 
+  async editAdmin(id: string, input: UpdateAdminDto, token: string): Promise<AdminModel> {
+    const currInfo = await this.getMeFromToken(token)
+    
+    if (!currInfo.isSuperAdmin) {
+      throw new UnauthorizedException();
+    }
 
+    return this.adminRepository.editAdmin(id, input)
+  }
 
-
+  async deleteAdmin(id: string, token:string) : Promise<void> {
+    const currInfo = await this.getMeFromToken(token)
+    
+    if (!currInfo.isSuperAdmin) {
+      throw new UnauthorizedException();
+    }
+    this.adminRepository.deleteAdmin(id)
+  }
 }
