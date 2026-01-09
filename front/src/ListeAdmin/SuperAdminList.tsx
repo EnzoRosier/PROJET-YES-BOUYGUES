@@ -10,9 +10,6 @@ export default function AdminList() {
     const [selectedAdmin, setSelectedAdmin] = useState<any | null>(null);
     const navigate = useNavigate();
 
-
-
-
     useEffect(() => {
         const checkLoggedIn = async () => {
             try {
@@ -90,7 +87,7 @@ export default function AdminList() {
             <div className="admin-actions">
                 <button
                     className="add-btn"
-                    onClick={() => console.log('Ajouter admin')}
+                    onClick={() => { navigate('/AjouterAdmin'); }}
                 >
                     Ajouter
                 </button>

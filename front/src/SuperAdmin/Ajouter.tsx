@@ -48,7 +48,7 @@ export default function AjouterAdmin() {
                     password: password,
                     firstName: firstname,
                     lastName: lastname,
-                    isSuperAdmin: true,
+                    isSuperAdmin: SuperAdmin,
                     worksiteIds: worksiteIds
                 }),
             });
