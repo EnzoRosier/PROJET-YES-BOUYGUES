@@ -36,10 +36,8 @@ function LoginPage() {
         const me = await meResponse.json();
 
         if (me.isSuperAdmin) {
-          console.log('crinje');
           navigate('/super-admin');
         } else {
-          console.log('cronje');
           navigate('/admin');
         }
 
@@ -60,6 +58,8 @@ function LoginPage() {
         {/* Formulaire */}
         <div className="login-form">
           <h2>Connexion</h2>
+
+          <button className='bouton-retour-compagnon' onClick={() => { navigate('/'); }}>←</button>
 
           <input
             type="email"
