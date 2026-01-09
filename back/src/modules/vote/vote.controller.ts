@@ -24,7 +24,7 @@ export class VoteController {
     return this.voteService.getVoteWorksiteId(id);
   }
 
-  @Get('getStatsOf/:id')
+  @Post('getStatsOf/:id')
   public async getStatOf(
     @Param('id') id: string,
     @Body() input: GetStatWorksiteDto): Promise<StatsWorksiteModel> {
