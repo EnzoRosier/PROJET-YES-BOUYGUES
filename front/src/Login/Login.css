@@ -41,6 +41,18 @@
   justify-content: center;
 }
 
+.bouton-retour-compagnon {
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  background: none;
+  border: none;
+  color: #2b2b45;
+  font-size: 24px;
+  cursor: pointer;
+} 
+
+
 .login-form h2 {
   margin-bottom: 25px;
   font-size: clamp(22px, 4vw, 28px);
