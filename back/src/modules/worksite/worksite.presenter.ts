@@ -16,7 +16,7 @@ export class WorksitePresenter {
     firstName: string;
     lastName: string;
     isSuperAdmin: boolean;
-  };
+  }[];
 
   private constructor(data: WorksitePresenter) {
     Object.assign(this, data);
@@ -33,7 +33,13 @@ export class WorksitePresenter {
       nomRespoSec: data.nomRespoSec,
       nbCollaborateur: data.nbCollaborateur,
       joursSansAccident: data.joursSansAccident,
-      respoChantier: data.respoChantier,
+      respoChantier: data.respoChantier?.map((r) => ({
+        id: r.id,
+        mail: r.mail,
+        firstName: r.firstName,
+        lastName: r.lastName,
+        isSuperAdmin: r.isSuperAdmin,
+      })),
     });
   }
 }

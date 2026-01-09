@@ -37,13 +37,16 @@ export class WorksiteRepository {
   public async createWorksite(
     worksite: CreateWorksiteDto,
   ): Promise<WorksiteModel> {
-    let admin = undefined;
-
-    if (typeof worksite.adminId === 'string') {
-      admin = await this.adminRepository.findOneOrFail({
-        where: { id: worksite.adminId },
-      });
+    let admin = [];
+    for (let i = 0; i < worksite.adminIds.length; i++) {
+      const currId = worksite.adminIds[i];
+      if (typeof currId === 'string') {
+        admin.push(await this.adminRepository.findOneOrFail({
+          where: { id: currId },
+        }));
+      }
     }
+    
 
     const newAdmin = this.worksiteRepository.create({
       nom: worksite.nom,
@@ -95,7 +98,7 @@ export class WorksiteRepository {
       relations: { respoChantier: true },
     });
 
-    worksite.respoChantier = admin;
+    worksite.respoChantier.push(admin);
     return this.worksiteRepository.save(worksite);
   }
 }

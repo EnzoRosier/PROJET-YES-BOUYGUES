@@ -2,6 +2,7 @@ import {
   BaseEntity,
   Column,
   Entity,
+  ManyToMany,
   OneToMany,
   PrimaryGeneratedColumn,
 } from 'typeorm';
@@ -26,6 +27,6 @@ export class AdminEntity extends BaseEntity {
   @Column({ name: 'isSuperAdmin', type: 'boolean' })
   isSuperAdmin: boolean;
 
-  @OneToMany(() => WorksiteEntity, (worksite) => worksite.respoChantier, {onDelete: "SET NULL"})
+  @ManyToMany(() => WorksiteEntity, (worksite) => worksite.respoChantier, {onDelete: "SET NULL"})
   worksites: WorksiteEntity[];
 }
