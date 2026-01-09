@@ -44,6 +44,57 @@
   gap: 30px;
 }
 
+/* Récap des statistiques sur la dernière semaine*/
+.stats-recap {
+  background: #f8f9fa;
+  padding: 15px;
+  border-radius: 8px;
+  margin-top: 15px;
+  border-left: 4px solid #007acc;
+}
+
+.stats-recap h2 {
+  margin: 8px 0;
+  font-size: 16px;
+  color: #333;
+  font-weight: 500;
+}
+
+/*Boutons de changement de période */
+
+.period-selector {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  margin: 20px 0;
+  padding: 0 20px;
+}
+.period-btn {
+  padding: 10px 20px;
+  border: 2px solid #e0e0e0;
+  background: white;
+  color: #666;
+  border-radius: 6px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  min-width: 140px;
+}
+
+.period-btn:hover {
+  border-color: #007acc;
+  color: #007acc;
+  transform: translateY(-2px);
+}
+
+.period-btn.active {
+  background: #007acc;
+  color: white;
+  border-color: #007acc;
+  box-shadow: 0 4px 12px rgba(0, 122, 204, 0.2);
+}
+
 .chart-section {
   background: white;
   border-radius: 15px;
@@ -73,6 +124,13 @@
   float: left;
 }
 
+.chart-wrapper h3 {
+  text-align: center;
+  margin-bottom: 15px;
+  color: #333;
+  font-size: 18px;
+}
+
 .mini-chart {
   display: flex;
   flex-direction: column;
@@ -87,12 +145,10 @@
 }
 
 .mini-chart h4 {
-  margin-top: 0;
-  margin-bottom: 20px;
-  color: #333;
   text-align: center;
-  width: 100%;
-  font-size: 1.1rem;
+  margin-bottom: 15px;
+  color: #333;
+  font-size: 16px;
 }
 
 .bar-chart-with-axis {
