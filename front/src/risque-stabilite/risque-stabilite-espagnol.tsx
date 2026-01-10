@@ -1,10 +1,15 @@
 import React, { useRef } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import './risque-stabilite.css';
 
 const RisqueStabiliteEspagnol: React.FC = () => {
   const navigate = useNavigate();
+  const location = useLocation();
   const audioRef = useRef<HTMLAudioElement | null>(null);
+  const handleBackClick = () => {
+    const returnLang = location.state?.returnLang || 'es';
+    navigate(`/riskeval?lang=${returnLang}`);
+  };
 
   const handleAudioClick = () => {
     if (audioRef.current) {
@@ -45,7 +50,7 @@ const RisqueStabiliteEspagnol: React.FC = () => {
           </div>
         </div>
       </main>
-      <button className="back-button" onClick={() => navigate(-1)}>
+      <button className="back-button" onClick={handleBackClick}>
         ← Atrás
       </button>
     </div>

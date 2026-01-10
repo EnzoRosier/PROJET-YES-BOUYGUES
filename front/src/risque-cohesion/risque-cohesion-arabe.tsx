@@ -1,10 +1,15 @@
 import React, { useRef } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import './risque-cohesion.css';
 
 const RisqueCohesionArabe: React.FC = () => {
   const navigate = useNavigate();
+  const location = useLocation();
   const audioRef = useRef<HTMLAudioElement | null>(null);
+  const handleBackClick = () => {
+    const returnLang = location.state?.returnLang || 'ar';
+    navigate(`/riskeval?lang=${returnLang}`);
+  };
 
   const handleAudioClick = () => {
     if (audioRef.current) {
@@ -45,7 +50,7 @@ const RisqueCohesionArabe: React.FC = () => {
           </div>
         </div>
       </main>
-      <button className="back-button" onClick={() => navigate(-1)}>
+      <button className="back-button" onClick={handleBackClick}>
         ← خلف
       </button>
     </div>

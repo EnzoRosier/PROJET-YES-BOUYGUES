@@ -1,7 +1,7 @@
 import { IsDate, IsInt, IsOptional, IsString } from 'class-validator';
 
 // Creation d'un worksite
-export declare class CreateWorksitenDto {
+export declare class CreateWorksiteDto {
   @IsString()
   nom: string;
   @IsString()
@@ -19,15 +19,15 @@ export declare class CreateWorksitenDto {
   @IsInt()
   joursSansAccident: number;
   @IsString()
-  adminId: string;
+  adminIds: string[];
 }
 
 // Création de plusieurs worksites
 export declare class CreateAdminsDto {
   @IsOptional()
-  admin: CreateWorksitenDto;
+  vote: CreateWorksiteDto;
   @IsOptional()
-  admins: CreateWorksitenDto[];
+  votes: CreateWorksiteDto[];
 }
 
 // ajoute/change le respo chantier
@@ -36,6 +36,11 @@ export declare class ChangeRespoChantierDto {
   idWorksite: string;
   @IsString()
   idAdmin: string;
+}
+
+export declare class ResetJourAccidentDto {
+  @IsString()
+  idWorksite: string;
 }
 
 // Mise à jour d'un worksite
@@ -68,5 +73,10 @@ export declare class UpdateAdminDto {
   worksiteId: string;
   @IsString()
   @IsOptional()
-  adminId: string;
+  adminIds: string[];
+}
+
+export declare class SetCurrentWorksiteDto {
+  @IsString()
+  worksiteId: string;
 }

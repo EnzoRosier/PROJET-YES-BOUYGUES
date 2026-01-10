@@ -1,10 +1,15 @@
 import React, { useRef } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import './travaux-hauteur.css';
 
 const TravauxHauteurPortugais: React.FC = () => {
   const navigate = useNavigate();
+  const location = useLocation();
   const audioRef = useRef<HTMLAudioElement | null>(null);
+  const handleBackClick = () => {
+    const returnLang = location.state?.returnLang || 'pt';
+    navigate(`/riskeval?lang=${returnLang}`);
+  };
 
   const handleAudioClick = () => {
     if (audioRef.current) {
@@ -45,7 +50,7 @@ const TravauxHauteurPortugais: React.FC = () => {
           </div>
         </div>
       </main>
-      <button className="back-button" onClick={() => navigate(-1)}>
+      <button className="back-button" onClick={handleBackClick}>
         ← Voltar
       </button>
     </div>

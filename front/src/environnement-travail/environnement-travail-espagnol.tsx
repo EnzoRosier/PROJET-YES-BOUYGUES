@@ -1,11 +1,15 @@
 import React, { useRef } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import './environnement-travail.css';
 
 const EnvironnementTravailEspagnol: React.FC = () => {
   const navigate = useNavigate();
+  const location = useLocation();
   const audioRef = useRef<HTMLAudioElement | null>(null);
-
+  const handleBackClick = () => {
+    const returnLang = location.state?.returnLang || 'es';
+    navigate(`/riskeval?lang=${returnLang}`);
+  };
   const handleAudioClick = () => {
     if (audioRef.current) {
       if (!audioRef.current.paused) {
@@ -47,7 +51,7 @@ const EnvironnementTravailEspagnol: React.FC = () => {
       </main>
 
       {/* Bouton retour */}
-      <button className="back-button" onClick={() => navigate(-1)}>
+      <button className="back-button" onClick={handleBackClick}>
         ← Atrás
       </button>
 

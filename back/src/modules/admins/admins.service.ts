@@ -1,24 +1,57 @@
-import { Injectable, UnauthorizedException } from '@nestjs/common';
-import { CreateAdminDto } from './admins.dto';
-import { AdminModel, CreateAdminModel } from './admins.model';
+import { forwardRef, Inject, Injectable, UnauthorizedException } from '@nestjs/common';
+import { CreateAdminDto, UpdateAdminDto } from './admins.dto';
+import { AdminModel, CreateAdminModel, MeModel } from './admins.model';
 import { AdminRepository } from './admins.repository';
 import * as bcrypt from 'bcrypt';
 import { JwtService } from '@nestjs/jwt';
+import { WorksiteService } from '../worksite/worksite.service';
+import { UpdateResult } from 'typeorm';
 
 @Injectable()
 export class AdminService {
-  constructor(private readonly adminRepository: AdminRepository,private readonly jwtService: JwtService) {}
+  constructor(private readonly adminRepository: AdminRepository,
+    @Inject(forwardRef(() => WorksiteService))
+    private worksiteService: WorksiteService,
 
-  public async getAdmins(): Promise<AdminModel[]> {
+    private readonly jwtService: JwtService) {}
+
+  public async getAdmins(req): Promise<AdminModel[]> {
+    const token = req.cookies?.access_token;
+    if (!token) {
+      throw new UnauthorizedException();
+    }
+    const infoMe = await this.getMeFromToken(token);
+    if (!infoMe.isSuperAdmin) {
+      throw new UnauthorizedException();
+    }
     return this.adminRepository.getAdmins();
   }
 
-  public async getAdminById(id: string): Promise<AdminModel | undefined> {
+  public async getAdminById(id: string, token: string): Promise<AdminModel | undefined> {
+    const infoMe = await this.getMeFromToken(token);
+    if (!infoMe.isSuperAdmin) {
+      throw new UnauthorizedException();
+    }
     return this.adminRepository.getAdminById(id);
   }
 
-  public createAdmin(Admin: CreateAdminDto): Promise<CreateAdminModel> {
-    return this.adminRepository.createAdmin(Admin);
+  public async createAdmin(Admin: CreateAdminDto): Promise<CreateAdminModel> {
+
+    if (await this.adminRepository.findByMail(Admin.mail)) {
+      throw new UnauthorizedException('mail already used');
+    }
+    let worksistes = []
+    if (Admin.worksiteIds != undefined) {
+      for (let i = 0; i < Admin.worksiteIds.length; i++) {
+      const worksiteId = Admin.worksiteIds[i];
+      let found = await this.worksiteService.getWorksiteEntityRefById(worksiteId)
+      if (found) {
+        worksistes.push(found)
+      }
+    };
+    }
+    
+    return this.adminRepository.createAdmin(Admin, worksistes);
   }
 
   async login(mail: string, password: string) {
@@ -39,7 +72,6 @@ export class AdminService {
 
     const payload = {
       sub: admin.id,
-      role: admin.isSuperAdmin ? 'SUPER_ADMIN' : 'ADMIN',
     };
     //jwt token pour faire l'authetification
     return {
@@ -47,6 +79,43 @@ export class AdminService {
     };
   }
 
+  async getMeFromToken(token: string): Promise<MeModel> {
+    if (!token || typeof token !== 'string') {
+      throw new UnauthorizedException('Token manquant ou invalide');
+    }
 
+    const payload = this.jwtService.verify(token);
 
+    const admin = await this.adminRepository.getAdminById(payload.sub);
+
+    if (!admin) {
+      throw new UnauthorizedException();
+    }
+
+    return {
+      id: admin.id,
+      mail: admin.mail,
+      isSuperAdmin: admin.isSuperAdmin,
+      worksites: admin.worksites,
+    };
+  }
+
+  async editAdmin(id: string, input: UpdateAdminDto, token: string): Promise<AdminModel> {
+    const currInfo = await this.getMeFromToken(token)
+    
+    if (!currInfo.isSuperAdmin) {
+      throw new UnauthorizedException();
+    }
+
+    return this.adminRepository.editAdmin(id, input)
+  }
+
+  async deleteAdmin(id: string, token:string) : Promise<void> {
+    const currInfo = await this.getMeFromToken(token)
+    
+    if (!currInfo.isSuperAdmin) {
+      throw new UnauthorizedException();
+    }
+    this.adminRepository.deleteAdmin(id)
+  }
 }

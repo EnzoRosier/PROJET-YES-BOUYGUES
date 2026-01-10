@@ -1,11 +1,16 @@
 import React, { useRef } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import './risque-levage.css';
 
 const RisqueLevageAnglais: React.FC = () => {
   const navigate = useNavigate();
+  const location = useLocation();
   const audioRef = useRef<HTMLAudioElement | null>(null);
 
+  const handleBackClick = () => {
+    const returnLang = location.state?.returnLang || 'en';
+    navigate(`/riskeval?lang=${returnLang}`);
+  };
   const handleAudioClick = () => {
     if (audioRef.current) {
       // Si l'audio est en train de jouer, on l'arrête
@@ -53,7 +58,7 @@ const RisqueLevageAnglais: React.FC = () => {
       </main>
 
       {/* Bouton retour */}
-      <button className="back-button" onClick={() => navigate(-1)}>
+      <button className="back-button" onClick={handleBackClick}>
         ← Back
       </button>
     </div>

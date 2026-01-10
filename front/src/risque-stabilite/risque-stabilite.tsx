@@ -1,9 +1,15 @@
 import React from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import './risque-stabilite.css';
 
 const RisqueStabilite: React.FC = () => {
   const navigate = useNavigate();
+  const location = useLocation();
+  
+  const handleBackClick = () => {
+    const returnLang = location.state?.returnLang || 'fr';
+    navigate(`/riskeval?lang=${returnLang}`);
+  };
 
   const handleAudioClick = () => {
     console.log("Audio button clicked");
@@ -39,7 +45,7 @@ const RisqueStabilite: React.FC = () => {
       </main>
 
       {/* Bouton retour */}
-      <button className="back-button" onClick={() => navigate(-1)}>
+      <button className="back-button" onClick={handleBackClick}>
         ← Retour
       </button>
     </div>

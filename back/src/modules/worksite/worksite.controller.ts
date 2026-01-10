@@ -1,35 +1,66 @@
-import { Body, Controller, Get, Param, Post } from '@nestjs/common';
+import { Body, Controller, Get, Param, Post, Req, UnauthorizedException } from '@nestjs/common';
 import { WorksiteRepository } from './worksite.repository';
 import { CreateWorksiteModel, WorksiteModel } from './worksite.model';
-import { ChangeRespoChantierDto, CreateWorksitenDto } from './worksite.dto';
+import { ChangeRespoChantierDto, CreateWorksiteDto, ResetJourAccidentDto, SetCurrentWorksiteDto } from './worksite.dto';
+import { WorksiteService } from './worksite.service';
+import { AppConfigModel } from '../appconfig/appconfig.model';
 
 @Controller('worksite')
 export class WorksiteController {
-  constructor(private readonly worksiteRepository: WorksiteRepository) {}
+  constructor(private readonly worksiteService: WorksiteService) {}
 
   @Get()
-  public async listAdmins(): Promise<WorksiteModel[]> {
-    return this.worksiteRepository.getWorksites();
+  public async listWorksite(): Promise<WorksiteModel[]> {
+    return this.worksiteService.getWorksites();
   }
 
   @Post('new')
-  public async createAdmin(
-    @Body() input: CreateWorksitenDto,
+  public async createWorksite(
+    @Body() input: CreateWorksiteDto,
+    @Req() req
   ): Promise<CreateWorksiteModel> {
-    return this.worksiteRepository.createAdmin(input);
+    const token = req.cookies?.access_token;
+    if (!token) {
+      throw new UnauthorizedException();
+    }
+    return this.worksiteService.createWorksite(input, req);
+  }
+
+  @Post('currentWorksite')
+  public async setCurrWorksite(
+    @Body() input: SetCurrentWorksiteDto,
+    @Req() req
+  ): Promise<AppConfigModel> {
+    const token = req.cookies?.access_token;
+    if (!token) {
+      throw new UnauthorizedException();
+    }
+    return this.worksiteService.setCurrWorksite(input, req);
+  }
+
+  @Get('currentWorksite')
+  public async getCurrWorksite(): Promise<AppConfigModel | null> {
+    return this.worksiteService.getCurrWorksite();
   }
 
   @Post('changeRespo')
   public async changeRespoChantier(
     @Body() input: ChangeRespoChantierDto,
   ): Promise<WorksiteModel> {
-    return this.worksiteRepository.changeRespoChantier(input);
+    return this.worksiteService.changeRespoChantier(input);
+  }
+
+  @Get('resetAccident/:id')
+  public async resetJourAccident(
+    @Param('id') id: string,
+  ): Promise<WorksiteModel | null> {
+    return this.worksiteService.resetJourAccident(id);
   }
 
   @Get(':id')
-  public async getAdmin(
+  public async getWorksiteById(
     @Param('id') id: string,
   ): Promise<WorksiteModel | null> {
-    return this.worksiteRepository.getWorksiteById(id);
+    return this.worksiteService.getWorksiteById(id);
   }
 }

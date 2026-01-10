@@ -18,7 +18,15 @@ export type CreateAdminModel = {
   firstName: string;
   lastName: string;
   isSuperAdmin: boolean;
-  worksites?: WorksiteEntity[];
+  worksitesId?: string[];
+};
+
+// modèle pour créer un admin
+export type MeModel = {
+  id: string;
+  mail: string;
+  isSuperAdmin: boolean;
+  worksites: WorksiteEntity[];
 };
 
 // modèle pour mettre à jour un admin

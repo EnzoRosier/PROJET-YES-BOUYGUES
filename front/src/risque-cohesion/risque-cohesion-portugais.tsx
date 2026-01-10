@@ -1,10 +1,15 @@
 import React, { useRef } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import './risque-cohesion.css';
 
 const RisqueCohesionPortugais: React.FC = () => {
   const navigate = useNavigate();
+  const location = useLocation();
   const audioRef = useRef<HTMLAudioElement | null>(null);
+  const handleBackClick = () => {
+    const returnLang = location.state?.returnLang || 'pt';
+    navigate(`/riskeval?lang=${returnLang}`);
+  };
 
   const handleAudioClick = () => {
     if (audioRef.current) {
@@ -36,24 +41,16 @@ const RisqueCohesionPortugais: React.FC = () => {
             <img src="/ressources/cohesion.png" alt="Cohésion d'équipe" className="cohesion-image" />
           </div>
           <div className="text-section">
-            <h1>Risque de Cohésion</h1>
+            <h1>Risco de Coesão</h1>
             <div className="description">
               <p>
-                Risque lié à un manque de coordination ou de communication entre équipes, pouvant provoquer des erreurs ou accidents
+                Risco relacionado a uma falta de coordenação ou comunicação entre equipes, o que pode levar a erros ou acidentes
               </p>
-              <h2>Principaux risques :</h2>
-              <ul>
-                <li><strong>Manque de communication :</strong> Informations importantes non transmises entre les équipes</li>
-                <li><strong>Coordination défaillante :</strong> Interventions simultanées non planifiées créant des situations dangereuses</li>
-                <li><strong>Incompréhension des consignes :</strong> Barrières linguistiques ou instructions mal comprises</li>
-                <li><strong>Isolement des travailleurs :</strong> Manque de soutien et d'entraide entre collègues</li>
-                <li><strong>Conflits interpersonnels :</strong> Tensions nuisant à la concentration et à la sécurité</li>
-              </ul>
             </div>
           </div>
         </div>
       </main>
-      <button className="back-button" onClick={() => navigate(-1)}>
+      <button className="back-button" onClick={handleBackClick}>
         ← Voltar
       </button>
     </div>

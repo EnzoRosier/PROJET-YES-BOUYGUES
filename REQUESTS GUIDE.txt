@@ -2,15 +2,16 @@ ADMIN REQUESTS
 
 --- RECUP ADMINS ---
 GET
-localhost:3000/admins
+localhost:3001/admins
 
 --- RECUP 1 ADMIN AVEC ID ---
 GET
-localhost:3000/admins/[idAdmin]
+localhost:3001/admins/[idAdmin]
 
 --- CREATE ADMIN ---
 POST
-localhost:3000/admins
+localhost:3001/admins
+BODY (exemple) :
 {
   "mail": "super.mario@gmail.com",
   "password": "yowaddup37",
@@ -24,23 +25,118 @@ WORKSITE REQUESTS
 
 --- RECUP WORKSITES ---
 GET
-localhost:3000/worksite
+localhost:3001/worksite
 
 --- RECUP 1 WORKSITE AVEC ID ---
 GET
-localhost:3000/worksite/[idWorksite]
+localhost:3001/worksite/[idWorksite]
+
+--- CHANGE RESPO WORKSITE ---
+POST
+localhost:3001/worksite/changeRespo
+BODY (exemple) : 
+{
+  "idWorksite": IdWorksite,
+  "idAdmin": IdAdmin,
+}
+
+--- RESET JOUR SANS ACCIDENT ---
+GET
+localhost:3001/worksite/resetAccident/[idWorksite]
 
 --- CREATE WORKSITE ---
 POST
-localhost:3000/worksite/new
-BODY : 
+localhost:3001/worksite/new
+BODY (exemple) : 
 {
   "nom": "yowaddup",
-  "addresse": "69 rue waddup",
+  "addresse": "12 rue waddup",
   "description": "Un super site",
   "dateFin": "2026-01-01",
-  "nomClient": "Joe Biden",
-  "nomRespoSec": "Joe Biden2",
+  "nomClient": "Bob",
+  "nomRespoSec": "Bobby",
   "nbCollaborateur": 233,
   "joursSansAccident": 1
 }
+
+--- SET CURRENT WORKSITE ---
+POST
+localhost:3001/worksite/currentWorksite
+{
+  "worksiteId": "ce13ccf7-7e73-400f-bbf3-b194b6ca59d6"
+}
+
+--- GET CURRENT WORKSITE ---
+GET
+localhost:3001/worksite/currentWorksite
+
+VOTE REQUESTS
+
+--- RECUP VOTES ---
+GET
+localhost:3001/vote
+
+--- CREATE VOTE ---
+POST
+localhost:3001/vote/new
+BODY (exemple) :
+{
+	"numQuestion": "1",
+	"reponse": "Oui",
+	"commentaire": "test",
+	"date": "2026-01-01",
+	"worksiteId": "627ecf0f-9aba-488c-9e53-54a40792cbfa"
+  "dateCloture": "2026-01-01" (OPTIONAL)
+}
+
+note : un vite est considéré comme un ticket si il y'a une date de cloture, la date de cloture défini l'état de la requete (ouverte si date pas passé et inversement)
+
+--- Get Vote by ID ---
+GET
+localhost:3001/worksite/[idVote]
+
+--- Get All Votes Of a Worksite ---
+GET
+localhost:3001/vote/getByWorksite/[idWorksite]
+
+--- Get All Ticket of a website by ID ---
+GET
+localhost:3001/vote/ticket/[idWorksite]
+
+--- Get Stats of worksite by ID ---
+POST
+localhost:3001/vote/getStatsOf/[idWorksite]
+{
+    "date": "2026-06-07" [OPTIONAL]
+}
+si pas de date prend tout les votes du site
+
+Renvoie un truc du genre : 
+{
+  "questionHumeur": {
+      "bien": 2,
+      "moyen": 0,
+      "mauvais": 1
+  },
+  "questionRisque": {
+      "levage": 1,
+      "cohesion": 2,
+      "environement": 0,
+      "equipement": 1,
+      "hauteur": 1,
+      "stabilite": 1,
+      "ambiance": 0,
+      "energie": 2,
+      "autre": 0
+  }
+}
+
+--- Respond to Ticket ---
+POST
+localhost:3001/vote/respond
+{
+    "idVote": "9",
+    "reponse": "yayaya"
+}
+ 
+Répond au ticket avec réponse et clot le ticket

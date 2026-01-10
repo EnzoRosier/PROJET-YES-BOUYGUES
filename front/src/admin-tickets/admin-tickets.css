@@ -1,0 +1,257 @@
+.admin-tickets {
+    min-height: 100vh;
+    padding: 20px;
+    background: linear-gradient(135deg, #F28C00, #E75113);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.admin-tickets-main {
+    position: relative;
+    width: 100%;
+    max-width: 1200px;
+    background: white;
+    border-radius: 16px;
+    padding: 40px;
+    box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+}
+
+.bouton-retour-accueil-admin {
+  margin-top: 10px;
+  padding: 12px;
+  font-size: 16px;
+  font-weight: bold;
+  border: none;
+  border-radius: 6px;
+  background-color: #2b2b45;
+  color: white;
+  cursor: pointer;
+}
+
+.bouton-retour-accueil-admin:hover {
+  background-color: #1e1e2f;
+}
+
+.table-tickets {
+    width: 80%;
+    border-collapse: collapse;
+    margin-top: 3%;
+    margin-left: 5%;
+    background-color: #fff;
+    font-size: 1.3rem;
+}
+
+/* --- TÊTE DE TABLE --- */
+.table-tickets-head .table-tickets-header-row {
+    background-color: #000;
+    color: #fff;
+}
+
+.table-tickets-header {
+    padding: 12px 10px;
+    text-align: left;
+    font-weight: 600;
+    border-bottom: 3px solid #E75113;
+}
+
+/* --- LIGNES --- */
+.table-tickets-row {
+    transition: background-color 0.2s ease, transform 0.1s ease;
+}
+
+.table-tickets-data-row {
+    text-align : left;
+    border-bottom: 1px solid #ccc;
+    cursor: pointer;
+}
+
+.table-tickets-data-row:hover {
+    background-color: #f5e7e0;
+    transform: scale(1.01);
+}
+
+.table-tickets-data-row:active {
+    background-color: #E75113;
+    color: #fff;
+}
+
+/* --- CELLULES --- */
+.table-tickets-cell {
+    padding: 10px 8px;
+    color: #111;
+}
+
+.table-tickets-data-row:active .table-tickets-cell {
+    color: #fff;
+}
+
+/* Conteneur principal de la popup */
+.admin-tickets-popup {
+    width: 450px;
+    max-width: 92%;                
+    background-color: #ffffff;
+    border: 1px solid #d5d5d5;
+    border-radius: 8px;
+    padding: 24px;
+    margin: 40px auto;
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.15);
+    font-family: Arial, sans-serif;
+    color: #333;
+    position : fixed;
+    z-index: 1000;
+}
+
+.close-popup{
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    font-size: 1.2rem;
+    font-weight: bold;
+    color: #888;
+    cursor: pointer;
+}
+
+/* Titre */
+.admin-tickets-popup h2 {
+    margin: 0;
+    font-size: 1.4rem;
+    font-weight: 600;
+    text-align: center;
+    color: #222;
+}
+
+/* Date */
+.date-ticket {
+    margin-top: 12px;
+    font-size: 0.85rem;
+    color: #666;
+    text-align: right;
+}
+
+/* Nom du chantier */
+.chantier-ticket {
+    font-size: 0.85rem;
+    font-weight: 500;
+    color: #555;
+    text-align : right;
+    margin-bottom: 12px;
+}
+
+/* Vote */
+.response-vote {
+    text-align: left;
+    margin : 5px;
+}
+
+/* Commentaire (vide pour l’instant mais prévu) */
+.commentaire-ticket {
+    margin : 5px;
+    text-align: left;
+    min-height: 20px;
+}
+
+/* Bloc contenant la réponse */
+.response-ticket {
+    background-color: #f5f5f5;
+    padding: 12px;
+    border-radius: 6px;
+    border: 1px solid #e1e1e1;
+    font-size: 0.95rem;
+    min-height: 40px;
+}
+
+/* Champ input */
+.input-reponse-ticket {
+    width: 100%;
+    padding: 10px;
+    font-size: 1rem;
+
+    border: 1px solid #c8c8c8;
+    border-radius: 6px;
+
+    transition: border-color 0.2s ease;
+}
+
+/* Bouton */
+.bouton-cloturer-ticket {
+    margin-top: 8px;
+    padding: 12px;
+
+    background-color: #E75113;
+    color: #ffffff;
+
+    border: none;
+    border-radius: 6px;
+
+    font-size: 1rem;
+    font-weight: 500;
+    cursor: pointer;
+
+    transition: background-color 0.2s ease;
+}
+
+.bouton-cloturer-ticket:hover {
+    background-color: #1a4480;
+}
+
+/* ========================== */
+/* RESPONSIVE MOBILE/TABLETTE */
+/* ========================== */
+
+/* Petites tablettes et grands téléphones (≤ 768px) */
+@media (max-width: 768px) {
+    .admin-tickets-popup {
+        width: 80%;
+        padding: 18px;
+        margin-top: 20px;
+        gap: 12px;
+    }
+
+    .admin-tickets-popup h2 {
+        font-size: 1.3rem;
+    }
+
+    .response-ticket {
+        font-size: 0.9rem;
+    }
+
+    .bouton-cloturer-ticket {
+        font-size: 0.95rem;
+        padding: 10px;
+    }
+}
+
+/* Téléphones standard (≤ 480px) */
+@media (max-width: 480px) {
+    .admin-tickets-popup {
+        width: 95%;
+        border-radius: 6px;
+        padding: 16px;
+        gap: 10px;
+    }
+
+    .admin-tickets-popup h2 {
+        font-size: 1.15rem;
+    }
+
+    .response-ticket {
+        font-size: 0.85rem;
+    }
+
+    .date-ticket {
+        font-size: 0.75rem;
+        text-align: left; /* Lecture plus aisée sur mobile */
+    }
+
+    .input-reponse-ticket {
+        font-size: 0.9rem;
+        padding: 8px;
+    }
+
+    .bouton-cloturer-ticket {
+        font-size: 0.9rem;
+        padding: 10px;
+    }
+}

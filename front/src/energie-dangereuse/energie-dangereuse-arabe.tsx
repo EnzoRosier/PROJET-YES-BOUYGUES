@@ -1,10 +1,16 @@
 import React, { useRef } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import './energie-dangereuse.css';
 
 const EnergieDangereuseArabe: React.FC = () => {
   const navigate = useNavigate();
+  const location = useLocation();
   const audioRef = useRef<HTMLAudioElement>(null);
+  const handleBackClick = () => {
+    const returnLang = location.state?.returnLang || 'ar';
+    navigate(`/riskeval?lang=${returnLang}`);
+  };
+
 
   const handleAudioClick = () => {
     if (audioRef.current) {
@@ -48,7 +54,7 @@ const EnergieDangereuseArabe: React.FC = () => {
       </main>
 
       {/* Bouton retour */}
-      <button className="back-button" onClick={() => navigate(-1)}>
+      <button className="back-button" onClick={handleBackClick}>
         ← خلف
       </button>
     </div>

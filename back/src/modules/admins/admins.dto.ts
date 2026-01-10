@@ -38,11 +38,18 @@ export declare class UpdateAdminDto {
   @IsString()
   @IsOptional()
   mail: string;
-  @IsInt()
+  @IsString()
   @IsOptional()
   password: string;
   @IsString()
-  adminId: string;
+  @IsOptional()
+  firstName: string;
+  @IsString()
+  @IsOptional()
+  lastName: string;
+  @IsBoolean()
+  @IsOptional()
+  isSuperAdmin: boolean;
 }
 //login
 export class LoginDto {

@@ -2,10 +2,14 @@ import {
   BaseEntity,
   Column,
   Entity,
+  JoinTable,
+  ManyToMany,
   ManyToOne,
+  OneToMany,
   PrimaryGeneratedColumn,
 } from 'typeorm';
 import { AdminEntity } from './admin.entity';
+import { VoteEntity } from './vote.entity';
 @Entity('worksite')
 export class WorksiteEntity extends BaseEntity {
   @PrimaryGeneratedColumn('uuid')
@@ -35,6 +39,20 @@ export class WorksiteEntity extends BaseEntity {
   @Column({ name: 'joursSansAccident', type: 'int' })
   joursSansAccident: number;
 
-  @ManyToOne(() => AdminEntity, (admin) => admin.worksites)
-  respoChantier: AdminEntity;
+  @ManyToMany(() => AdminEntity, (admin) => admin.worksites, {onDelete: "SET NULL"})
+  @JoinTable({
+    name: "worksite_admin_id",
+    joinColumn: {
+      name: "worksite",
+      referencedColumnName: "id"
+    },
+    inverseJoinColumn: {
+      name: "admins",
+      referencedColumnName: "id"
+    }
+  })
+  respoChantier: AdminEntity[];
+
+  @OneToMany(() => VoteEntity, (vote) => vote.worksite,{onDelete: "CASCADE"})
+  votes: VoteEntity[];
 }

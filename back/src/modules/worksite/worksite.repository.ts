@@ -2,7 +2,7 @@ import { BadRequestException, Injectable } from '@nestjs/common';
 import { DataSource } from 'typeorm';
 import { WorksiteEntity } from '../database/entities/worksite.entity';
 import { WorksiteModel } from './worksite.model';
-import { ChangeRespoChantierDto, CreateWorksitenDto } from './worksite.dto';
+import { ChangeRespoChantierDto, CreateWorksiteDto } from './worksite.dto';
 import { AdminEntity } from '../database/entities/admin.entity';
 
 @Injectable()
@@ -13,11 +13,9 @@ export class WorksiteRepository {
 
   constructor(private readonly dataSource: DataSource) {}
 
-  private worksites: WorksiteModel[] = [];
-
   //liste des worksites
   public async getWorksites(): Promise<WorksiteModel[]> {
-    return this.worksiteRepository.find();
+    return this.worksiteRepository.find({ relations: { respoChantier: true } });
   }
   //récupère un worksite par son ID
   public async getWorksiteById(id: string): Promise<WorksiteModel | null> {
@@ -27,17 +25,28 @@ export class WorksiteRepository {
     });
   }
 
-  //création d'un worksite
-  public async createAdmin(
-    worksite: CreateWorksitenDto,
-  ): Promise<WorksiteModel> {
-    if (typeof worksite.adminId !== 'string') {
-      throw new BadRequestException('dinosaurID not specified');
-    }
-
-    const admin = await this.adminRepository.findOneOrFail({
-      where: { id: worksite.adminId },
+  
+  public async getWorksiteEntityRefById(id: string): Promise<WorksiteEntity | null> {
+    return this.worksiteRepository.findOneOrFail({
+      where: { id },
+      relations: { respoChantier: true },
     });
+  }
+
+  //création d'un worksite
+  public async createWorksite(
+    worksite: CreateWorksiteDto,
+  ): Promise<WorksiteModel> {
+    let admin = [];
+    for (let i = 0; i < worksite.adminIds.length; i++) {
+      const currId = worksite.adminIds[i];
+      if (typeof currId === 'string') {
+        admin.push(await this.adminRepository.findOneOrFail({
+          where: { id: currId },
+        }));
+      }
+    }
+    
 
     const newAdmin = this.worksiteRepository.create({
       nom: worksite.nom,
@@ -53,6 +62,20 @@ export class WorksiteRepository {
     const returnedAdmin = this.worksiteRepository.save(newAdmin);
 
     return returnedAdmin;
+  }
+
+  public async changeAccident(id: string, nb: number): Promise<WorksiteModel> {
+    if (typeof id !== 'string') {
+      throw new BadRequestException('worksiteID not specified');
+    }
+
+    const worksite = await this.worksiteRepository.findOneOrFail({
+      where: { id: id },
+    });
+
+    worksite.joursSansAccident = nb
+    const returnedAdmin = this.worksiteRepository.save(worksite);
+    return returnedAdmin
   }
 
   public async changeRespoChantier(
@@ -75,7 +98,7 @@ export class WorksiteRepository {
       relations: { respoChantier: true },
     });
 
-    worksite.respoChantier = admin;
+    worksite.respoChantier.push(admin);
     return this.worksiteRepository.save(worksite);
   }
 }
