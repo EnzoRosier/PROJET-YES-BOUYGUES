@@ -39,12 +39,13 @@ export class WorksiteEntity extends BaseEntity {
   @Column({ name: 'joursSansAccident', type: 'int' })
   joursSansAccident: number;
 
-  @ManyToMany(() => AdminEntity, (admin) => admin.worksites, {onDelete: "SET NULL"})
+  @ManyToMany(() => AdminEntity, (admin) => admin.worksites, {onDelete: "CASCADE"})
   @JoinTable({
     name: "worksite_admin_id",
     joinColumn: {
       name: "worksite",
       referencedColumnName: "id"
+      
     },
     inverseJoinColumn: {
       name: "admins",
