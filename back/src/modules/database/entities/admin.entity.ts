@@ -27,6 +27,6 @@ export class AdminEntity extends BaseEntity {
   @Column({ name: 'isSuperAdmin', type: 'boolean' })
   isSuperAdmin: boolean;
 
-  @ManyToMany(() => WorksiteEntity, (worksite) => worksite.respoChantier, {onDelete: "SET NULL"})
+  @ManyToMany(() => WorksiteEntity, (worksite) => worksite.respoChantier, {onDelete: "CASCADE"})
   worksites: WorksiteEntity[];
 }
