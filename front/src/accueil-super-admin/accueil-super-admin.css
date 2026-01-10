@@ -1,5 +1,5 @@
 
-.accueil-admin {
+.accueil-super-admin {
     min-height: 100vh;
     padding: 20px;
     background: linear-gradient(135deg, #F28C00, #E75113);
@@ -9,7 +9,7 @@
     justify-content: center;
 }
 
-.accueil-admin-main {
+.accueil-super-admin-main {
     position: relative;
     width: 100%;
     max-width: 1200px;
@@ -86,6 +86,22 @@
     padding-bottom: 4px;
 }
 
+/* LABEL */
+.chantier-info label {
+    width: 260px;                  /* Largeur fixe pour aligner tous les inputs */
+    font-size: 1.3rem;
+    font-weight: 500;
+}
+
+/* INPUT */
+.chantier-info input {
+    flex: 1;                       /* L'input prend toute la place restante */
+    padding: 8px;
+    font-size: 1.1rem;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
 .chantier-info p span.label {
     font-weight: 600;
     color: #000;
@@ -93,6 +109,20 @@
 
 .chantier-info p span.value {
     color: #222;
+}
+
+.bouton-liste-admin {
+    position : absolute;
+    bottom : 15%;
+    right : 5%;
+    padding: 12px;
+    font-size: 16px;
+    font-weight: bold;
+    border: none;
+    border-radius: 6px;
+    background-color: #E75113;
+    color: white;
+    cursor: pointer;
 }
 
 .bouton-tickets {
