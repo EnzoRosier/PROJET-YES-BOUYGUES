@@ -107,7 +107,16 @@ export class AdminService {
       throw new UnauthorizedException();
     }
 
-    return this.adminRepository.editAdmin(id, input)
+    let worksites = undefined
+    if (typeof input.worksiteIds !== "undefined") {
+      worksites = []
+      for (let i = 0; i < input.worksiteIds.length; i++) {
+        const currId = input.worksiteIds[i];
+        worksites.push(await this.worksiteService.getWorksiteById(currId))
+      }
+    }
+
+    return this.adminRepository.editAdmin(id, input, worksites)
   }
 
   async deleteAdmin(id: string, token:string) : Promise<void> {
