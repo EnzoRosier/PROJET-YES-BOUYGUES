@@ -12,6 +12,7 @@ import AccueilAdmin from './accueil-admin/accueil-admin';
 import AdminList from './ListeAdmin/SuperAdminList';
 import AccueilSuperAdmin from './accueil-super-admin/accueil-super-admin';
 import AjouterAdmin from './SuperAdmin/Ajouter';
+import ModifierAdmin from './SuperAdmin/Modifier';  
 import { useState } from 'react';
 
 function App() {
@@ -35,6 +36,7 @@ function App() {
           <Route path='/AdminList' element={<AdminList />} />
           <Route path="/super-admin" element={<AccueilSuperAdmin />} />
           <Route path='/AjouterAdmin' element={<AjouterAdmin />} />
+          <Route path='/ModifierAdmin' element={<ModifierAdmin />} />
         </Routes>
       </div>
     );

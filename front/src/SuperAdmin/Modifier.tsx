@@ -1,8 +1,8 @@
 import './SuperAdmin.css';
-import { Navigate, useNavigate } from 'react-router-dom';
+import { Navigate, useLocation, useNavigate } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 
-export default function AjouterAdmin() {
+export default function ModifierAdmin() {
     const [loggedIn, setLoggedIn] = useState<boolean | null>(null);
     const [isSuperAdmin, setIsSuperAdmin] = useState<boolean>(false);
 
@@ -16,6 +16,24 @@ export default function AjouterAdmin() {
     const [worksites, setWorksites] = useState<any[]>([]);
 
     const navigate = useNavigate();
+
+    const location = useLocation();
+    const idAdmin = location.state?.idAdmin || null;
+    const firstName = location.state?.firstName || null;
+    const lastName = location.state?.lastName || null;
+    const emailState = location.state?.email || null;
+    const isSuperAdminState = location.state?.isSuperAdmin || false;
+    const worksiteIdState = location.state?.worksiteId || null;
+
+    useEffect(() => {
+        if (!idAdmin) return;
+
+        setEmail(emailState ?? '');
+        setFirstname(firstName ?? '');
+        setLastname(lastName ?? '');
+        setIsSuper(isSuperAdminState ?? false);
+        setWorksiteId(worksiteIdState ?? '');
+    }, [idAdmin]);
 
     useEffect(() => {
         const checkSuperLoggedIn = async () => {
@@ -52,14 +70,13 @@ export default function AjouterAdmin() {
                 console.log('Erreur récupération chantiers');
             }
         };
-
         checkSuperLoggedIn();
         fetchWorksites();
     }, []);
 
     const handleSubmit = async () => {
         if (!email || !password || !firstname || !lastname) {
-            alert('Tous les champs sont obligatoires sauf le chantier');
+            alert('Tous les champs doivent avoir une valeur');
             return;
         }
 
@@ -77,7 +94,7 @@ export default function AjouterAdmin() {
 
 
         try {
-            const response = await fetch('http://localhost:3001/admins', {
+            const response = await fetch(`http://localhost:3001/admins/edit/${idAdmin}`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -86,21 +103,18 @@ export default function AjouterAdmin() {
                 body: JSON.stringify({
                     mail: email,
                     password: password,
-                    firstName: firstname,
-                    lastName: lastname,
+                    firstName: firstName,
+                    lastName: lastName,
                     isSuperAdmin: isSuper,
-                    worksiteIds: worksiteId ? [worksiteId] : [],
+                    worksiteId: worksiteId ? [worksiteId] : [],
                 }),
             });
         } catch (error) {
             console.log('Erreur login');
         }
         navigate('/AdminList');
-
         
     };
-
-    
 
     if (loggedIn === null) {
         return <div className="admin-liste"><h2>Chargement...</h2></div>;
@@ -114,11 +128,11 @@ export default function AjouterAdmin() {
         <div className="admin-liste">
             <img src="/ressources/Logo.png" alt="Logo" className="logo-admin" />
 
-            <button className="bouton-retour" onClick={() => navigate('/AdminList')}>
+            <button className="bouton-retour" onClick={() => navigate('/AdminsList')}>
                 Retour
             </button>
 
-            <h2>Ajouter un administrateur</h2>
+            <h2>Modifier ou Supprimer un administrateur</h2>
 
             <div className="form-container">
                 <label>Email *</label>
@@ -150,7 +164,31 @@ export default function AjouterAdmin() {
                 </select>
 
                 <button className="add-btn" onClick={handleSubmit}>
-                    Ajouter
+                    Modifier
+                </button>
+
+                <button
+                    className="delete-btn"
+                    onClick={async () => {
+                        const confirmed = window.confirm(
+                            'Êtes-vous sûr de vouloir supprimer cet administrateur ?'
+                        );
+                        if (!confirmed) return;
+
+                        try {
+                            console.log(idAdmin);
+                            await fetch(`http://localhost:3001/admins/delete/${idAdmin}`, {
+                                method: 'POST',
+                                credentials: 'include',
+                            });
+                        } catch {
+                            alert('Erreur lors de la suppression');
+                        }
+
+                        navigate('/AdminList');
+                    }}
+                >
+                    Supprimer
                 </button>
             </div>
         </div>
