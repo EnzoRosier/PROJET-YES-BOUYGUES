@@ -114,7 +114,7 @@ export default function AjouterAdmin() {
         <div className="admin-liste">
             <img src="/ressources/Logo.png" alt="Logo" className="logo-admin" />
 
-            <button className="bouton-retour" onClick={() => navigate('/AdminList')}>
+            <button className="bouton-retour-liste" onClick={() => navigate('/AdminList')}>
                 Retour
             </button>
 
