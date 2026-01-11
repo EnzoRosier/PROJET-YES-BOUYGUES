@@ -112,7 +112,7 @@ export default function AdminList() {
             </div>
 
             <button
-                className="bouton-retour"
+                className="bouton-retour-accueil"
                 onClick={() => { navigate('/login'); }}
             >
                 Retour
