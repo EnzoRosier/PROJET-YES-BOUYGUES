@@ -29,8 +29,6 @@ export default function Stats() {
     {label: 'Energie', value: 0, color: '#1982C4' },
     { label: 'Autre', value: 0, color: '#8ACB88' }
   ]);
-  
-  // Options des diagrammes
   const [chartOptions, setChartOptions] = useState({
     size: 300,
     thickness: 50,
@@ -109,6 +107,9 @@ export default function Stats() {
         {
           method: 'POST',
           credentials: 'include',
+          headers: {
+            'Content-Type': 'application/json',
+          },
           body : JSON.stringify({ date : startDate
         })
       }
@@ -267,14 +268,13 @@ export default function Stats() {
                 data={donutChartData}
                 size={chartOptions.size}
                 thickness={chartOptions.thickness}
-                showLabels={chartOptions.showLabels}
-                showCenterText={chartOptions.showCenterText}
+                showLegend={true}
               />
             </div>
             
             {/* Diagramme en barres - Risques */}
             <div className="mini-chart">
-              <h4>Répartition des risques signalés ({dateRange === 'week' ? '7j' : dateRange === '2weeks' ? '14j' : '30j'})</h4>
+              <h3>Répartition des risques signalés ({dateRange === 'week' ? '7j' : dateRange === '2weeks' ? '14j' : '30j'})</h3>
               <div className="bar-chart-with-axis">
                 {(() => {
                   const { max: scaleMax, ticks } = calculateAdaptiveScale(barChartData); 
@@ -284,9 +284,9 @@ export default function Stats() {
                         <div className="y-ticks">
                           {ticks.map((tick, index) => (
                           <div 
-                          key={`tick-${index}-${tick}`}  // Utilisez l'index ET la valeur pour garantir l'unicité
+                          key={`tick-${index}-${tick}`} 
                           className="y-tick"
-                          style={{ bottom: `${(tick / scaleMax) * 100}%` }}
+                          style={{ top: `${100 - (tick / scaleMax) * 100}%` }}
                           >
                           <span className="tick-line"></span>
                           <span className="tick-value">{tick}</span>
@@ -323,7 +323,7 @@ export default function Stats() {
           </div>
         </section>
         
-        <button className="bouton-retour" onClick={() => { navigate('/admin'); }}>
+        <button className="bouton-retour-stats" onClick={() => { navigate('/admin'); }}>
           Retour à la page Admin
         </button>
       </div>
