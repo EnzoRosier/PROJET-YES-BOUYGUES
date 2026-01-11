@@ -115,6 +115,7 @@ function App() {
         <Route path='/AdminList' element={<AdminList />} />
         <Route path="/super-admin" element={<AccueilSuperAdmin />} />
         <Route path='/AjouterAdmin' element={<AjouterAdmin />} />
+        <Route path='/ModifierAdmin' element={<ModifierAdmin />} />
         
         {/* Risque Levage */}
         <Route path="/risque-levage" element={<RisqueLevage />} />

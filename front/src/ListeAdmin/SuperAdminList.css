@@ -110,3 +110,13 @@
         border-radius: 20px;
     }
 }
+
+.admin-title {
+    text-align: center;
+    font-size: 2rem;
+    font-weight: 700;
+    margin: 2.5rem 0 1.5rem 0;
+    color: #E75113;
+    letter-spacing: 0.5px;
+}
+

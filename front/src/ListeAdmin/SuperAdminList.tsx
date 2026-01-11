@@ -104,7 +104,7 @@ export default function AdminList() {
                 {selectedAdmin && (
                     <button
                         className="delete-btn"
-                        onClick={() => { navigate('/ModifierAdmin',{state : {
+                        onClick={() => { navigate('//ModifierAdmin',{state : {
                             idAdmin : selectedAdmin.id,
                             firstName:selectedAdmin.firstName,
                             lastName:selectedAdmin.lastName,
