@@ -12,6 +12,8 @@ export default function ModifierAdmin() {
     const [lastname, setLastname] = useState('');
     const [isSuper, setIsSuper] = useState<boolean>(true);
     const [worksiteId, setWorksiteId] = useState<string>('');
+    const [worksiteIds, setWorksiteIds] = useState<string[]>([]);
+
 
     const [worksites, setWorksites] = useState<any[]>([]);
 
@@ -103,10 +105,10 @@ export default function ModifierAdmin() {
                 body: JSON.stringify({
                     mail: email,
                     password: password,
-                    firstName: firstName,
-                    lastName: lastName,
+                    firstName: firstname,
+                    lastName: lastname,
                     isSuperAdmin: isSuper,
-                    worksiteId: worksiteId ? [worksiteId] : [],
+                    worksiteIds: worksiteId ? [worksiteId] : [],
                 }),
             });
         } catch (error) {
