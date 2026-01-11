@@ -50,6 +50,9 @@ export declare class UpdateAdminDto {
   @IsBoolean()
   @IsOptional()
   isSuperAdmin: boolean;
+  @IsArray()
+  @IsOptional()
+  worksiteIds: string[];
 }
 //login
 export class LoginDto {

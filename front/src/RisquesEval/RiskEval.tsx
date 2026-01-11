@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 import '../Formulaire/Survey.css';
 import './RiskEval.css';
 
@@ -96,11 +96,44 @@ const questionTexts: Record<string, string> = {
   pl: 'Kliknij ryzyka, które uważasz, że nie są wystarczająco chronione',
 };
 
+// Mapping des index de risques vers les URLs (position dans le tableau riskLabels)
+const riskIndexToUrl: string[] = [
+  '/risque-levage',        // 0: Risque de levage
+  '/travaux-hauteur',      // 1: Travaux en Hauteur
+  '/risque-cohesion',      // 2: Risque de collision
+  '/risque-stabilite',     // 3: Risque de stabilité
+  '/environnement-travail',// 4: Environnement de travail
+  '/equipement-travail',   // 5: Equipement de production
+  '/ambiance-sociale',     // 6: Ambiance Sociale
+  '/energie-dangereuse',   // 7: Énergie dangereuse
+];
+
+// Codes de langue pour les URLs
+const langCodeMapping: Record<string, string> = {
+  'fr': 'fr',
+  'en': 'en',
+  'es': 'es',
+  'pt': 'pt',
+  'ar': 'ar',
+  'ur': 'ur',
+  'pl': 'pl',
+};
+
 export default function RiskEval() {
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
   const [selectedRisks, setSelectedRisks] = useState<string[]>([]);
   const [langOpen, setLangOpen] = useState(false);
   const [currentLang, setCurrentLang] = useState('fr');
+  
+  // Récupérer la langue depuis l'URL au chargement
+  useEffect(() => {
+    const langFromUrl = searchParams.get('lang');
+    if (langFromUrl && langCodeMapping[langFromUrl]) {
+      setCurrentLang(langFromUrl);
+    }
+  }, [searchParams]);
+  
   const speakQuestion = (lang: string) => {
     const text = questionTexts[lang] || questionTexts.fr;
     if (!('speechSynthesis' in window)) {
@@ -142,6 +175,21 @@ export default function RiskEval() {
     setLangOpen(false);
   };
 
+  const handleRiskInfo = (label: string) => {
+    // Trouver l'index du risque dans le tableau de la langue actuelle
+    const currentRisks = riskLabels[currentLang] || riskLabels.fr;
+    const riskIndex = currentRisks.indexOf(label);
+    
+    if (riskIndex !== -1 && riskIndex < riskIndexToUrl.length) {
+      const baseUrl = riskIndexToUrl[riskIndex];
+      const langCode = langCodeMapping[currentLang] || 'fr';
+      // Passer la langue dans l'état pour que la page de risque puisse la réutiliser
+      navigate(`${baseUrl}/${langCode}`, { state: { returnLang: currentLang } });
+    } else {
+      // Fallback si le risque n'est pas trouvé
+      navigate(`/risk-info/${encodeURIComponent(label)}`);
+    }
+  };
 
 
   return (
@@ -214,13 +262,13 @@ export default function RiskEval() {
                   title={`Plus d'informations sur ${label}`}
                   onClick={(e) => {
                     e.stopPropagation();
-                    navigate(`/risk-info/${encodeURIComponent(label)}`);
+                    handleRiskInfo(label);
                   }}
                   onKeyDown={(e) => {
                     if (e.key === 'Enter' || e.key === ' ') {
                       e.preventDefault();
                       e.stopPropagation();
-                      navigate(`/risk-info/${encodeURIComponent(label)}`);
+                      handleRiskInfo(label);
                     }
                   }}
                 >

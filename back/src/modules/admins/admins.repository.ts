@@ -58,13 +58,26 @@ export class AdminRepository {
     });
   }
 
-  async editAdmin(id: string, input: UpdateAdminDto): Promise<AdminModel> {
+  async editAdmin(id: string, input: UpdateAdminDto, worksites: WorksiteEntity[]): Promise<AdminModel> {
     if (input.password) {
       const saltRounds=12;
       const hashedPassword = await bcrypt.hash(input.password, saltRounds);
       input.password = hashedPassword
     }
-    await this.adminRepository.update(id, input)
+    let newAdmin = {
+      id: id,
+      mail: input.mail,
+      password: input.password,
+      firstName: input.firstName,
+      lastName: input.lastName,
+      isSuperAdmin: input.isSuperAdmin,
+      worksites: undefined
+    }
+    if (typeof worksites !== 'undefined') {
+      newAdmin.worksites = worksites
+    }
+
+    await this.adminRepository.save(newAdmin)
     return await this.getAdminById(id)
   }
 
