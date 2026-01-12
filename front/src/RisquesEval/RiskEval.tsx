@@ -303,7 +303,6 @@ export default function RiskEval() {
 
   return (
     <div className="survey-root">
-      <img className="brand-badge" src="/images/Bouygues_bat.png" alt="Bouygues" aria-hidden="true" />
       <header className="survey-header">
         <div className="lang-menu">
           <button 
@@ -413,6 +412,8 @@ export default function RiskEval() {
         <button className="back-btn" aria-label={uiTexts[currentLang]?.back || 'Retour'} onClick={() => navigate(-1)}>
           ←
         </button>
+
+        <img className="brand-badge brand-badge--inline" src="/images/Bouygues_bat.png" alt="Bouygues" aria-hidden="true" />
 
         {visible && (
           <PopupCommentaire 

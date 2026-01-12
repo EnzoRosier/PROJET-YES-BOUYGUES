@@ -56,11 +56,10 @@ export default function PopupCommentaire( {onClose, setCommentaire, commentaire,
 
   return (
     <div className="popup-commentaire">
-      <img src="/ressources/Logo.png" alt="Logo" className="logo-popup"/>
 
       <h1 className="titre-popup">{t.title}
         <button onClick={lireQuestion} className="bouton-audio">
-          <img src="/ressources/icone-audio.png" alt={t.audioAlt}/>
+          🔊
         </button>
       </h1>
       
@@ -69,14 +68,6 @@ export default function PopupCommentaire( {onClose, setCommentaire, commentaire,
       <div className="zone-texte">
         <p>{t.explain}</p>
         <textarea className="zone-commentaire" value={commentaire} onChange={(e) => setCommentaire(e.target.value)} placeholder={t.placeholder}/>
-        
-        <label htmlFor="upload-image" className="bouton-upload">
-          <img src="/appareil-photo.png" alt="Choisir une image" />
-        </label>
-        <input id="upload-image" className="upload-file" type="file" accept="image/*" onChange={handleImage}/>
-        {preview && (
-          <img src={preview} alt="Aperçu" style={{ maxWidth: "300px", marginTop: "1rem" }}/>
-        )}
       </div>
 
       <div className="popup-footer">

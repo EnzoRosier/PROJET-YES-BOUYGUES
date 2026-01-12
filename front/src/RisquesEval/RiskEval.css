@@ -184,5 +184,42 @@
   .question { font-size: 18px; margin-bottom: 18px; }
 }
 
+/* Place Bouygues logo under the back button on RiskEval and keep it in the page flow */
+.brand-badge{
+  position: fixed;
+  left: 18px;
+  bottom: 18px;
+  width: 175px;
+  height: auto;
+  z-index: 1500;
+  pointer-events: none;
+  opacity: 0.98;
+}
+
+/* Inline variant for RiskEval: default to the standard fixed badge on wide screens */
+.brand-badge.brand-badge--inline {
+  /* keep fixed position from .brand-badge for larger viewports */
+  display: inline-block;
+  width: 175px;
+  height: auto;
+  z-index: 1500;
+  pointer-events: none;
+  opacity: 0.98;
+}
+
+/* On small screens (<= 480px), center the logo and make it part of the page flow */
+@media (max-width: 480px) {
+  .brand-badge.brand-badge--inline {
+    position: static !important; /* not fixed, will not follow scroll */
+    display: block;
+    margin: 8px auto 24px !important; /* center horizontally and add spacing under */
+    width: clamp(32px, 40vw, 140px);
+    max-width: 90%;
+    height: auto;
+    transform: none !important;
+    left: auto !important;
+    align-self: center;
+  }
+}
 
 
