@@ -196,62 +196,131 @@
     background-color: #1a4480;
 }
 
-/* ========================== */
-/* RESPONSIVE MOBILE/TABLETTE */
-/* ========================== */
+/* ------- RESPONSIVE ------- */
 
-/* Petites tablettes et grands téléphones (≤ 768px) */
+/* Écrans entre 992px et 1200px */
+@media (max-width: 1200px) {
+
+    .admin-tickets-main {
+        padding: 30px;
+    }
+
+    .table-tickets {
+        width: 90%;
+        margin-left: 0;
+        font-size: 1.2rem;
+    }
+}
+
+/* Écrans entre 768px et 992px */
+@media (max-width: 992px) {
+
+    .admin-tickets-main {
+        padding: 25px;
+    }
+
+    .table-tickets {
+        width: 100%;
+        font-size: 1.15rem;
+    }
+
+    .table-tickets-header, 
+    .table-tickets-cell {
+        padding: 8px;
+    }
+}
+
+/* Tablettes portrait (≤ 768px) */
 @media (max-width: 768px) {
+
+    .admin-tickets {
+        padding: 10px;
+    }
+
+    .admin-tickets-main {
+        padding: 20px;
+        border-radius: 12px;
+    }
+
+    .table-tickets {
+        width: 100%;
+        font-size: 1rem;
+        margin-left: 0;
+    }
+
+    .table-tickets-header {
+        font-size: 1rem;
+    }
+
+    .table-tickets-data-row:hover {
+        transform: none;
+    }
+
+    /* Popup */
     .admin-tickets-popup {
-        width: 80%;
-        padding: 18px;
-        margin-top: 20px;
-        gap: 12px;
+        width: 90%;
+        padding: 16px;
+        margin-top: 10%;
     }
 
     .admin-tickets-popup h2 {
-        font-size: 1.3rem;
+        font-size: 1.2rem;
     }
 
     .response-ticket {
         font-size: 0.9rem;
     }
-
-    .bouton-cloturer-ticket {
-        font-size: 0.95rem;
-        padding: 10px;
-    }
 }
 
-/* Téléphones standard (≤ 480px) */
-@media (max-width: 480px) {
-    .admin-tickets-popup {
-        width: 95%;
-        border-radius: 6px;
+/* Téléphones (≤ 576px) */
+@media (max-width: 576px) {
+
+    .admin-tickets-main {
         padding: 16px;
-        gap: 10px;
     }
 
-    .admin-tickets-popup h2 {
-        font-size: 1.15rem;
+    .table-tickets-head {
+        display: none; /* On cache l’en-tête pour mobile */
     }
 
-    .response-ticket {
-        font-size: 0.85rem;
+    /* Version mobile : présentation en cartes */
+    .table-tickets-row,
+    .table-tickets-data-row {
+        display: block;
+        padding: 12px;
+        border-bottom: 2px solid #ddd;
     }
 
-    .date-ticket {
-        font-size: 0.75rem;
-        text-align: left; /* Lecture plus aisée sur mobile */
+    .table-tickets-cell {
+        display: flex;
+        justify-content: space-between;
+        padding: 6px 0;
+        font-size: 0.95rem;
+    }
+
+    .table-tickets-cell::before {
+        content: attr(data-label);
+        font-weight: bold;
+        margin-right: 10px;
+        color: #333;
+    }
+
+    /* Popup */
+    .admin-tickets-popup {
+        width: 92%;
+        margin: 20px auto;
+        padding: 14px;
     }
 
     .input-reponse-ticket {
         font-size: 0.9rem;
-        padding: 8px;
     }
 
     .bouton-cloturer-ticket {
-        font-size: 0.9rem;
-        padding: 10px;
+        width: 100%;
+    }
+
+    .bouton-retour-accueil-admin {
+        width: 100%;
     }
 }

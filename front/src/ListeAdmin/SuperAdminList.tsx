@@ -104,7 +104,14 @@ export default function AdminList() {
                 {selectedAdmin && (
                     <button
                         className="delete-btn"
-                        onClick={() => console.log(selectedAdmin)}
+                        onClick={() => { navigate('//ModifierAdmin',{state : {
+                            idAdmin : selectedAdmin.id,
+                            firstName:selectedAdmin.firstName,
+                            lastName:selectedAdmin.lastName,
+                            email:selectedAdmin.mail,
+                            isSuperAdmin:selectedAdmin.isSuperAdmin,
+                            worksiteId:selectedAdmin.worksiteId
+                        }}); }}
                     >
                         Modifier
                     </button>
@@ -112,7 +119,7 @@ export default function AdminList() {
             </div>
 
             <button
-                className="bouton-retour"
+                className="bouton-aurevoir"
                 onClick={() => { navigate('/login'); }}
             >
                 Retour

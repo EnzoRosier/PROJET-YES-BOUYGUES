@@ -11,7 +11,7 @@
     height: auto;
 }
 
-.bouton-retour {
+.bouton-retour-liste {
     position: absolute;
     top: 5%;
     left: 5%;
@@ -66,8 +66,9 @@
         width: 25%;
     }
 
-    .bouton-retour {
+    .bouton-retour-liste {
         font-size: 1rem;
         padding: 8px 14px;
     }
 }
+

@@ -75,7 +75,7 @@ export default function AccueilSuperAdmin() {
 
     const definirChantierActuel = async (idChantier: string) => {
         try{
-            const response = await fetch(`http://localhost:3001/worksite/currentWorksite/${idChantier}`, {
+            const response = await fetch(`http://localhost:3001/worksite/currentWorksite`, {
                 method: 'POST',
                 credentials: 'include',
                 headers: {
