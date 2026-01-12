@@ -16,11 +16,12 @@ export default function AjouterAdmin() {
     const [worksites, setWorksites] = useState<any[]>([]);
 
     const navigate = useNavigate();
+    const ip = window.location.hostname;
 
     useEffect(() => {
         const checkSuperLoggedIn = async () => {
             try {
-                const response = await fetch('http://localhost:3001/admins/me', {
+                const response = await fetch(`http://${ip}:3001/admins/me`, {
                     method: 'GET',
                     credentials: 'include',
                 });
@@ -42,7 +43,7 @@ export default function AjouterAdmin() {
 
         const fetchWorksites = async () => {
             try {
-                const response = await fetch('http://localhost:3001/worksite', {
+                const response = await fetch(`http://${ip}:3001/worksite`, {
                     method: 'GET',
                     credentials: 'include',
                 });
@@ -77,7 +78,7 @@ export default function AjouterAdmin() {
 
 
         try {
-            const response = await fetch('http://localhost:3001/admins', {
+            const response = await fetch(`http://${ip}:3001/admins`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',

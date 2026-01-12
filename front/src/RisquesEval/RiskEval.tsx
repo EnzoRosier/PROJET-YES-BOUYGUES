@@ -128,6 +128,7 @@ export default function RiskEval() {
   const [selectedRisks, setSelectedRisks] = useState<string[]>([]);
   const [langOpen, setLangOpen] = useState(false);
   const [currentLang, setCurrentLang] = useState('fr');
+  const ip = window.location.hostname;
   
   // Récupérer la langue depuis l'URL au chargement
   useEffect(() => {
@@ -213,7 +214,7 @@ export default function RiskEval() {
     };
 
     try {
-      const response = await fetch('http://localhost:3001/vote/new', {
+      const response = await fetch(`http://${ip}:3001/vote/new`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(voteData),

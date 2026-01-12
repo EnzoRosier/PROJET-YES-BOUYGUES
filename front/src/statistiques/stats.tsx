@@ -7,6 +7,7 @@ export default function Stats() {
   const location = useLocation();
   const idChantier = location.state?.idChantier || null;
   const navigate = useNavigate();
+  const ip = window.location.hostname;
   
   // Données pour le login
   const [loggedIn, setLoggedIn] = useState<boolean | null>(null);
@@ -78,7 +79,7 @@ export default function Stats() {
   // Fonction pour vérifier la connexion
   const checkLoggedIn = async () => {
     try {
-      const response = await fetch('http://localhost:3001/admins/me', {
+      const response = await fetch(`http://${ip}:3001/admins/me`, {
         method: 'GET',
         credentials: 'include',
       });
@@ -105,7 +106,7 @@ export default function Stats() {
       
       console.log(`Récupération des stats à partir du ${startDate} (${period})`);
       const response = await fetch(
-        `http://localhost:3001/vote/getStatsOf/${idChantier}`, 
+        `http://${ip}:3001/vote/getStatsOf/${idChantier}`, 
         {
           method: 'POST',
           credentials: 'include',

@@ -15,11 +15,12 @@ export default function AccueilSuperAdmin() {
     const [respoSec, setRespoSec] = useState("");
     const [nbCollaborateurs, setNbCollaborateurs] = useState(0);
     const [dateFin, setDateFin] = useState("");
+    const ip = window.location.hostname;
 
     const checkLoggedIn = async () => {
         // vérifier si l'utilisateur est connecté
         try {
-            const response = await fetch('http://localhost:3001/admins/me', {
+            const response = await fetch(`http://${ip}:3001/admins/me`, {
                 method: 'GET',
                 credentials: 'include',
             });
@@ -42,7 +43,7 @@ export default function AccueilSuperAdmin() {
     // On va demander au serveur les informations de tous les chantiers pour afficher un récapitulatif.
     const fetchChantierInfo = async () => {
         try {
-            const response = await fetch(`http://localhost:3001/worksite/`, {
+            const response = await fetch(`http://${ip}:3001/worksite/`, {
                 method: 'GET',
                 credentials: 'include',
             });
@@ -61,7 +62,7 @@ export default function AccueilSuperAdmin() {
 
     const valider_accident = async (idChantier: string) => {
         console.log("Validation d'un accident...");
-        const response = await fetch(`http://localhost:3001/worksite/resetAccident/${idChantier}`, {
+        const response = await fetch(`http://${ip}:3001/worksite/resetAccident/${idChantier}`, {
             method: 'GET',
             credentials: 'include',
         });
@@ -75,7 +76,7 @@ export default function AccueilSuperAdmin() {
 
     const definirChantierActuel = async (idChantier: string) => {
         try{
-            const response = await fetch(`http://localhost:3001/worksite/currentWorksite`, {
+            const response = await fetch(`http://${ip}:3001/worksite/currentWorksite`, {
                 method: 'POST',
                 credentials: 'include',
                 headers: {
@@ -99,7 +100,7 @@ export default function AccueilSuperAdmin() {
     const creerChantier = async () => {
         console.log("Création d'un nouveau chantier...");
         try{
-            const response = await fetch(`http://localhost:3001/worksite/new`, {
+            const response = await fetch(`http://${ip}:3001/worksite/new`, {
                 method: 'POST',
                 credentials: 'include',
                 headers: {

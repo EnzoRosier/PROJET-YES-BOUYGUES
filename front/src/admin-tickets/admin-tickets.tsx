@@ -9,12 +9,13 @@ export default function AdminTickets() {
     const location = useLocation();
     const [worksiteIds, setWorksiteIds] = useState<string[]>(); // Remplacez par l'ID du chantier souhaité
     const { idTicket } = useParams<{ idTicket: string }>(); // On prend l'id du ticket dans l'URL s'il y en a un
+    const ip = window.location.hostname;
 
 
     const checkLoggedIn = async () => {
         // vérifier si l'utilisateur est connecté
         try {
-            const response = await fetch('http://localhost:3001/admins/me', {
+            const response = await fetch(`http://${ip}:3001/admins/me`, {
                 method: 'GET',
                 credentials: 'include',
             });
@@ -45,7 +46,7 @@ export default function AdminTickets() {
         try {
             let ticketsById: any[] = []
             for (let worksiteId of worksiteIds || []) {
-                const response = await fetch(`http://localhost:3001/vote/getByWorksite/${worksiteId}`, {
+                const response = await fetch(`http://${ip}:3001/vote/getByWorksite/${worksiteId}`, {
                     method: 'GET',
                     credentials: 'include',
                 });
@@ -68,7 +69,7 @@ export default function AdminTickets() {
     const cloturer_ticket = async (ticket: any) => {
         try {
             let reponse = (document.querySelector('.input-reponse-ticket') as HTMLInputElement).value;
-            const response = await fetch(`http://localhost:3001/vote/respond`, {
+            const response = await fetch(`http://${ip}:3001/vote/respond`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
