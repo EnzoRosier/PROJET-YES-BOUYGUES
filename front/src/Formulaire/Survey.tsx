@@ -30,12 +30,63 @@ const questionTexts: Record<string, string> = {
   pl: 'Jaki jest Twój nastrój pod koniec dnia?',
 };
 
-const WORKSITE_ID_PLACEHOLDER = "4aef3bc5-6637-40f6-b7f2-e613e0744efd";
-
 export default function Survey() {
   const [selected, setSelected] = useState<number | null>(null);
   const [langOpen, setLangOpen] = useState(false);
   const [currentLang, setCurrentLang] = useState('fr');
+  const [worksiteId, setWorksiteId] = useState<string | null>(null);
+  const navigate = useNavigate();
+
+  // Fetch current worksite id on mount; if missing, redirect to admin login
+  useEffect(() => {
+    const fetchWorksite = async () => {
+      try {
+        const res = await fetch('http://localhost:3001/worksite/currentWorksite');
+
+        // Try to read body (JSON or text) regardless of res.ok so we can decide based on content
+        let data: any = null;
+        try {
+          const text = await res.text();
+          try {
+            data = JSON.parse(text);
+          } catch {
+            data = text || null;
+          }
+        } catch (e) {
+          console.warn('Failed to read worksite response body:', e);
+        }
+
+        // Extract id from multiple possible shapes (id, worksiteId, value, nested value)
+        let id: string | null = null;
+        if (data) {
+          if (typeof data === 'string') {
+            id = data;
+          } else if (typeof data === 'object') {
+            id = data?.id ?? data?.worksiteId ?? null;
+            if (!id && data?.value) {
+              if (typeof data.value === 'string') id = data.value;
+              else if (typeof data.value === 'object') id = data.value.id ?? data.value.worksiteId ?? null;
+            }
+          }
+        }
+
+        console.debug('Extracted worksite id:', id);
+
+        if (id && typeof id === 'string') {
+          setWorksiteId(id);
+          return; // valid id, do not redirect
+        }
+
+        // If no id found, redirect to login (after having awaited the response and parsed it)
+        console.warn('No worksite id returned or invalid response:', { status: res.status, data });
+        navigate('/login');
+      } catch (err) {
+        console.warn('Could not fetch current worksite:', err);
+        navigate('/login');
+      }
+    };
+    fetchWorksite();
+  }, [navigate]);
   const [visible, setVisible] = useState(false);
   const [commentaire, setCommentaire] = useState('');
   const [showNoSelectionModal, setShowNoSelectionModal] = useState(false);
@@ -61,7 +112,6 @@ export default function Survey() {
   };
 
   const audioRef = useRef<HTMLAudioElement | null>(null);
-  const navigate = useNavigate();
 
   useEffect(() => {
     return () => {
@@ -135,9 +185,15 @@ export default function Survey() {
       reponse: moodMapping[selected] || "INCONNU", 
       commentaire: commentaire,
       date: today,
-      worksiteId: WORKSITE_ID_PLACEHOLDER,
+      worksiteId: worksiteId,
       dateCloture: ""
     };
+
+    if (!worksiteId) {
+      console.error('No worksiteId available; redirecting to admin login');
+      navigate('/login');
+      return;
+    }
 
     try {
       const response = await fetch('http://localhost:3001/vote/new', {

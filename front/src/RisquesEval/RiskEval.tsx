@@ -97,10 +97,9 @@ const questionTexts: Record<string, string> = {
   pl: 'Kliknij ryzyka, które uważasz, że nie są wystarczająco chronione',
 };
 
-const WORKSITE_ID_PLACEHOLDER = "4aef3bc5-6637-40f6-b7f2-e613e0744efd";  
- 
 // Mapping des index de risques vers les URLs (position dans le tableau riskLabels)
 const riskIndexToUrl: string[] = [
+  '/risque-levage',        // 0: Risque de levage
   '/risque-levage',        // 0: Risque de levage
   '/travaux-hauteur',      // 1: Travaux en Hauteur
   '/risque-cohesion',      // 2: Risque de collision
@@ -128,7 +127,59 @@ export default function RiskEval() {
   const [selectedRisks, setSelectedRisks] = useState<string[]>([]);
   const [langOpen, setLangOpen] = useState(false);
   const [currentLang, setCurrentLang] = useState('fr');
+  const [worksiteId, setWorksiteId] = useState<string | null>(null);
   const audioRef = React.useRef<HTMLAudioElement | null>(null);
+
+  // Fetch current worksite id on mount; if missing redirect to admin login
+  useEffect(() => {
+    const fetchWorksite = async () => {
+      try {
+        const res = await fetch('http://localhost:3001/worksite/currentWorksite');
+
+        // Try to read body (JSON or text) regardless of res.ok so we can decide based on content
+        let data: any = null;
+        try {
+          const text = await res.text();
+          try {
+            data = JSON.parse(text);
+          } catch {
+            data = text || null;
+          }
+        } catch (e) {
+          console.warn('Failed to read worksite response body:', e);
+        }
+
+        // Extract id from multiple possible shapes (id, worksiteId, value, nested value)
+        let id: string | null = null;
+        if (data) {
+          if (typeof data === 'string') {
+            id = data;
+          } else if (typeof data === 'object') {
+            id = data?.id ?? data?.worksiteId ?? null;
+            if (!id && data?.value) {
+              if (typeof data.value === 'string') id = data.value;
+              else if (typeof data.value === 'object') id = data.value.id ?? data.value.worksiteId ?? null;
+            }
+          }
+        }
+
+        console.debug('Extracted worksite id:', id);
+
+        if (id && typeof id === 'string') {
+          setWorksiteId(id);
+          return; // valid id, do not redirect
+        }
+
+        // If no id found, redirect to login (after having awaited the response and parsed it)
+        console.warn('No worksite id returned or invalid response:', { status: res.status, data });
+        navigate('/login');
+      } catch (err) {
+        console.warn('Could not fetch current worksite:', err);
+        navigate('/login');
+      }
+    };
+    fetchWorksite();
+  }, [navigate]);
   
   // Récupérer la langue depuis l'URL au chargement
   useEffect(() => {
@@ -263,8 +314,14 @@ export default function RiskEval() {
       reponse,
       commentaire: commentaire || (otherText || ''),
       date: today,
-      worksiteId: WORKSITE_ID_PLACEHOLDER,
+      worksiteId: worksiteId,
     };
+
+    if (!worksiteId) {
+      console.error('No worksiteId available; redirecting to admin login');
+      navigate('/login');
+      return;
+    }
 
     try {
       const response = await fetch('http://localhost:3001/vote/new', {
