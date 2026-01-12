@@ -6,7 +6,7 @@ export default function Accueil() {
     return (
         <div className="accueil">
             <img src="/ressources/Logo.png" alt="Logo" className="logo-popup"/>
-            <h1>Safety</h1>
+            <h1 className="titre-accueil">Safety</h1>
 
             <Link to="/Formulaire"><button className='bouton-formulaire'>Remplir le formulaire</button></Link>
             <Link to="/login"><button className='bouton-login'>

@@ -41,7 +41,7 @@ export class AdminRepository {
     //var hashedPassword = admin.password;
 
     const newAdmin = this.adminRepository.create({
-      mail: admin.mail,
+      mail: admin.mail.toLowerCase(),
       password: hashedPassword,
       firstName: admin.firstName,
       lastName: admin.lastName,
@@ -53,6 +53,7 @@ export class AdminRepository {
     return returnedAdmin;
   }
   public async findByMail(mail: string) {
+    mail = mail.toLowerCase()
     return this.adminRepository.findOne({
       where: { mail },
     });
@@ -66,7 +67,7 @@ export class AdminRepository {
     }
     let newAdmin = {
       id: id,
-      mail: input.mail,
+      mail: input.mail.toLowerCase(),
       password: input.password,
       firstName: input.firstName,
       lastName: input.lastName,

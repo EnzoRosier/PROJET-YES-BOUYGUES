@@ -5,9 +5,9 @@ import { Link, useNavigate } from 'react-router-dom';
 import PopupCommentaire from '../popup-commentaire/popup-commentaire';
 
 const smiles = [
-  { id: 0, label: 'Très insatisfait', image: '/images/Smiley_Angry.png', color: '#e74c3c' },
-  { id: 1, label: 'Neutre', image: '/images/Smiley_Normal.png', color: '#f1c40f' },
-  { id: 2, label: 'Très satisfait', image: '/images/Smiley_Happy.png', color: '#2ecc71' },
+  { id: 0, label: 'Très insatisfait', image: '/images/Smiley_Angry.png', color: '#e74c3c' }, // ID 0 -> MAUVAIS
+  { id: 1, label: 'Neutre', image: '/images/Smiley_Normal.png', color: '#f1c40f' },          // ID 1 -> MOYEN
+  { id: 2, label: 'Très satisfait', image: '/images/Smiley_Happy.png', color: '#2ecc71' },  // ID 2 -> BIEN
 ];
 
 const languages = [
@@ -24,11 +24,13 @@ const questionTexts: Record<string, string> = {
   fr: 'Quelle est votre humeur en cette fin de journée ?',
   en: 'What is your mood at the end of the day?',
   es: '¿Cuál es su estado de ánimo al final del día?',
-  pt: 'Qual é o seu estado de espírito no final do dia?',
+  pt: 'Qual é o seu état d\'esprit no final do dia?',
   ar: 'ما هو مزاجك في نهاية هذا اليوم؟',
   ur: 'دن کے آخر میں آپ کا مزاج کیسا है؟',
   pl: 'Jaki jest Twój nastrój pod koniec dnia?',
 };
+
+const WORKSITE_ID_PLACEHOLDER = "4aef3bc5-6637-40f6-b7f2-e613e0744efd";
 
 export default function Survey() {
   const [selected, setSelected] = useState<number | null>(null);
@@ -39,7 +41,6 @@ export default function Survey() {
   const [showNoSelectionModal, setShowNoSelectionModal] = useState(false);
   
   const navigate = useNavigate();
-
   const audioRef = useRef<HTMLAudioElement | null>(null);
 
   useEffect(() => {
@@ -56,17 +57,10 @@ export default function Survey() {
       audioRef.current.pause();
       audioRef.current.currentTime = 0;
     }
-
     const audioPath = `./ressources/audios/${lang}/${lang}_2.mp3`;
-    alert(audioPath);
-
     const audio = new Audio(audioPath);
     audioRef.current = audio;
-
-    audio.play().catch((error) => {
-      console.error("Erreur lors de la lecture du fichier audio :", error);
-      alert("Le fichier audio pour cette langue est introuvable ou illisible.");
-    });
+    audio.play().catch((error) => console.error("Erreur audio :", error));
   };
 
   const handleLangSelect = (code: string) => {
@@ -74,20 +68,56 @@ export default function Survey() {
     setLangOpen(false);
   };
 
+  // Logique d'envoi des données
+  const handleConfirm = async () => {
+    if (selected === null) {
+      setShowNoSelectionModal(true);
+      return;
+    }
+
+    const moodMapping: Record<number, string> = {
+      0: "MAUVAIS",
+      1: "MOYEN",
+      2: "BIEN"
+    };
+
+    const today = new Date().toISOString().split('T')[0];
+
+    const voteData = {
+      numQuestion: "1",
+      reponse: moodMapping[selected] || "INCONNU", 
+      commentaire: commentaire,
+      date: today,
+      worksiteId: WORKSITE_ID_PLACEHOLDER,
+      dateCloture: ""
+    };
+
+    try {
+      const response = await fetch('http://localhost:3001/vote/new', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(voteData),
+      });
+
+      if (response.ok) {
+        navigate('../riskeval');
+      } else {
+        alert("Erreur lors de l'envoi");
+      }
+    } catch (error) {
+      console.error("Erreur API:", error);
+    }
+  };
+
   return (
     <div className="survey-root">
-      <img className="brand-badge" src="/images/Bouygues_bat.png" alt="Bouygues" aria-hidden="true" />
+      <img className="brand-badge" src="/images/Bouygues_bat.png" alt="Bouygues" />
       
       <header className="survey-header">
         <div className="lang-menu">
-          <button 
-            className="lang-btn" 
-            aria-label="Sélectionner la langue"
-            onClick={() => setLangOpen(!langOpen)}
-          >
+          <button className="lang-btn" onClick={() => setLangOpen(!langOpen)}>
             <span className="flag">{languages.find(l => l.code === currentLang)?.flag}</span>
           </button>
-
           {langOpen && (
             <div className="lang-dropdown">
               {languages.map((lang) => (
@@ -103,32 +133,21 @@ export default function Survey() {
             </div>
           )}
         </div>
-
-        <Link to="../login">
-          <button className="admin-btn">🔒</button>
-        </Link>
+        <Link to="../login"><button className="admin-btn">🔒</button></Link>
       </header>
 
       <main className="survey-main">
         <h1 className="question">
           {questionTexts[currentLang] || questionTexts.fr}
-          <button
-            type="button"
-            className="audio-btn"
-            aria-label="Lire la question"
-            onClick={() => speakQuestion(currentLang)}
-          >
-            🔊
-          </button>
+          <button className="audio-btn" onClick={() => speakQuestion(currentLang)}>🔊</button>
         </h1>
 
-        <div className="smile-row" role="list">
+        <div className="smile-row">
           {smiles.map((s) => (
             <button
               key={s.id}
               className={`smile ${selected === s.id ? 'selected' : ''}`}
               onClick={() => setSelected(s.id)}
-              aria-label={s.label}
             >
               <img src={s.image} alt={s.label} className="smile-image" />
             </button>
@@ -136,58 +155,27 @@ export default function Survey() {
         </div>
 
         <div className="actions">
-          <button
-            className="confirm"
-            onClick={() => {
-              if (selected === null) {
-                setShowNoSelectionModal(true);
-                return;
-              }
-              const selectedSmile = smiles.find(s => s.id === selected);
-              alert(`Réponse enregistrée : ${selectedSmile?.label}`);
-              navigate('../riskeval');
-            }}
-          >
-            Confirmer
-          </button>
-
+          <button className="confirm" onClick={handleConfirm}>Confirmer</button>
           <button className="develop" onClick={() => setVisible(true)}>Je développe</button>
         </div>
 
-        <Link to="../">
-          <button className="back-btn" aria-label="Retour">←</button>
-        </Link>
+        <Link to="../"><button className="back-btn">←</button></Link>
 
-        <div>
-          {visible && (
-            <PopupCommentaire 
-              onClose={() => setVisible(false)} 
-              setCommentaire={setCommentaire} 
-              commentaire={commentaire}
-            />
-          )}
-        </div>
+        {visible && (
+          <PopupCommentaire 
+            onClose={() => setVisible(false)} 
+            setCommentaire={setCommentaire} 
+            commentaire={commentaire}
+          />
+        )}
       </main>
 
       {showNoSelectionModal && (
         <div className="modal-overlay" onClick={() => setShowNoSelectionModal(false)}>
-          <div
-            className="modal"
-            role="dialog"
-            aria-modal="true"
-            aria-labelledby="modal-title"
-            onClick={(e) => e.stopPropagation()}
-          >
-            <h3 id="modal-title">Sélection requise</h3>
-            <p>Veuillez sélectionner une appréciation avant de confirmer.</p>
-            <div className="modal-actions">
-              <button
-                className="modal-close"
-                onClick={() => setShowNoSelectionModal(false)}
-              >
-                OK
-              </button>
-            </div>
+          <div className="modal" onClick={(e) => e.stopPropagation()}>
+            <h3>Sélection requise</h3>
+            <p>Veuillez sélectionner un smiley.</p>
+            <button className="modal-close" onClick={() => setShowNoSelectionModal(false)}>OK</button>
           </div>
         </div>
       )}
