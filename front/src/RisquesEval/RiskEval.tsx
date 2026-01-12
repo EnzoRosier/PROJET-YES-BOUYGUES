@@ -88,13 +88,13 @@ const languages = [
 ];
 
 const questionTexts: Record<string, string> = {
-  fr: "Cliquez sur les risques majeurs, pour lesquels vous pensez ne pas être assez protégé",
-  en: 'Click on the major risks for which you think you are not sufficiently protected',
-  es: 'Haga clic en los riesgos principales por los que cree que no está suficientemente protegido',
-  pt: 'Clique nos riscos principais para os quais você acha que não está suficientemente protegido',
-  ar: 'ان بڑے خطرات پر کلک کریں جن کے بارے میں آپ کو لگتا ہے کہ آپ کافی حد تک محفوظ نہیں ہیں',
-  ur: 'ان اہم خطرات پر کلک کریں جن کے بارے میں آپ سمجھتے ہیں کہ آپ کافی حد تک محفوظ نہیں ہیں',
-  pl: 'Kliknij ryzyka, które uważasz, że nie są wystarczająco chronione',
+  fr: "Lequel de ces 8 risques est associé à votre humeur ?",
+  en: 'Which of these 8 risks is associated with your mood ?',
+  es: '¿ Cuál de estos 8 riesgos está asociado con tu estado de ánimo ?',
+  pt: 'Qual destes 8 riscos está associado ao seu humor ?',
+  ar: 'أي من هذه المخاطر الثمانية يرتبط بحالتك المزاجية؟',
+  ur: 'ان 8 خطرات میں سے کون سا آپ کے مزاج سے وابستہ ہے؟',
+  pl: 'Które z tych 8 zagrożeń jest związane z Twoim nastrojem ?',
 };
 
 // Mapping des index de risques vers les URLs (position dans le tableau riskLabels)
@@ -201,13 +201,13 @@ export default function RiskEval() {
 
   const getAudioPath = (lang: string, index = 2) => {
     const map: Record<string, string> = {
-      fr: `/ressources/audios/fr/fr_${index}.mp3`,
-      en: `/ressources/audios/Anglais/Anglais_Diapo_${index}.mp3`,
-      es: `/ressources/audios/Espagnol/Espagnol_Diapo_${index}.mp3`,
-      pt: `/ressources/audios/Portugais/DIAPO ${index}.mp3`,
-      ar: `/ressources/audios/Arabe Littéraire/diapo ${index}.mp3`,
-      ur: `/ressources/audios/Ourdou/${index}.m4a`,
-      pl: `/ressources/audios/Polonais/Polonais diapo ${index} audio.mp3`,
+      fr: `audio/Français/Français_Diapo_${index}.mp3`,
+      en: `audio/Anglais/Anglais_Diapo_${index}.mp3`,
+      es: `audio/Espagnol/Espagnol_Diapo_${index}.mp3`,
+      pt: `audio/Portugais/Portugais_Diapo_${index}.mp3`,
+      ar: `audio/Arabe Littéraire/Arabe_Diapo_${index}.mp3`,
+      ur: `audio/Ourdou/Ourdou_Diapo_${index}.mp3`,
+      pl: `audio/Polonais/Polonais_Diapo_${index}.mp3`,
     };
     return map[lang] || map.fr;
   };
