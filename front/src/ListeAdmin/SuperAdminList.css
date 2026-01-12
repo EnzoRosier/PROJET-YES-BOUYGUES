@@ -75,3 +75,48 @@
     background-color: #b00020;
     color: white;
 }
+
+.bouton-aurevoir {
+    position: absolute;
+    top: 4%;
+    left: 4%;
+    width: 7%;
+    height: auto;
+    padding: 2%;
+    font-size: 1.5rem;
+    background-color: #555;
+    border-radius: 35px;
+    color: white;
+    cursor: pointer;
+    border: none;
+}
+
+/* Tablette */
+@media (max-width: 1024px) {
+    .bouton-aurevoir {
+        width: auto;
+        padding: 10px 18px;
+        font-size: 1.1rem;
+    }
+}
+
+/* Mobile */
+@media (max-width: 600px) {
+    .bouton-aurevoir {
+        top: 3%;
+        left: 3%;
+        padding: 8px 14px;
+        font-size: 1rem;
+        border-radius: 20px;
+    }
+}
+
+.admin-title {
+    text-align: center;
+    font-size: 2rem;
+    font-weight: 700;
+    margin: 2.5rem 0 1.5rem 0;
+    color: #E75113;
+    letter-spacing: 0.5px;
+}
+

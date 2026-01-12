@@ -1,11 +1,12 @@
 import './admin-tickets.css';
-import { useNavigate, Navigate, useParams } from 'react-router-dom';
+import { useNavigate, useLocation, Navigate, useParams } from 'react-router-dom';
 import { use, useEffect, useState } from 'react';
 
 export default function AdminTickets() {
     const [loggedIn, setLoggedIn] = useState<boolean | null>(null);
     const [dataTickets, setDataTickets] = useState<any>(null);
     const navigate = useNavigate();
+    const location = useLocation();
     const [worksiteIds, setWorksiteIds] = useState<string[]>(); // Remplacez par l'ID du chantier souhaité
     const { idTicket } = useParams<{ idTicket: string }>(); // On prend l'id du ticket dans l'URL s'il y en a un
 
@@ -173,7 +174,11 @@ export default function AdminTickets() {
                 ))}
             </tbody>
         </table>
-        <button className="bouton-retour-accueil-admin" onClick={() => navigate('/admin')}>Retour</button>
+        <button className="bouton-retour-accueil-admin" onClick={() => {
+            if (location.state?.from === "admin"){navigate('/admin')}
+            else if(location.state?.from === "superadmin"){navigate('/super-admin')}
+            else{navigate('/admin')}
+            }}>Retour</button>
         </div></div>
         );
     }

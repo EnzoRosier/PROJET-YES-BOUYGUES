@@ -38,13 +38,16 @@ export class WorksiteRepository {
     worksite: CreateWorksiteDto,
   ): Promise<WorksiteModel> {
     let admin = [];
-    for (let i = 0; i < worksite.adminIds.length; i++) {
-      const currId = worksite.adminIds[i];
-      if (typeof currId === 'string') {
-        admin.push(await this.adminRepository.findOneOrFail({
-          where: { id: currId },
-        }));
+    if (typeof worksite.adminIds !== 'undefined') {
+      for (let i = 0; i < worksite.adminIds.length; i++) {
+        const currId = worksite.adminIds[i];
+        if (typeof currId === 'string') {
+          admin.push(await this.adminRepository.findOneOrFail({
+            where: { id: currId },
+          }));
+        }
       }
+    
     }
     
 
