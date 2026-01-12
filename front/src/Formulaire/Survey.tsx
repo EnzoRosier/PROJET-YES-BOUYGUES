@@ -22,12 +22,12 @@ const languages = [
 
 const questionTexts: Record<string, string> = {
   fr: 'Quelle est votre humeur en cette fin de journée ?',
-  en: 'What is your mood at the end of the day?',
-  es: '¿Cuál es su estado de ánimo al final del día?',
-  pt: 'Qual é o seu estado de espírito no final do dia?',
-  ar: 'ما هو مزاجك في نهاية هذا اليوم؟',
-  ur: 'دن کے آخر میں آپ کا مزاج کیسا है؟',
-  pl: 'Jaki jest Twój nastrój pod koniec dnia?',
+  en: 'How are you feeling at the end of the day ?',
+  es: '¿ Cómo te sientes al final del día ?',
+  pt: 'Como se sente no final do dia ?',
+  ar: 'ما هو مزاجك في نهاية اليوم؟',
+  ur: 'دن کے آخر میں آپ کا موڈ کیا ہے؟',
+  pl: 'Jak się czujesz pod koniec dnia ?',
 };
 
 export default function Survey() {
@@ -126,13 +126,13 @@ export default function Survey() {
   // Map language code to the actual audio file path for question 2
   const getAudioPath = (lang: string, index = 2) => {
     const map: Record<string, string> = {
-      fr: `/ressources/audios/fr/fr_${index}.mp3`,
-      en: `/ressources/audios/Anglais/Anglais_Diapo_${index}.mp3`,
-      es: `/ressources/audios/Espagnol/Espagnol_Diapo_${index}.mp3`,
-      pt: `/ressources/audios/Portugais/DIAPO ${index}.mp3`,
-      ar: `/ressources/audios/Arabe Littéraire/diapo ${index}.mp3`,
-      ur: `/ressources/audios/Ourdou/${index}.m4a`,
-      pl: `/ressources/audios/Polonais/Polonais diapo ${index} audio.mp3`,
+      fr: `audio/Français/Français_Diapo_${index}.mp3`,
+      en: `audio/Anglais/Anglais_Diapo_${index}.mp3`,
+      es: `audio/Espagnol/Espagnol_Diapo_${index}.mp3`,
+      pt: `audio/Portugais/Portugais_Diapo_${index}.mp3`,
+      ar: `audio/Arabe Littéraire/Arabe_Diapo_${index}.mp3`,
+      ur: `audio/Ourdou/Ourdou_Diapo_${index}.mp3`,
+      pl: `audio/Polonais/Polonais_Diapo_${index}.mp3`,
     };
     return map[lang] || map.fr;
   };
