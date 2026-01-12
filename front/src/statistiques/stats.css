@@ -291,17 +291,26 @@
   align-self: center;
 }
 
+.bouton-export-stats{
+  margin-top: 10px;
+  padding: 12px;
+  font-size: 16px;
+  font-weight: bold;
+  border: none;
+  border-radius: 6px;
+  background-color: #2b2b45;
+  color: white;
+  cursor: pointer;
+  width: 250px;
+  align-self: center;
+}
+
 /* Responsive */
 @media (max-width: 768px) {
   .bar-chart-with-axis {
     height: 200px;
   }
   
-  .y-axis {
-    width: 50px;
-    margin-right: 10px;
-  }
-
   .bar-chart-preview {
     height: 150px;
   }
@@ -326,10 +335,6 @@
   .legend-color {
     width: 12px;
     height: 12px;
-  }
-  
-  .tick-value {
-    font-size: 9px;
   }
 }
 

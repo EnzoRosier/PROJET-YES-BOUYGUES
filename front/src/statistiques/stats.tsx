@@ -312,6 +312,9 @@ export default function Stats() {
             else{navigate('/admin')}}}>
           Retour à la page Admin
         </button>
+        <button className="bouton-export-stats" onClick={() => {console.log("Export des statistiques en PDF (fonctionnalité à implémenter)")}}>
+          Exporter les statistiques en PDF
+        </button>
       </div>
     </div>
   );
