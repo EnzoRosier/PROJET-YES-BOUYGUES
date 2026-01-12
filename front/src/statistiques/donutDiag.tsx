@@ -1,4 +1,3 @@
-// components/DonutChart.tsx
 import React from 'react';
 
 interface DonutChartProps {
@@ -8,22 +7,20 @@ interface DonutChartProps {
     color: string;
   }>;
   size?: number;
-  thickness?: number; // Épaisseur de l'anneau (en pixels)
-  showLabels?: boolean;
-  showCenterText?: boolean;
+  thickness?: number;
+  showLegend?: boolean;
 }
 
 const DonutChart: React.FC<DonutChartProps> = ({
   data,
   size = 300,
   thickness = 60,
-  showLabels = true,
-  showCenterText = true
+  showLegend = true
 }) => {
   const total = data.reduce((sum, item) => sum + item.value, 0);
   const center = size / 2;
   const outerRadius = size / 2 - 10;
-  const innerRadius = outerRadius - thickness; // Rayon intérieur pour créer le trou
+  const innerRadius = outerRadius - thickness;
   
   let cumulativePercentage = 0;
   
@@ -34,7 +31,6 @@ const DonutChart: React.FC<DonutChartProps> = ({
     
     cumulativePercentage += percentage;
     
-    // Calcul des points pour l'arc SVG (pour un anneau)
     const startXOuter = center + outerRadius * Math.cos(startAngle - Math.PI / 2);
     const startYOuter = center + outerRadius * Math.sin(startAngle - Math.PI / 2);
     const endXOuter = center + outerRadius * Math.cos(endAngle - Math.PI / 2);
@@ -47,26 +43,17 @@ const DonutChart: React.FC<DonutChartProps> = ({
     
     const largeArcFlag = percentage > 0.5 ? 1 : 0;
     
-    // Création du chemin pour l'anneau
     const pathData = [
-      `M ${startXOuter} ${startYOuter}`, // Début sur le cercle extérieur
-      `A ${outerRadius} ${outerRadius} 0 ${largeArcFlag} 1 ${endXOuter} ${endYOuter}`, // Arc extérieur
-      `L ${endXInner} ${endYInner}`, // Ligne vers l'intérieur
-      `A ${innerRadius} ${innerRadius} 0 ${largeArcFlag} 0 ${startXInner} ${startYInner}`, // Arc intérieur (sens inverse)
-      'Z' // Fermer le chemin
+      `M ${startXOuter} ${startYOuter}`,
+      `A ${outerRadius} ${outerRadius} 0 ${largeArcFlag} 1 ${endXOuter} ${endYOuter}`,
+      `L ${endXInner} ${endYInner}`,
+      `A ${innerRadius} ${innerRadius} 0 ${largeArcFlag} 0 ${startXInner} ${startYInner}`,
+      'Z'
     ].join(' ');
-    
-    // Position pour les labels
-    const labelAngle = cumulativePercentage - percentage / 2;
-    const labelRadius = (innerRadius + outerRadius) / 2; // Milieu de l'anneau
-    const labelX = center + labelRadius * Math.cos(labelAngle * 2 * Math.PI - Math.PI / 2);
-    const labelY = center + labelRadius * Math.sin(labelAngle * 2 * Math.PI - Math.PI / 2);
     
     return {
       pathData,
-      percentage: (percentage * 100).toFixed(1),
-      labelX,
-      labelY,
+      percentage: total > 0 ? ((item.value / total) * 100).toFixed(1) : '0.0',
       label: item.label,
       color: item.color,
       value: item.value
@@ -74,7 +61,11 @@ const DonutChart: React.FC<DonutChartProps> = ({
   });
 
   return (
-    <div style={{ position: 'relative', display: 'inline-block' }}>
+    <div style={{ 
+      display: 'inline-flex', 
+      flexDirection: 'column', 
+      alignItems: 'center' 
+    }}>
       <svg width={size} height={size}>
         {/* Dessiner tous les segments */}
         {segments.map((segment, index) => (
@@ -98,39 +89,10 @@ const DonutChart: React.FC<DonutChartProps> = ({
                 e.currentTarget.style.filter = 'drop-shadow(0 2px 3px rgba(0,0,0,0.1))';
               }}
             />
-            
-            {/* Labels sur les segments */}
-            {showLabels && segment.percentage !== '0.0' && parseFloat(segment.percentage) > 5 && (
-              <g>
-                <text
-                  x={segment.labelX}
-                  y={segment.labelY - 10}
-                  textAnchor="middle"
-                  dominantBaseline="middle"
-                  fill="#333"
-                  fontSize="14"
-                  fontWeight="bold"
-                  style={{ pointerEvents: 'none' }}
-                >
-                  {segment.label}
-                </text>
-                <text
-                  x={segment.labelX}
-                  y={segment.labelY + 10}
-                  textAnchor="middle"
-                  dominantBaseline="middle"
-                  fill="#666"
-                  fontSize="12"
-                  style={{ pointerEvents: 'none' }}
-                >
-                  {segment.percentage}%
-                </text>
-              </g>
-            )}
           </g>
         ))}
         
-        {/* Cercle blanc au centre */}
+        {/* Cercle blanc au centre (trou du donut) */}
         <circle
           cx={center}
           cy={center}
@@ -140,6 +102,43 @@ const DonutChart: React.FC<DonutChartProps> = ({
           strokeWidth="1"
         />
       </svg>
+      
+      {/* Légende en dessous du diagramme */}
+      {showLegend && (
+        <div style={{ 
+          display: 'flex', 
+          flexWrap: 'wrap', 
+          justifyContent: 'center', 
+          gap: '15px',
+          marginTop: '20px',
+          maxWidth: size + 100
+        }}>
+          {segments.filter(segment => segment.value > 0).map((segment, index) => (
+            <div 
+              key={index} 
+              style={{ 
+                display: 'flex', 
+                alignItems: 'center',
+                fontSize: '14px',
+                color: '#333'
+              }}
+            >
+              <div 
+                style={{ 
+                  width: '15px', 
+                  height: '15px', 
+                  backgroundColor: segment.color,
+                  borderRadius: '3px',
+                  marginRight: '8px'
+                }} 
+              />
+              <span>
+                {segment.label}: {segment.value} ({segment.percentage}%)
+              </span>
+            </div>
+          ))}
+        </div>
+      )}
     </div>
   );
 };

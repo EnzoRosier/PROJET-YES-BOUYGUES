@@ -2,8 +2,18 @@
   position:  absolute;
   top : 3%; 
   right : 3%;
-  width: 10%;
-  height : auto
+  width : 150px;
+  height : auto;
+}
+
+.titre-accueil {
+    position : absolute;
+    top : 5%;
+    left : 50%;
+    transform : translate(-50%, -50%);
+    font-size: 80px;
+    color : #E75113;
+    font-weight : bold;
 }
 
 .bouton-formulaire {
