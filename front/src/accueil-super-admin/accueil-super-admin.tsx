@@ -234,7 +234,7 @@ export default function AccueilSuperAdmin() {
                     </div>
                 )}
                 <button className="bouton-retour" onClick={() => { 
-                    document.cookie = "access_token=; expires=Thu, 01 Jan 1970 00:00:00 GMT; path=/; domain=localhost"; // On supprime le token qui nous gardait connecté
+                    document.cookie = `access_token=; expires=Thu, 01 Jan 1970 00:00:00 GMT; path=/; domain=${ip}`; // On supprime le token qui nous gardait connecté
                     navigate('/login'); }}>Se déconnecter</button>
             </div></div>
         );
