@@ -24,7 +24,7 @@ const questionTexts: Record<string, string> = {
   fr: 'Quelle est votre humeur en cette fin de journée ?',
   en: 'What is your mood at the end of the day?',
   es: '¿Cuál es su estado de ánimo al final del día?',
-  pt: 'Qual é o seu état d\'esprit no final do dia?',
+  pt: 'Qual é o seu estado de espírito no final do dia?',
   ar: 'ما هو مزاجك في نهاية هذا اليوم؟',
   ur: 'دن کے آخر میں آپ کا مزاج کیسا है؟',
   pl: 'Jaki jest Twój nastrój pod koniec dnia?',
@@ -39,9 +39,29 @@ export default function Survey() {
   const [visible, setVisible] = useState(false);
   const [commentaire, setCommentaire] = useState('');
   const [showNoSelectionModal, setShowNoSelectionModal] = useState(false);
-  
-  const navigate = useNavigate();
+
+  const modalTexts: Record<string, {title: string; message: string; ok: string}> = {
+    fr: { title: 'Sélection requise', message: 'Veuillez sélectionner un smiley.', ok: 'OK' },
+    en: { title: 'Selection required', message: 'Please select a smiley.', ok: 'OK' },
+    es: { title: 'Selección requerida', message: 'Por favor seleccione un smiley.', ok: 'OK' },
+    pt: { title: 'Seleção necessária', message: 'Por favor selecione um smiley.', ok: 'OK' },
+    ar: { title: 'مطلوب اختيار', message: 'الرجاء تحديد رمز تعبيري.', ok: 'حسناً' },
+    ur: { title: 'انتخاب ضروری', message: 'براہ کرم ایک سمائلی منتخب کریں۔', ok: 'ٹھیک ہے' },
+    pl: { title: 'Wymagana selekcja', message: 'Proszę wybrać emotikonę.', ok: 'OK' },
+  };
+
+  const uiTexts: Record<string, {confirm:string; develop:string; back:string}> = {
+    fr: { confirm: 'Confirmer', develop: 'Je développe', back: 'Retour' },
+    en: { confirm: 'Confirm', develop: 'I develop', back: 'Back' },
+    es: { confirm: 'Confirmar', develop: 'Desarrollar', back: 'Volver' },
+    pt: { confirm: 'Confirmar', develop: 'Eu desenvolvo', back: 'Voltar' },
+    ar: { confirm: 'تأكيد', develop: 'أقوم بالتطوير', back: 'عودة' },
+    ur: { confirm: 'تصدیق', develop: 'میں تیار کرتا ہوں', back: 'واپس' },
+    pl: { confirm: 'Potwierdź', develop: 'Rozwijam', back: 'Powrót' },
+  };
+
   const audioRef = useRef<HTMLAudioElement | null>(null);
+  const navigate = useNavigate();
 
   useEffect(() => {
     return () => {
@@ -52,15 +72,42 @@ export default function Survey() {
     };
   }, []);
 
+  // Map language code to the actual audio file path for question 2
+  const getAudioPath = (lang: string, index = 2) => {
+    const map: Record<string, string> = {
+      fr: `/ressources/audios/fr/fr_${index}.mp3`,
+      en: `/ressources/audios/Anglais/Anglais_Diapo_${index}.mp3`,
+      es: `/ressources/audios/Espagnol/Espagnol_Diapo_${index}.mp3`,
+      pt: `/ressources/audios/Portugais/DIAPO ${index}.mp3`,
+      ar: `/ressources/audios/Arabe Littéraire/diapo ${index}.mp3`,
+      ur: `/ressources/audios/Ourdou/${index}.m4a`,
+      pl: `/ressources/audios/Polonais/Polonais diapo ${index} audio.mp3`,
+    };
+    return map[lang] || map.fr;
+  };
+
   const speakQuestion = (lang: string) => {
     if (audioRef.current) {
       audioRef.current.pause();
       audioRef.current.currentTime = 0;
     }
-    const audioPath = `./ressources/audios/${lang}/${lang}_2.mp3`;
+    const audioPath = getAudioPath(lang, 2);
     const audio = new Audio(audioPath);
     audioRef.current = audio;
-    audio.play().catch((error) => console.error("Erreur audio :", error));
+    audio.play().catch((error) => {
+      console.error("Erreur audio :", error);
+      // Fallback: try to use speechSynthesis if audio file fails to play
+      if ('speechSynthesis' in window) {
+        const text = questionTexts[lang] || questionTexts.fr;
+        const utterance = new SpeechSynthesisUtterance(text);
+        const langMap: Record<string, string> = {
+          fr: 'fr-FR', en: 'en-GB', es: 'es-ES', pt: 'pt-PT', ar: 'ar-SA', ur: 'ur-PK', pl: 'pl-PL',
+        };
+        utterance.lang = langMap[lang] || 'fr-FR';
+        window.speechSynthesis.cancel();
+        window.speechSynthesis.speak(utterance);
+      }
+    });
   };
 
   const handleLangSelect = (code: string) => {
@@ -100,9 +147,10 @@ export default function Survey() {
       });
 
       if (response.ok) {
-        navigate('../riskeval');
+        // Preserve selected language when navigating to RiskEval
+        navigate(`../riskeval?lang=${currentLang}`);
       } else {
-        alert("Erreur lors de l'envoi");
+        console.error("Erreur lors de l'envoi");
       }
     } catch (error) {
       console.error("Erreur API:", error);
@@ -155,17 +203,18 @@ export default function Survey() {
         </div>
 
         <div className="actions">
-          <button className="confirm" onClick={handleConfirm}>Confirmer</button>
-          <button className="develop" onClick={() => setVisible(true)}>Je développe</button>
+          <button className="confirm" onClick={handleConfirm}>{uiTexts[currentLang]?.confirm || 'Confirmer'}</button>
+          <button className="develop" onClick={() => setVisible(true)}>{uiTexts[currentLang]?.develop || 'Je développe'}</button>
         </div>
 
-        <Link to="../"><button className="back-btn">←</button></Link>
+        <Link to="../"><button className="back-btn" aria-label={uiTexts[currentLang]?.back || 'Retour'}>←</button></Link>
 
         {visible && (
           <PopupCommentaire 
             onClose={() => setVisible(false)} 
             setCommentaire={setCommentaire} 
             commentaire={commentaire}
+            lang={currentLang}
           />
         )}
       </main>
@@ -173,9 +222,9 @@ export default function Survey() {
       {showNoSelectionModal && (
         <div className="modal-overlay" onClick={() => setShowNoSelectionModal(false)}>
           <div className="modal" onClick={(e) => e.stopPropagation()}>
-            <h3>Sélection requise</h3>
-            <p>Veuillez sélectionner un smiley.</p>
-            <button className="modal-close" onClick={() => setShowNoSelectionModal(false)}>OK</button>
+            <h3>{modalTexts[currentLang]?.title || modalTexts.fr.title}</h3>
+            <p>{modalTexts[currentLang]?.message || modalTexts.fr.message}</p>
+            <button className="modal-close" onClick={() => setShowNoSelectionModal(false)}>{modalTexts[currentLang]?.ok || modalTexts.fr.ok}</button>
           </div>
         </div>
       )}
