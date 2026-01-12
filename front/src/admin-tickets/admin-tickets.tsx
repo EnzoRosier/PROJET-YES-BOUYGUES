@@ -146,7 +146,7 @@ export default function AdminTickets() {
             </div>
         )}
         <div className="admin-tickets-main">
-        <img src="/ressources/Logo.png" alt="Logo" className="logo-popup"/>
+        <img src="/ressources/Logo.png" alt="Logo" className="logo-accueil"/>
         
         <table className="table-tickets">
             <thead className="table-tickets-head">

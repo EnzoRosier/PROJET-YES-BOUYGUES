@@ -163,7 +163,7 @@ export default function AccueilSuperAdmin() {
         return(
             <div className="accueil-super-admin">
                 <div className="accueil-super-admin-main">
-                <img src="/ressources/Logo.png" alt="Logo" className="logo-popup"/>
+                <img src="/ressources/Logo.png" alt="Logo" className="logo-accueil"/>
                 {dataChantier && (
                 <>
                 <h2 className="titre-selecteur">Sélectionner un chantier 
