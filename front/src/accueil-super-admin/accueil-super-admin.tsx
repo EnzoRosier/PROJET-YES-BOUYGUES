@@ -89,6 +89,7 @@ export default function AccueilSuperAdmin() {
             if (response.ok) {
                 const info = await response.json();
                 console.log("Chantier actuel défini :", info);
+                window.alert("Chantier actuel défini avec succès !");
             } else {
                 console.log("Erreur lors de la définition du chantier actuel");
             }
@@ -227,8 +228,8 @@ export default function AccueilSuperAdmin() {
                                     <p>Nombre de collaborateurs : {chantier.nbCollaborateur}</p>
                                     <p>Jours sans accident : {chantier.joursSansAccident} <button className="bouton-valider-accident" onClick={() => valider_accident(chantier.id)}> Cliquez ici s'il y a eu un accident</button></p>
                                     <p>Date de fin : {chantier.dateFin}</p>
-                                    <button className="bouton-stats" onClick={() => { navigate('/stats', {state : {idChantier : chantier.id, from : "superadmin"}}); }}>Voir les statistiques</button>
                                     <button className="bouton-selection-chantier" onClick={() => { definirChantierActuel(chantier.id); }}>Définir comme chantier actuel</button>
+                                    <button className="bouton-stats" onClick={() => { navigate('/stats', {state : {idChantier : chantier.id, from : "superadmin"}}); }}>Voir les statistiques</button>
                                 </div>
                             ))}
                     </div>
