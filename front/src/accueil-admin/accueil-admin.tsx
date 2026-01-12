@@ -133,7 +133,7 @@ export default function AccueilAdmin() {
         return(
             <div className="accueil-admin">
                 <div className="accueil-admin-main">
-                <img src="/ressources/Logo.png" alt="Logo" className="logo-popup"/>
+                <img src="/ressources/Logo.png" alt="Logo" className="logo-accueil"/>
                 {dataChantier && (
                 <>
                 <h2 className="titre-selecteur">Sélectionner un chantier 

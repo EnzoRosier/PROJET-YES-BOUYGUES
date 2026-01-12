@@ -8,7 +8,7 @@ export default function Accueil() {
 
     return (
         <div className="accueil">
-            <img src="/ressources/Logo.png" alt="Logo" className="logo-popup"/>
+            <img src="/ressources/Logo.png" alt="Logo" className="logo-accueil"/>
             <h1 className="titre-accueil">Safety</h1>
 
             <QRCodeCanvas value={url} size={200} className="qrcode"/>

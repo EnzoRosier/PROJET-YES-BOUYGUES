@@ -1,25 +1,30 @@
 import './stats.css';
 import DonutChart from './donutDiag';
-import { Navigate,useLocation, useNavigate } from 'react-router-dom';
-import React, {useEffect, useState, useRef, use} from 'react';
+import { Navigate, useLocation, useNavigate } from 'react-router-dom';
+import React, { useEffect, useState, useRef } from 'react';
+import html2canvas from 'html2canvas';
+import jsPDF from 'jspdf';
 
 export default function Stats() {
   const location = useLocation();
+  // @ts-ignore (Si idChantier pose problème de type, sinon laissez tel quel)
   const idChantier = location.state?.idChantier || null;
   const navigate = useNavigate();
   const ip = window.location.hostname;
   
-  // Données pour le login
+  // CORRECTION 1 : Typage précis de la référence (HTMLDivElement)
+  const statsRef = useRef<HTMLDivElement>(null);
+  
+  // CORRECTION 2 : Typage du state (peut être null OU boolean)
   const [loggedIn, setLoggedIn] = useState<boolean | null>(null);
   
-  // État de départ pour les diagrammes
-  const [donutChartData, setDonutChartData] = useState<Array<{ label: string; value: number; color: string }>>([
+  const [donutChartData, setDonutChartData] = useState([
     { label: 'Satisfait', value: 0, color: '#34A853' },
     { label: 'Neutre', value: 0, color: '#FBBC05' },
     { label: 'Insatisfait', value: 0, color: '#EA4335' }
   ]);
   
-  const [barChartData, setBarChartData] = useState<Array<{ label: string; value: number; color: string }>>([
+  const [barChartData, setBarChartData] = useState([
     { label: 'Levage', value: 0, color: '#FF6B6B' },
     { label: 'Cohésion', value: 0, color: '#4ECDC4' },
     { label: 'Environnement', value: 0, color: '#45B7D1' },
@@ -27,11 +32,10 @@ export default function Stats() {
     { label: 'Hauteur', value: 0, color: '#FFD93D' },
     { label: 'Stabilité', value: 0, color: '#FF6F91' },
     { label: 'Ambiance', value: 0, color: '#6A4C93' },
-    {label: 'Energie', value: 0, color: '#1982C4' },
+    { label: 'Energie', value: 0, color: '#1982C4' },
     { label: 'Autre', value: 0, color: '#8ACB88' }
   ]);
-  
-  // Options des diagrammes
+
   const [chartOptions, setChartOptions] = useState({
     size: 300,
     thickness: 50,
@@ -39,23 +43,50 @@ export default function Stats() {
     showCenterText: true
   });
   
-  // Période sélectionnée pour les diagrammes
   const [dateRange, setDateRange] = useState<string>('week');
   
-  // Références fixes pour les titres
-  const totalVotesLastWeek = useRef<number>(0);
-  const totalRisksLastWeek = useRef<number>(0);
+  const totalVotesLastWeek = useRef(0);
+  const totalRisksLastWeek = useRef(0);
   
-  // Fonction pour formater la date
-  const formatDateYYYYMMDD = (date: Date): string => {
+  const handleExportPDF = async () => {
+    const input = statsRef.current;
+    if (!input) return;
+
+    try {
+      const canvas = await html2canvas(input, {
+        scale: 2,
+        useCORS: true,
+        ignoreElements: (element) => {
+          return element.classList.contains('bouton-export-stats') || 
+                 element.classList.contains('bouton-retour-stats') ||
+                 element.classList.contains('period-selector');
+        }
+      });
+
+      const imgData = canvas.toDataURL('image/png');
+      const pdf = new jsPDF('p', 'mm', 'a4');
+      
+      const pdfWidth = pdf.internal.pageSize.getWidth();
+      const pdfHeight = (canvas.height * pdfWidth) / canvas.width;
+
+      pdf.addImage(imgData, 'PNG', 0, 0, pdfWidth, pdfHeight);
+      pdf.save(`statistiques-chantier-${formatDateYYYYMMDD(new Date())}.pdf`);
+      
+    } catch (error) {
+      console.error("Erreur lors de l'export PDF :", error);
+    }
+  };
+
+  // CORRECTION 3 : Ajout du type ': Date'
+  const formatDateYYYYMMDD = (date: Date) => {
     const year = date.getFullYear();
     const month = String(date.getMonth() + 1).padStart(2, '0');
     const day = String(date.getDate()).padStart(2, '0');
     return `${year}-${month}-${day}`;
   };
   
-  // Fonction pour calculer la date de début selon la période
-  const calculateStartDate = (range: string): string => {
+  // CORRECTION 4 : Ajout du type ': string'
+  const calculateStartDate = (range: string) => {
     const today = new Date();
     const start = new Date();
     
@@ -76,7 +107,6 @@ export default function Stats() {
     return formatDateYYYYMMDD(start);
   };
   
-  // Fonction pour vérifier la connexion
   const checkLoggedIn = async () => {
     try {
       const response = await fetch(`http://${ip}:3001/admins/me`, {
@@ -86,10 +116,10 @@ export default function Stats() {
       if (response.ok) {
         const me = await response.json();
         if(me != null){
-          setLoggedIn(true);
+          setLoggedIn(true); // Maintenant TypeScript accepte 'true'
         }
       } else {
-        setLoggedIn(false);
+        setLoggedIn(false); // Et 'false'
       }
     } catch (error) {
       console.log('Erreur lors de la vérification de la connexion');
@@ -97,7 +127,7 @@ export default function Stats() {
     }
   };
   
-  // Fonction pour récupérer les statistiques
+  // CORRECTION 5 : Valeur par défaut typée
   const getWorksiteStats = async (period: string = 'week') => {
     if (!idChantier) return;
     
@@ -110,21 +140,22 @@ export default function Stats() {
         {
           method: 'POST',
           credentials: 'include',
-          body : JSON.stringify({ date : startDate
-        })
-      }
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body : JSON.stringify({ date : startDate })
+        }
       );
       
       if (response.ok) {
-        const stats = await response.json();
+        // Typage générique 'any' pour la réponse API pour éviter les erreurs de structure
+        const stats: any = await response.json();
         console.log("Statistiques reçues :", stats);
         
-        // Données pour le diagramme donut (humeurs)
         const bien = stats.questionHumeur?.bien || 0;
         const moyen = stats.questionHumeur?.moyen || 0;
         const mauvais = stats.questionHumeur?.mauvais || 0;
         
-        // Données pour le diagramme en barres (risques)
         const risques = stats.questionRisque || {};
         const levage = risques.levage || 0;
         const cohesion = risques.cohesion || 0;
@@ -135,17 +166,15 @@ export default function Stats() {
         const ambiance = risques.ambiance || 0;
         const energie = risques.energie || 0;
         const autre = risques.autre || 0;
-        // Calculer le total des votes pour cette période
+
         const totalCurrentPeriod = bien + moyen + mauvais;
         const totalRisksCurrentPeriod = levage + cohesion + environnement + equipement + hauteur + stabilite + ambiance + energie + autre;
         
-        // Si c'est la période "1 semaine", mettre à jour les refs
         if (period === 'week') {
           totalVotesLastWeek.current = totalCurrentPeriod;
           totalRisksLastWeek.current = totalRisksCurrentPeriod;
         }
         
-        // Mettre à jour les diagrammes
         setDonutChartData([
           { label: 'Satisfait', value: bien, color: '#34A853' },
           { label: 'Neutre', value: moyen, color: '#FBBC05' },
@@ -153,15 +182,15 @@ export default function Stats() {
         ]);
 
         setBarChartData([
-          { label: 'Levage', value: levage || 0, color: '#FF6B6B' },
-          { label: 'Cohésion', value: cohesion || 0, color: '#4ECDC4' },
-          { label: 'Environnement', value: environnement || 0, color: '#45B7D1' },
-          { label: 'Equipement', value: equipement || 0, color: '#96CEB4' },
-          { label: 'Hauteur', value: hauteur || 0, color: '#FFD93D' },
-          { label: 'Stabilité', value: stabilite || 0, color: '#FF6F91' },
-          { label: 'Ambiance', value: ambiance || 0, color: '#6A4C93' },
-          { label: 'Energie', value: energie || 0, color: '#1982C4' },
-          { label: 'Autre', value: autre || 0, color: '#8ACB88' }
+          { label: 'Levage', value: levage, color: '#FF6B6B' },
+          { label: 'Cohésion', value: cohesion, color: '#4ECDC4' },
+          { label: 'Environnement', value: environnement, color: '#45B7D1' },
+          { label: 'Equipement', value: equipement, color: '#96CEB4' },
+          { label: 'Hauteur', value: hauteur, color: '#FFD93D' },
+          { label: 'Stabilité', value: stabilite, color: '#FF6F91' },
+          { label: 'Ambiance', value: ambiance, color: '#6A4C93' },
+          { label: 'Energie', value: energie, color: '#1982C4' },
+          { label: 'Autre', value: autre, color: '#8ACB88' }
         ]);   
       } else {
         console.error("Erreur API :", response.status);
@@ -171,7 +200,6 @@ export default function Stats() {
     }
   };
   
-  // Chargement initial (1 semaine par défaut)
   useEffect(() => {
     checkLoggedIn();
     if (idChantier) {
@@ -180,21 +208,16 @@ export default function Stats() {
     }
   }, [idChantier]);
   
-  // Gestion des périodes
+  // CORRECTION 6 : Typage string
   const handlePeriodChange = (period: string) => {
     setDateRange(period);
     getWorksiteStats(period);
   };
   
-  // Échelle adaptative pour le diagramme en barres
-  const calculateAdaptiveScale = (data: Array<{ value: number }>) => {
-    if (!data || data.length === 0) {
-      return {
-        max: 100,
-        ticks: [0, 25, 50, 75, 100]
-      };
-    }  
-    const maxValue = Math.max(...data.map(item => item.value));
+  // CORRECTION 7 : Typage du tableau de données (any[] pour faire simple)
+  const calculateAdaptiveScale = (data: any[]) => {
+    // CORRECTION 8 : Typage de l'item dans le map
+    const maxValue = Math.max(...data.map((item: any) => item.value));
     const intervals = [1, 2, 5, 10, 20, 25, 50, 100];
     let scaleMax = 100;
     
@@ -204,18 +227,9 @@ export default function Stats() {
         break;
       }
     }   
-    const numTicks = 5;
-    const tickStep = scaleMax / (numTicks - 1);
-    const ticks = [];
-    
-    for (let i = 0; i < numTicks; i++) {
-      const tickValue = Math.round(i * tickStep);
-      ticks.push(tickValue);
-    }
-    return { max: scaleMax, ticks };
+    return { max: scaleMax};
   };
   
-  // Gestion de l'état de connexion
   if (loggedIn === null) {
     return <div className="stats"><h2>Chargement...</h2></div>;
   }
@@ -224,19 +238,18 @@ export default function Stats() {
     console.log("Utilisateur non connecté, redirection vers login");
     return (<Navigate to="/login" replace />);
   } 
+  
   return (
-    <div className="stats">
+    <div className="stats" ref={statsRef}>
       <header className="stats-header">
         <img src="/ressources/Logo.png" alt="Logo" className="logo" />
         <h1>Statistiques du chantier</h1>
         <div className="stats-recap">
-          {/* Ces valeurs restent fixes (1 semaine) grâce à useRef */}
           <h2>Nombre de votes sur la dernière semaine : {totalVotesLastWeek.current}</h2>
           <h2>Nombre de risques signalés sur la dernière semaine : {totalRisksLastWeek.current}</h2>
         </div>
       </header>
       
-      {/* Boutons de sélection de période pour les diagrammes */}
       <div className="period-selector">
         <button 
           className={`period-btn ${dateRange === 'week' ? 'active' : ''}`}
@@ -261,40 +274,23 @@ export default function Stats() {
       <div className="stats-content">
         <section className="chart-section">
           <div className="chart-container">            
-            {/* Diagramme donut - Humeurs */}
             <div className="chart-wrapper">
               <h3>Répartition des humeurs ({dateRange === 'week' ? '7j' : dateRange === '2weeks' ? '14j' : '30j'})</h3>
               <DonutChart 
                 data={donutChartData}
                 size={chartOptions.size}
                 thickness={chartOptions.thickness}
-                showLabels={chartOptions.showLabels}
-                showCenterText={chartOptions.showCenterText}
+                showLegend={true}
               />
             </div>
             
-            {/* Diagramme en barres - Risques */}
             <div className="mini-chart">
-              <h4>Répartition des risques signalés ({dateRange === 'week' ? '7j' : dateRange === '2weeks' ? '14j' : '30j'})</h4>
+              <h3>Répartition des risques signalés ({dateRange === 'week' ? '7j' : dateRange === '2weeks' ? '14j' : '30j'})</h3>
               <div className="bar-chart-with-axis">
                 {(() => {
-                  const { max: scaleMax, ticks } = calculateAdaptiveScale(barChartData); 
+                  const { max: scaleMax} = calculateAdaptiveScale(barChartData); 
                   return (
                     <>
-                      <div className="y-axis">
-                        <div className="y-ticks">
-                          {ticks.map((tick, index) => (
-                          <div 
-                          key={`tick-${index}-${tick}`}  // Utilisez l'index ET la valeur pour garantir l'unicité
-                          className="y-tick"
-                          style={{ bottom: `${(tick / scaleMax) * 100}%` }}
-                          >
-                          <span className="tick-line"></span>
-                          <span className="tick-value">{tick}</span>
-                          </div>
-                          ))}
-                        </div>
-                      </div>
                       <div className="chart-area">
                         <div className="bar-chart-preview">
                           {barChartData.map((item, index) => {
@@ -308,8 +304,8 @@ export default function Stats() {
                                     height: `${barHeight}px`,
                                     backgroundColor: item.color
                                   }}
+                                  data-value={item.value}
                                 />
-                                <div className="bar-label">{item.label} : {item.value}</div>
                               </div>
                             );
                           })}
@@ -319,13 +315,32 @@ export default function Stats() {
                   );
                 })()}
               </div>
+              <div className="bar-chart-legend">
+                {barChartData.map((item, index) => (
+                  <div key={`legend-${index}`} className="legend-item">
+                    <div 
+                      className="legend-color" 
+                      style={{ backgroundColor: item.color }}
+                    />
+                    <span className="legend-label">{item.label}</span>
+                    <span className="legend-value">({item.value})</span>
+                  </div>
+                ))}
+              </div>
             </div>
-
           </div>
         </section>
         
-        <button className="bouton-retour" onClick={() => { navigate('/admin'); }}>
+        <button className="bouton-retour-stats" onClick={() => { 
+            if (location.state?.from === "admin") navigate('/admin');
+            else if(location.state?.from === "superadmin") navigate('/super-admin');
+            else navigate('/admin');
+        }}>
           Retour à la page Admin
+        </button>
+        
+        <button className="bouton-export-stats" onClick={handleExportPDF}>
+          Exporter les statistiques en PDF
         </button>
       </div>
     </div>
