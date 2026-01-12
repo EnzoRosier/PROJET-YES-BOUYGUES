@@ -188,12 +188,7 @@ export default function Stats() {
   
   // Échelle adaptative pour le diagramme en barres
   const calculateAdaptiveScale = (data: Array<{ value: number }>) => {
-    if (!data || data.length === 0) {
-      return {
-        max: 100,
-        ticks: [0, 25, 50, 75, 100]
-      };
-    }  
+ 
     const maxValue = Math.max(...data.map(item => item.value));
     const intervals = [1, 2, 5, 10, 20, 25, 50, 100];
     let scaleMax = 100;
@@ -204,15 +199,7 @@ export default function Stats() {
         break;
       }
     }   
-    const numTicks = 5;
-    const tickStep = scaleMax / (numTicks - 1);
-    const ticks = [];
-    
-    for (let i = 0; i < numTicks; i++) {
-      const tickValue = Math.round(i * tickStep);
-      ticks.push(tickValue);
-    }
-    return { max: scaleMax, ticks };
+    return { max: scaleMax};
   };
   
   // Gestion de l'état de connexion
@@ -277,23 +264,9 @@ export default function Stats() {
               <h3>Répartition des risques signalés ({dateRange === 'week' ? '7j' : dateRange === '2weeks' ? '14j' : '30j'})</h3>
               <div className="bar-chart-with-axis">
                 {(() => {
-                  const { max: scaleMax, ticks } = calculateAdaptiveScale(barChartData); 
+                  const { max: scaleMax} = calculateAdaptiveScale(barChartData); 
                   return (
                     <>
-                      <div className="y-axis">
-                        <div className="y-ticks">
-                          {ticks.map((tick, index) => (
-                          <div 
-                          key={`tick-${index}-${tick}`} 
-                          className="y-tick"
-                          style={{ top: `${100 - (tick / scaleMax) * 100}%` }}
-                          >
-                          <span className="tick-line"></span>
-                          <span className="tick-value">{tick}</span>
-                          </div>
-                          ))}
-                        </div>
-                      </div>
                       <div className="chart-area">
                         <div className="bar-chart-preview">
                           {barChartData.map((item, index) => {
@@ -307,8 +280,8 @@ export default function Stats() {
                                     height: `${barHeight}px`,
                                     backgroundColor: item.color
                                   }}
+                                  data-value={item.value}
                                 />
-                                <div className="bar-label">{item.label} : {item.value}</div>
                               </div>
                             );
                           })}
@@ -318,12 +291,25 @@ export default function Stats() {
                   );
                 })()}
               </div>
+              <div className="bar-chart-legend">
+                {barChartData.map((item, index) => (
+                  <div key={`legend-${index}`} className="legend-item">
+                    <div 
+                      className="legend-color" 
+                      style={{ backgroundColor: item.color }}
+                    />
+                    <span className="legend-label">{item.label}</span>
+                    <span className="legend-value">({item.value})</span>
+                  </div>
+                ))}
+              </div>
             </div>
-
           </div>
         </section>
         
-        <button className="bouton-retour-stats" onClick={() => { navigate('/admin'); }}>
+        <button className="bouton-retour-stats" onClick={() => { if (location.state?.from === "admin"){navigate('/admin')}
+            else if(location.state?.from === "superadmin"){navigate('/super-admin')}
+            else{navigate('/admin')}}}>
           Retour à la page Admin
         </button>
       </div>
