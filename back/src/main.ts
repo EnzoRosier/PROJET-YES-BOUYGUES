@@ -4,18 +4,29 @@ import * as cookieParser from 'cookie-parser';
 import * as os from 'os'
 import 'dotenv/config';
 
-
 function getLocalIp(): string | null {
   const interfaces = os.networkInterfaces();
 
-    for (let i = 0; i < interfaces["Wi-Fi"].length; i++) {
-      const element = interfaces["Wi-Fi"][i];
-      if (element.family == 'IPv4' && !element.internal) {
-        return element.address
+  const possibleNames = [
+    'Wi-Fi',                         
+    'Wireless Network Connection',   
+    'Ethernet'                       
+  ];
+
+  for (const name of possibleNames) {
+    const net = interfaces[name];
+    if (!net) continue;
+
+    for (const iface of net) {
+      if (iface.family === 'IPv4' && !iface.internal) {
+        return iface.address;
       }
     }
+  }
+
   return null;
 }
+
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
