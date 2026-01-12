@@ -7,13 +7,7 @@ import 'dotenv/config';
 function getLocalIp(): string | null {
   const interfaces = os.networkInterfaces();
 
-  const possibleNames = [
-    'Wi-Fi',                         
-    'Wireless Network Connection',   
-    'Ethernet'                       
-  ];
-
-  for (const name of possibleNames) {
+  for (const name in interfaces) {
     const net = interfaces[name];
     if (!net) continue;
 
@@ -48,6 +42,6 @@ async function bootstrap() {
     methods: 'GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS',
     allowedHeaders: 'Content-Type, Authorization',
   });
-  await app.listen(3001);
+  await app.listen(3001, '0.0.0.0');
 }
 bootstrap();
