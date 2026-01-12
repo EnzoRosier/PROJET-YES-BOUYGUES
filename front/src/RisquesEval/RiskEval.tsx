@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import PopupCommentaire from '../popup-commentaire/popup-commentaire';
 import '../Formulaire/Survey.css';
 import './RiskEval.css';
 
@@ -96,6 +97,8 @@ const questionTexts: Record<string, string> = {
   pl: 'Kliknij ryzyka, które uważasz, że nie są wystarczająco chronione',
 };
 
+const WORKSITE_ID_PLACEHOLDER = "4aef3bc5-6637-40f6-b7f2-e613e0744efd";   
+
 export default function RiskEval() {
   const navigate = useNavigate();
   const [selectedRisks, setSelectedRisks] = useState<string[]>([]);
@@ -129,6 +132,8 @@ export default function RiskEval() {
   const [showNoSelectionModal, setShowNoSelectionModal] = useState(false);
   const [showOtherModal, setShowOtherModal] = useState(false);
   const [otherText, setOtherText] = useState('');
+  const [visible, setVisible] = useState(false);
+  const [commentaire, setCommentaire] = useState('');
 
   const toggleRisk = (label: string) => {
     setSelectedRisks((cur) => {
@@ -141,6 +146,56 @@ export default function RiskEval() {
     setCurrentLang(code);
     setLangOpen(false);
   };
+
+  // Map visible risk label (any language) to the exact identifier requested
+  const mapLabelToId = (label: string) => {
+    const l = label.toLowerCase();
+    if (l.includes('lev') || l.includes('lift') || l.includes('eleva') || l.includes('izaj') || l.includes('izaje') || l.includes('لف')) return 'LEVAGE';
+    if (l.includes('collision') || l.includes('colis') || l.includes('cohes')) return 'COHESION';
+    if (l.includes('environ')) return 'ENVIRONEMENT';
+    if (l.includes('equip') || l.includes('produit') || l.includes('equipo') || l.includes('equipamento')) return 'EQUIPEMENT';
+    if (l.includes('hauteur') || l.includes('height') || l.includes('altura')) return 'HAUTEUR';
+    if (l.includes('stabil')) return 'STABILITE';
+    if (l.includes('amb') || l.includes('atmos') || l.includes('ambiente') || l.includes('social')) return 'AMBIANCE';
+    if (l.includes('ener') || l.includes('energ') || l.includes('طاقة')) return 'ENERGIE';
+    return 'AUTRE';
+  };
+
+  const handleConfirm = async () => {
+    if (selectedRisks.length === 0) {
+      setShowNoSelectionModal(true);
+      return;
+    }
+
+    const ids = selectedRisks.map(mapLabelToId);
+    const reponse = ids.join(' ');
+    const today = new Date().toISOString().split('T')[0];
+
+    const voteData = {
+      numQuestion: "2",
+      reponse,
+      commentaire: commentaire || (otherText || ''),
+      date: today,
+      worksiteId: WORKSITE_ID_PLACEHOLDER,
+    };
+
+    try {
+      const response = await fetch('http://localhost:3001/vote/new', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(voteData),
+      });
+
+      if (response.ok) {
+        alert(`Réponse enregistrée : ${reponse}`);
+        navigate('../');
+      } else {
+        alert('Erreur lors de l\'envoi');
+      }
+    } catch (error) {
+      console.error('Erreur API:', error);
+    }
+  }; 
 
 
 
@@ -243,25 +298,27 @@ export default function RiskEval() {
         <div className="actions">
           <button
             className="confirm"
-            onClick={() => {
-              if (selectedRisks.length === 0) {
-                setShowNoSelectionModal(true);
-                return;
-              }
-              alert(`Réponse enregistrée : ${selectedRisks.join(', ')}`);
-            }}
+            onClick={() => handleConfirm()}
           >
             Confirmer
-          </button>
+          </button> 
 
-          <button className="develop" onClick={() => alert('Ouvrir zone de développement (à implémenter)')}>
+          <button className="develop" onClick={() => setVisible(true)}>
             Je développe
-          </button>
+          </button> 
         </div>
 
         <button className="back-btn" aria-label="Retour" onClick={() => navigate(-1)}>
           ←
         </button>
+
+        {visible && (
+          <PopupCommentaire 
+            onClose={() => setVisible(false)} 
+            setCommentaire={setCommentaire} 
+            commentaire={commentaire}
+          />
+        )}
       </main>
       {showNoSelectionModal && (
         <div className="modal-overlay" onClick={() => setShowNoSelectionModal(false)}>

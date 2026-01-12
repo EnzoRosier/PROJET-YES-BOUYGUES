@@ -1,5 +1,5 @@
 import './accueil-admin.css';
-import { data, Navigate, useNavigate } from "react-router-dom";
+import { Navigate, useNavigate } from "react-router-dom";
 import { useState, useEffect } from 'react';
 
 export default function AccueilAdmin() {
