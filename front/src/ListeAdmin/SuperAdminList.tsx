@@ -121,7 +121,7 @@ export default function AdminList() {
 
             <button
                 className="bouton-aurevoir"
-                onClick={() => { navigate('/login'); }}
+                onClick={() => { navigate('/super-admin'); }}
             >
                 Retour
             </button>

@@ -23,7 +23,7 @@ function LoginPage() {
       });
 
       if (!response.ok) {
-        throw new Error('Login failed');
+        alert('Échec de la connexion. Vérifiez vos identifiants.');
       }
 
 
