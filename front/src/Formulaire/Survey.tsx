@@ -35,7 +35,6 @@ export default function Survey() {
   const [langOpen, setLangOpen] = useState(false);
   const [currentLang, setCurrentLang] = useState('fr');
   const [worksiteId, setWorksiteId] = useState<string | null>(null);
-  const navigate = useNavigate();
 
   // Fetch current worksite id on mount; if missing, redirect to admin login
   useEffect(() => {
@@ -86,7 +85,7 @@ export default function Survey() {
       }
     };
     fetchWorksite();
-  }, [navigate]);
+  });
   const [visible, setVisible] = useState(false);
   const [commentaire, setCommentaire] = useState('');
   const [showNoSelectionModal, setShowNoSelectionModal] = useState(false);
@@ -112,6 +111,8 @@ export default function Survey() {
   };
 
   const audioRef = useRef<HTMLAudioElement | null>(null);
+  const navigate = useNavigate();
+  const ip = window.location.hostname;
 
   useEffect(() => {
     return () => {
@@ -196,7 +197,7 @@ export default function Survey() {
     }
 
     try {
-      const response = await fetch('http://localhost:3001/vote/new', {
+      const response = await fetch(`http://${ip}:3001/vote/new`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(voteData),

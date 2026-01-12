@@ -26,6 +26,7 @@ export default function ModifierAdmin() {
     const emailState = location.state?.email || null;
     const isSuperAdminState = location.state?.isSuperAdmin || false;
     const worksiteIdState = location.state?.worksiteId || null;
+    const ip = window.location.hostname;
 
     useEffect(() => {
         if (!idAdmin) return;
@@ -40,7 +41,7 @@ export default function ModifierAdmin() {
     useEffect(() => {
         const checkSuperLoggedIn = async () => {
             try {
-                const response = await fetch('http://localhost:3001/admins/me', {
+                const response = await fetch(`http://${ip}:3001/admins/me`, {
                     method: 'GET',
                     credentials: 'include',
                 });
@@ -62,7 +63,7 @@ export default function ModifierAdmin() {
 
         const fetchWorksites = async () => {
             try {
-                const response = await fetch('http://localhost:3001/worksite', {
+                const response = await fetch(`http://${ip}:3001/worksite`, {
                     method: 'GET',
                     credentials: 'include',
                 });
@@ -96,7 +97,7 @@ export default function ModifierAdmin() {
 
 
         try {
-            const response = await fetch(`http://localhost:3001/admins/edit/${idAdmin}`, {
+            const response = await fetch(`http://${ip}:3001/admins/edit/${idAdmin}`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -179,7 +180,7 @@ export default function ModifierAdmin() {
 
                         try {
                             console.log(idAdmin);
-                            await fetch(`http://localhost:3001/admins/delete/${idAdmin}`, {
+                            await fetch(`http://${ip}:3001/admins/delete/${idAdmin}`, {
                                 method: 'POST',
                                 credentials: 'include',
                             });

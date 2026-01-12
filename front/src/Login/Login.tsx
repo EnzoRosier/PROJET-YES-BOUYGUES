@@ -6,10 +6,11 @@ function LoginPage() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const navigate = useNavigate();
+  const ip = window.location.hostname;
 
   const handleLogin = async () => {
     try {
-      const response = await fetch('http://localhost:3001/admins/login', {
+      const response = await fetch(`http://${ip}:3001/admins/login`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -22,13 +23,13 @@ function LoginPage() {
       });
 
       if (!response.ok) {
-        throw new Error('Login failed');
+        alert('Échec de la connexion. Vérifiez vos identifiants.');
       }
 
 
       console.log('Login OK, cookie reçu');
 
-      const meResponse = await fetch('http://localhost:3001/admins/me', {
+      const meResponse = await fetch(`http://${ip}:3001/admins/me`, {
         credentials: 'include',
       });
 

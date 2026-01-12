@@ -8,11 +8,12 @@ export default function AccueilAdmin() {
     const [dataChantier, setDataChantier] = useState<any>(null);
     const [chantierSelectionne, setChantierSelectionne] = useState<string | null>(null);
     const navigate = useNavigate();
+    const ip = window.location.hostname;
 
     const checkLoggedIn = async () => {
         // vérifier si l'utilisateur est connecté
         try {
-            const response = await fetch('http://localhost:3001/admins/me', {
+            const response = await fetch(`http://${ip}:3001/admins/me`, {
                 method: 'GET',
                 credentials: 'include',
             });
@@ -44,7 +45,7 @@ export default function AccueilAdmin() {
         try {
             let infosChantier = [];
             for (let worksite of worksiteIds || []) {
-                const response = await fetch(`http://localhost:3001/worksite/${worksite}`, {
+                const response = await fetch(`http://${ip}:3001/worksite/${worksite}`, {
                     method: 'GET',
                     credentials: 'include',
                 });
@@ -64,7 +65,7 @@ export default function AccueilAdmin() {
 
     const valider_accident = async (idChantier: string) => {
         console.log("Validation d'un accident...");
-        const response = await fetch(`http://localhost:3001/worksite/resetAccident/${idChantier}`, {
+        const response = await fetch(`http://${ip}:3001/worksite/resetAccident/${idChantier}`, {
             method: 'GET',
             credentials: 'include',
         });
@@ -74,29 +75,6 @@ export default function AccueilAdmin() {
             fetchChantierInfo(); // Mettre à jour les infos du chantier après validation
         } else {
             console.log("Erreur lors de la récupération des informations du chantier");
-        }
-    }
-
-    const definirChantierActuel = async (idChantier: string) => {
-        try{
-            const response = await fetch(`http://localhost:3001/worksite/currentWorksite`, {
-                method: 'POST',
-                credentials: 'include',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({
-                    worksiteId: idChantier,
-                }),
-            });
-            if (response.ok) {
-                const info = await response.json();
-                console.log("Chantier actuel défini :", info);
-            } else {
-                console.log("Erreur lors de la définition du chantier actuel");
-            }
-        }catch (error) {
-            console.log("Erreur lors de la définition du chantier actuel");
         }
     }
 
@@ -132,7 +110,7 @@ export default function AccueilAdmin() {
         return(
             <div className="accueil-admin">
                 <div className="accueil-admin-main">
-                <img src="/ressources/Logo.png" alt="Logo" className="logo-popup"/>
+                <img src="/ressources/Logo.png" alt="Logo" className="logo-accueil"/>
                 {dataChantier && (
                 <>
                 <h2 className="titre-selecteur">Sélectionner un chantier 
@@ -171,7 +149,6 @@ export default function AccueilAdmin() {
                                     <p>Jours sans accident : {chantier.joursSansAccident} <button className="bouton-valider-accident" onClick={() => valider_accident(chantier.id)}> Cliquez ici s'il y a eu un accident</button></p>
                                     <p>Date de fin : {chantier.dateFin}</p>
                                     <button className="bouton-stats" onClick={() => { navigate('/stats', {state : {idChantier : chantier.id, from: "admin"}}); }}>Voir les statistiques</button>
-                                    <button className="bouton-selection-chantier" onClick={() => { definirChantierActuel(chantier.id); }}>Définir comme chantier actuel</button>                                
                                 </div>
                             ))}
                     </div>

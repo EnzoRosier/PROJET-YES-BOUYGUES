@@ -15,11 +15,12 @@ export default function AccueilSuperAdmin() {
     const [respoSec, setRespoSec] = useState("");
     const [nbCollaborateurs, setNbCollaborateurs] = useState(0);
     const [dateFin, setDateFin] = useState("");
+    const ip = window.location.hostname;
 
     const checkLoggedIn = async () => {
         // vérifier si l'utilisateur est connecté
         try {
-            const response = await fetch('http://localhost:3001/admins/me', {
+            const response = await fetch(`http://${ip}:3001/admins/me`, {
                 method: 'GET',
                 credentials: 'include',
             });
@@ -42,7 +43,7 @@ export default function AccueilSuperAdmin() {
     // On va demander au serveur les informations de tous les chantiers pour afficher un récapitulatif.
     const fetchChantierInfo = async () => {
         try {
-            const response = await fetch(`http://localhost:3001/worksite/`, {
+            const response = await fetch(`http://${ip}:3001/worksite/`, {
                 method: 'GET',
                 credentials: 'include',
             });
@@ -61,7 +62,7 @@ export default function AccueilSuperAdmin() {
 
     const valider_accident = async (idChantier: string) => {
         console.log("Validation d'un accident...");
-        const response = await fetch(`http://localhost:3001/worksite/resetAccident/${idChantier}`, {
+        const response = await fetch(`http://${ip}:3001/worksite/resetAccident/${idChantier}`, {
             method: 'GET',
             credentials: 'include',
         });
@@ -75,7 +76,7 @@ export default function AccueilSuperAdmin() {
 
     const definirChantierActuel = async (idChantier: string) => {
         try{
-            const response = await fetch(`http://localhost:3001/worksite/currentWorksite`, {
+            const response = await fetch(`http://${ip}:3001/worksite/currentWorksite`, {
                 method: 'POST',
                 credentials: 'include',
                 headers: {
@@ -88,6 +89,7 @@ export default function AccueilSuperAdmin() {
             if (response.ok) {
                 const info = await response.json();
                 console.log("Chantier actuel défini :", info);
+                window.alert("Chantier actuel défini avec succès !");
             } else {
                 console.log("Erreur lors de la définition du chantier actuel");
             }
@@ -99,7 +101,7 @@ export default function AccueilSuperAdmin() {
     const creerChantier = async () => {
         console.log("Création d'un nouveau chantier...");
         try{
-            const response = await fetch(`http://localhost:3001/worksite/new`, {
+            const response = await fetch(`http://${ip}:3001/worksite/new`, {
                 method: 'POST',
                 credentials: 'include',
                 headers: {
@@ -163,7 +165,7 @@ export default function AccueilSuperAdmin() {
         return(
             <div className="accueil-super-admin">
                 <div className="accueil-super-admin-main">
-                <img src="/ressources/Logo.png" alt="Logo" className="logo-popup"/>
+                <img src="/ressources/Logo.png" alt="Logo" className="logo-accueil"/>
                 {dataChantier && (
                 <>
                 <h2 className="titre-selecteur">Sélectionner un chantier 
@@ -226,14 +228,14 @@ export default function AccueilSuperAdmin() {
                                     <p>Nombre de collaborateurs : {chantier.nbCollaborateur}</p>
                                     <p>Jours sans accident : {chantier.joursSansAccident} <button className="bouton-valider-accident" onClick={() => valider_accident(chantier.id)}> Cliquez ici s'il y a eu un accident</button></p>
                                     <p>Date de fin : {chantier.dateFin}</p>
-                                    <button className="bouton-stats" onClick={() => { navigate('/stats', {state : {idChantier : chantier.id, from : "superadmin"}}); }}>Voir les statistiques</button>
                                     <button className="bouton-selection-chantier" onClick={() => { definirChantierActuel(chantier.id); }}>Définir comme chantier actuel</button>
+                                    <button className="bouton-stats" onClick={() => { navigate('/stats', {state : {idChantier : chantier.id, from : "superadmin"}}); }}>Voir les statistiques</button>
                                 </div>
                             ))}
                     </div>
                 )}
                 <button className="bouton-retour" onClick={() => { 
-                    document.cookie = "access_token=; expires=Thu, 01 Jan 1970 00:00:00 GMT; path=/; domain=localhost"; // On supprime le token qui nous gardait connecté
+                    document.cookie = `access_token=; expires=Thu, 01 Jan 1970 00:00:00 GMT; path=/; domain=${ip}`; // On supprime le token qui nous gardait connecté
                     navigate('/login'); }}>Se déconnecter</button>
             </div></div>
         );

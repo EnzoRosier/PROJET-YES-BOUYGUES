@@ -10,11 +10,12 @@ export default function AdminList() {
     const [admins, setAdmins] = useState<any[]>([]);      
     const [selectedAdmin, setSelectedAdmin] = useState<any | null>(null);
     const navigate = useNavigate();
+    const ip = window.location.hostname;
 
     useEffect(() => {
         const checkSuperLoggedIn = async () => {
             try {
-                const response = await fetch('http://localhost:3001/admins/me', {
+                const response = await fetch(`http://${ip}:3001/admins/me`, {
                     method: 'GET',
                     credentials: 'include',
                 });
@@ -33,7 +34,7 @@ export default function AdminList() {
         };
 
         const getAdminList = async () => {
-            const response = await fetch('http://localhost:3001/admins', {
+            const response = await fetch(`http://${ip}:3001/admins`, {
                 method: 'GET',
                 credentials: 'include',
             });
@@ -120,7 +121,7 @@ export default function AdminList() {
 
             <button
                 className="bouton-aurevoir"
-                onClick={() => { navigate('/login'); }}
+                onClick={() => { navigate('/super-admin'); }}
             >
                 Retour
             </button>

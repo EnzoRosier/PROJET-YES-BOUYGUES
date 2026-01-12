@@ -19,7 +19,7 @@
     box-shadow: 0 20px 40px rgba(0,0,0,0.3);
 }
 
-.logo-popup {
+.logo-accueil {
   position:  absolute;
   top : 3%; 
   right : 3%;
@@ -64,7 +64,7 @@
     border: 2px solid #000;
     border-radius: 6px;
     background-color: #fff;
-    max-width: 800px;
+    width: 100%;
 }
 
 /* TITRE DU BLOC */
@@ -95,44 +95,19 @@
     color: #222;
 }
 
-.bouton-tickets {
-    position : absolute;
-    bottom : 55%;
-    right : 5%;
-    margin-top: 10px;
+.bouton-tickets, .bouton-stats {
+    position: relative;
+    bottom: unset;
+    right: unset;
+    margin-top: 20px;
+    width: 100%;
+    text-align: center;
     padding: 12px;
     font-size: 16px;
     font-weight: bold;
     border: none;
     border-radius: 6px;
     background-color: #E75113;
-    color: white;
-    cursor: pointer;
-}
-
-.bouton-stats {
-    position : absolute;
-    bottom : 35%;
-    right : 5%;
-    margin-top: 10px;
-    padding: 12px;
-    font-size: 16px;
-    font-weight: bold;
-    border: none;
-    border-radius: 6px;
-    background-color: #E75113;
-    color: white;
-    cursor: pointer;
-}
-
-.bouton-selection-chantier {
-    margin-left: 20px;
-    padding: 12px;
-    font-size: 1rem;
-    font-weight: bold;
-    background-color: #007bff;
-    border: none;
-    border-radius: 4px;
     color: white;
     cursor: pointer;
 }
@@ -160,10 +135,75 @@
     cursor: pointer;
 }
 
-/* RESPONSIVITÉ LÉGÈRE */
+/* --------------------------------- */
+
+
+/* =========================================================
+   RESPONSIVE
+   ========================================================= */
+
+/* --- TABLETTES --- */
+@media (max-width: 1024px) {
+
+    .logo-accueil {
+        width: 15%;
+        top: 10px;
+        right: 10px;
+    }
+
+    .chantier-info h1 {
+        font-size: 1.7rem;
+    }
+
+    .chantier-info p {
+        font-size: 1.2rem;
+        flex-direction: column;
+        align-items: flex-start;
+    }
+}
+
+/* --- TÉLÉPHONES --- */
 @media (max-width: 600px) {
-    .chantier-info {
-        max-width: 100%;
+
+    .accueil-admin-main {
+        padding: 20px;
+    }
+
+    .logo-accueil {
+        width: 20%;
+        top: 10px;
+        right: 10px;
+    }
+
+    .titre-selecteur {
+        font-size: 1.4rem;
+        text-align: left
+    }
+
+    .select-chantier {
+        width: 100%;
         margin-left: 0;
+    }
+
+    .chantier-info {
+        padding: 12px 15px;
+        max-width: 100%;
+    }
+
+    .chantier-info h1 {
+        font-size: 1.4rem;
+        text-align: center;
+    }
+
+    .chantier-info p {
+        font-size: 1rem;
+    }
+
+    .bouton-tickets,
+    .bouton-stats,
+    .bouton-retour {
+        width: 100%;
+        padding: 14px;
+        font-size: 1.1rem;
     }
 }

@@ -10,6 +10,7 @@ export default function Stats() {
   // @ts-ignore (Si idChantier pose problème de type, sinon laissez tel quel)
   const idChantier = location.state?.idChantier || null;
   const navigate = useNavigate();
+  const ip = window.location.hostname;
   
   // CORRECTION 1 : Typage précis de la référence (HTMLDivElement)
   const statsRef = useRef<HTMLDivElement>(null);
@@ -108,7 +109,7 @@ export default function Stats() {
   
   const checkLoggedIn = async () => {
     try {
-      const response = await fetch('http://localhost:3001/admins/me', {
+      const response = await fetch(`http://${ip}:3001/admins/me`, {
         method: 'GET',
         credentials: 'include',
       });
@@ -135,7 +136,7 @@ export default function Stats() {
       
       console.log(`Récupération des stats à partir du ${startDate} (${period})`);
       const response = await fetch(
-        `http://localhost:3001/vote/getStatsOf/${idChantier}`, 
+        `http://${ip}:3001/vote/getStatsOf/${idChantier}`, 
         {
           method: 'POST',
           credentials: 'include',
