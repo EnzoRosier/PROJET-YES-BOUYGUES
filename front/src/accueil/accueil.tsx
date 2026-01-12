@@ -4,7 +4,7 @@ import { QRCodeCanvas } from "qrcode.react";
 
 export default function Accueil() {
     const ip = window.location.hostname;
-    const url = `http://${ip}:3000`;
+    const url = `http://${ip}:3000/Formulaire`;
 
     return (
         <div className="accueil">

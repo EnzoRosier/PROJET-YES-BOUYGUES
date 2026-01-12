@@ -8,6 +8,7 @@ export default function AccueilAdmin() {
     const [dataChantier, setDataChantier] = useState<any>(null);
     const [chantierSelectionne, setChantierSelectionne] = useState<string | null>(null);
     const navigate = useNavigate();
+    const ip = window.location.hostname;
 
     const checkLoggedIn = async () => {
         // vérifier si l'utilisateur est connecté
