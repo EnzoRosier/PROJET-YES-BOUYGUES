@@ -58,7 +58,7 @@ export default function AdminTickets() {
                     console.log("Erreur lors de la récupération des tickets");
                 }
             }
-            const ticketsAvecCommentaire = ticketsById.filter(t => t.commentaire !== null);
+            const ticketsAvecCommentaire = ticketsById.filter(t => t.commentaire !== "");
             setDataTickets(ticketsAvecCommentaire);
             console.log("Tickets récupérés :", ticketsAvecCommentaire);
         } catch (error) {
