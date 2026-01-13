@@ -9,6 +9,7 @@ function LoginPage() {
   const ip = window.location.hostname;
 
   const handleLogin = async () => {
+    document.cookie = "access_token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
     try {
       const response = await fetch(`http://${ip}:3001/admins/login`, {
         method: 'POST',
