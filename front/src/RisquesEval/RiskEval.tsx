@@ -470,7 +470,7 @@ export default function RiskEval() {
           ←
         </button>
 
-        <img className="brand-badge brand-badge--inline" src="/images/Bouygues_bat.png" alt="Bouygues" aria-hidden="true" />
+        <img className="brand-badge brand-badge--inline" src="ressources/Bouygues_bat.png" alt="Bouygues" aria-hidden="true" />
 
         {visible && (
           <PopupCommentaire 
