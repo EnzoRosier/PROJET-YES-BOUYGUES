@@ -16,7 +16,7 @@ while ($ChoixDB -eq "not selected") {
         Copy-Item "$projectPath/DB/CLEAN.db" -Destination "$projectPath/../back/db.db"
     } elseif ($ChoixDB -eq "TEST") {
         Write-Host "INITIALISATION BASE DE DONNEE TEST" -ForegroundColor Green
-        opy-Item "$projectPath/DB/TEST.db" -Destination "$projectPath/../back/db.db"
+        Copy-Item "$projectPath/DB/TEST.db" -Destination "$projectPath/../back/db.db"
     } else {
         Write-Host "CHOIX INVALIDE" -ForegroundColor Red
         $ChoixDB = "not selected"
