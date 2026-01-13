@@ -50,7 +50,7 @@ export class AdminController {
       loginDto.password,
     );
     res.cookie('access_token', accessToken, {  
-      httpOnly: true,     
+      httpOnly: false,     
       secure: false,     
       sameSite: 'lax',
       maxAge: 60 * 60 * 1000,
