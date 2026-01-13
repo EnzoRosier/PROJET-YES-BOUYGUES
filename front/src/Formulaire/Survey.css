@@ -13,7 +13,7 @@
   padding: 16px;
 }
 
-.lang-btn, .admin-btn {
+.lang-btn, .home-btn {
   background: transparent;
   border: none;
   cursor: pointer;
@@ -180,20 +180,6 @@
 .develop:hover {
   background: #e8e8e8;
   transform: scale(1.02);
-}
-
-.back-btn {
-  margin-top: 32px;
-  background: transparent;
-  border: none;
-  font-size: 32px;
-  cursor: pointer;
-  color: #333;
-  transition: transform 120ms ease;
-}
-
-.back-btn:hover {
-  transform: scale(1.2);
 }
 
 .lang-menu {

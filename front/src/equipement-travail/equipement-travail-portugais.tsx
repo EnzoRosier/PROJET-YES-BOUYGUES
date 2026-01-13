@@ -1,49 +1,61 @@
 import React, { useRef } from 'react';
-import { useNavigate, useLocation } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import './equipement-travail.css';
 
 const EquipementTravailPortugais: React.FC = () => {
   const navigate = useNavigate();
-  const location = useLocation();
   const audioRef = useRef<HTMLAudioElement>(null);
-  const handleBackClick = () => {
-    const returnLang = location.state?.returnLang || 'pt';
-    navigate(`/riskeval?lang=${returnLang}`);
+
+  const titleTexts: Record<string, string> = {
+    pt: 'Equipamento de Trabalho',
   };
 
+  const getAudioPath = (index = 14) => {
+    return `/ressources/audios/Portugais/Portugais_Diapo_${index}.mp3`;
+  };
 
-  const handleAudioClick = () => {
+  const handleBackClick = () => {
+    navigate(`/riskeval?lang=pt`);
+  };
+
+  const speakQuestion = () => {
     if (audioRef.current) {
-      if (audioRef.current.paused) {
-        audioRef.current.play();
-      } else {
-        audioRef.current.pause();
-      }
+      audioRef.current.src = getAudioPath(14);
+      
+      audioRef.current.play().catch((error) => {
+        console.error("Erreur audio détaillée :", error);
+        
+        if ('speechSynthesis' in window) {
+          const text = titleTexts.pt;
+          const utterance = new SpeechSynthesisUtterance(text);
+          utterance.lang = 'pt-PT';
+          window.speechSynthesis.cancel();
+          window.speechSynthesis.speak(utterance);
+        }
+      });
     }
   };
 
   return (
     <div className="equipement-travail-container">
-      <audio ref={audioRef} src="ressources/audios/Portugais/diapo-14.mp3" />
+      <audio ref={audioRef} preload="auto" />
       
-      {/* En-tête avec logo et bouton audio */}
       <header className="equipement-travail-header">
-        <button className="audio-button" onClick={handleAudioClick}>
+        <button className="audio-button" onClick={speakQuestion}>
           <img src="/ressources/audio.png" alt="Audio" className="audio-icon" />
-        </button>
+        </button> 
         <div className="logo-container">
-          <img src="/ressources/logo.png" alt="Logo Bouygues" className="logo" />
+          <img src="/ressources/logo.png" alt="Logo" className="logo" />
         </div>
       </header>
 
-      {/* Contenu principal */}
       <main className="equipement-travail-content">
         <div className="content-wrapper">
           <div className="image-section">
-            <img src="/ressources/equipement.jpg" alt="Équipement de travail" className="equipement-image" />
+            <img src="/ressources/equipement.jpg" alt="Équipement" className="equipement-image" />
           </div>
           <div className="text-section">
-            <h1>Equipamento de Trabalho</h1>
+            <h1>{titleTexts.pt}</h1>
             <div className="description">
               <p>
                 Risco de acidente relacionado ao uso, falha ou má manutenção de máquinas e ferramentas
@@ -53,7 +65,6 @@ const EquipementTravailPortugais: React.FC = () => {
         </div>
       </main>
 
-      {/* Bouton retour */}
       <button className="back-button" onClick={handleBackClick}>
         ← Voltar
       </button>

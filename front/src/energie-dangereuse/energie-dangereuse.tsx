@@ -1,39 +1,59 @@
-import React from 'react';
-import { useNavigate, useLocation } from 'react-router-dom';
+import React, { useRef } from 'react';
+import { useNavigate } from 'react-router-dom';
 import './energie-dangereuse.css';
 
 const EnergieDangereuse: React.FC = () => {
   const navigate = useNavigate();
-  const location = useLocation();
-  const handleBackClick = () => {
-    const returnLang = location.state?.returnLang || 'fr';
-    navigate(`/riskeval?lang=${returnLang}`);
+  const audioRef = useRef<HTMLAudioElement>(null);
+
+  const titleTexts: Record<string, string> = {
+    fr: 'Énergie Dangereuse',
   };
-  const handleAudioClick = () => {
-    // Fonctionnalité audio à implémenter plus tard
-    console.log("Audio button clicked");
+
+  // Harmonisation du chemin vers le dossier Français (avec ç) - Piste 15
+  const getAudioPath = () => `/ressources/audios/Français/Français_Diapo_15.mp3`;
+
+  const handleBackClick = () => {
+    navigate(`/riskeval?lang=fr`);
+  };
+
+  const speakQuestion = () => {
+    if (audioRef.current) {
+      audioRef.current.src = getAudioPath();
+      audioRef.current.play().catch((error) => {
+        console.error("Erreur audio détaillée :", error);
+        
+        if ('speechSynthesis' in window) {
+          const text = titleTexts.fr;
+          const utterance = new SpeechSynthesisUtterance(text);
+          utterance.lang = 'fr-FR';
+          window.speechSynthesis.cancel(); 
+          window.speechSynthesis.speak(utterance);
+        }
+      });
+    }
   };
 
   return (
     <div className="energie-dangereuse-container">
-      {/* En-tête avec logo et bouton audio */}
+      <audio ref={audioRef} preload="auto" />
+      
       <header className="energie-dangereuse-header">
-        <button className="audio-button" onClick={handleAudioClick}>
+        <button className="audio-button" onClick={speakQuestion}>
           <img src="/ressources/audio.png" alt="Audio" className="audio-icon" />
-        </button>
+        </button> 
         <div className="logo-container">
-          <img src="/ressources/logo.png" alt="Logo Bouygues" className="logo" />
+          <img src="/ressources/logo.png" alt="Logo" className="logo" />
         </div>
       </header>
 
-      {/* Contenu principal */}
       <main className="energie-dangereuse-content">
         <div className="content-wrapper">
           <div className="image-section">
-            <img src="/ressources/energie.png" alt="Énergie dangereuse" className="energie-image" />
+            <img src="/ressources/energie.png" alt="Énergie" className="energie-image" />
           </div>
           <div className="text-section">
-            <h1>Énergie Dangereuse</h1>
+            <h1>{titleTexts.fr}</h1>
             <div className="description">
               <p>
                 Risque de blessure dû à des sources d’énergie non maîtrisées (électrique, hydraulique, pneumatique, thermique, etc.)
@@ -43,7 +63,6 @@ const EnergieDangereuse: React.FC = () => {
         </div>
       </main>
 
-      {/* Bouton retour */}
       <button className="back-button" onClick={handleBackClick}>
         ← Retour
       </button>

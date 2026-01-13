@@ -50,7 +50,10 @@ export default function PopupCommentaire( {onClose, setCommentaire, commentaire,
       window.speechSynthesis.speak(utter);
     } else {
       // If not supported, try to play any existing audio element if present
-      audioRef.current?.play();
+      if (audioRef.current) {
+        audioRef.current.src = '/ressources/sons/titre-popup.mp3';
+        audioRef.current.play().catch(() => {});
+      }
     }
   }
 
@@ -63,7 +66,7 @@ export default function PopupCommentaire( {onClose, setCommentaire, commentaire,
         </button>
       </h1>
       
-      <audio ref={audioRef} src="/ressources/sons/titre-popup.mp3" />
+      <audio ref={audioRef} preload="auto" />
       
       <div className="zone-texte">
         <p>{t.explain}</p>

@@ -1,47 +1,65 @@
 import React, { useRef } from 'react';
-import { useNavigate, useLocation } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import './risque-stabilite.css';
 
 const RisqueStabiliteArabe: React.FC = () => {
   const navigate = useNavigate();
-  const location = useLocation();
-  const audioRef = useRef<HTMLAudioElement | null>(null);
-  const handleBackClick = () => {
-    const returnLang = location.state?.returnLang || 'ar';
-    navigate(`/riskeval?lang=${returnLang}`);
+  const audioRef = useRef<HTMLAudioElement>(null);
+
+  const titleTexts: Record<string, string> = {
+    ar: 'مخاطر عدم الاستقرار',
   };
 
-  const handleAudioClick = () => {
+  // Chemin vers le fichier audio Arabe (index 10)
+  const getAudioPath = (index = 10) => {
+    return `/ressources/audios/Arabe Littéraire/diapo ${index}.mp3`;
+  };
+
+  const handleBackClick = () => {
+    navigate(`/riskeval?lang=ar`);
+  };
+
+  const speakQuestion = () => {
     if (audioRef.current) {
-      if (!audioRef.current.paused) {
-        audioRef.current.pause();
-        audioRef.current.currentTime = 0;
-        return;
-      }
+      // Attribution de la source audio
+      audioRef.current.src = getAudioPath(10);
+      
+      audioRef.current.play().catch((error) => {
+        console.error("Erreur audio détaillée :", error);
+        
+        // Fallback avec synthèse vocale (ar-SA)
+        if ('speechSynthesis' in window) {
+          const text = titleTexts.ar;
+          const utterance = new SpeechSynthesisUtterance(text);
+          utterance.lang = 'ar-SA';
+          window.speechSynthesis.cancel();
+          window.speechSynthesis.speak(utterance);
+        }
+      });
     }
-    audioRef.current = new Audio('ressources/audios/Arabe Littéraire/diapo 10.mp3');
-    audioRef.current.play().catch(error => {
-      console.error("Erreur lors de la lecture de l'audio:", error);
-    });
   };
 
   return (
     <div className="risque-stabilite-container">
+      {/* L'élément audio est prêt, on lui donnera sa source au clic */}
+      <audio ref={audioRef} preload="auto" />
+      
       <header className="risque-stabilite-header">
-        <button className="audio-button" onClick={handleAudioClick}>
+        <button className="audio-button" onClick={speakQuestion}>
           <img src="/ressources/audio.png" alt="Audio" className="audio-icon" />
-        </button>
+        </button> 
         <div className="logo-container">
-          <img src="/ressources/logo.png" alt="Logo Bouygues" className="logo" />
+          <img src="/ressources/logo.png" alt="Logo" className="logo" />
         </div>
       </header>
+
       <main className="risque-stabilite-content">
         <div className="content-wrapper">
           <div className="image-section">
-            <img src="/ressources/instable.png" alt="Risque de stabilité" className="instable-image" />
+            <img src="/ressources/instable.png" alt="Instabilité" className="instable-image" />
           </div>
           <div className="text-section">
-            <h1>خطر الاستقرار</h1>
+            <h1>{titleTexts.ar}</h1>
             <div className="description">
               <p>
                 خطر الانهيار أو الانقلاب أو الانزلاق لعناصر الهيكل أو الأرض أو المعدات
@@ -50,6 +68,7 @@ const RisqueStabiliteArabe: React.FC = () => {
           </div>
         </div>
       </main>
+
       <button className="back-button" onClick={handleBackClick}>
         ← خلف
       </button>

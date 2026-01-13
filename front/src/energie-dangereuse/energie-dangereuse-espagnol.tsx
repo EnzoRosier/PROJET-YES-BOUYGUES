@@ -1,49 +1,61 @@
 import React, { useRef } from 'react';
-import { useNavigate, useLocation } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import './energie-dangereuse.css';
 
 const EnergieDangereuseEspagnol: React.FC = () => {
   const navigate = useNavigate();
-  const location = useLocation();
   const audioRef = useRef<HTMLAudioElement>(null);
-  const handleBackClick = () => {
-    const returnLang = location.state?.returnLang || 'es';
-    navigate(`/riskeval?lang=${returnLang}`);
+
+  const titleTexts: Record<string, string> = {
+    es: 'Energía peligrosa',
   };
 
+  // Harmonisation du chemin vers le dossier Espagnol - Piste 15
+  const getAudioPath = () => `/ressources/audios/Espagnol/Espagnol_Diapo_15.mp3`;
 
-  const handleAudioClick = () => {
+  const handleBackClick = () => {
+    navigate(`/riskeval?lang=es`);
+  };
+
+  const speakQuestion = () => {
     if (audioRef.current) {
-      if (audioRef.current.paused) {
-        audioRef.current.play();
-      } else {
-        audioRef.current.pause();
-      }
+      audioRef.current.src = getAudioPath();
+      
+      audioRef.current.play().catch((error) => {
+        console.error("Error de audio detallado:", error);
+        
+        // Fallback con síntesis de voz (es-ES)
+        if ('speechSynthesis' in window) {
+          const text = titleTexts.es;
+          const utterance = new SpeechSynthesisUtterance(text);
+          utterance.lang = 'es-ES';
+          window.speechSynthesis.cancel(); // Limpia lecturas en curso
+          window.speechSynthesis.speak(utterance);
+        }
+      });
     }
   };
 
   return (
     <div className="energie-dangereuse-container">
-      <audio ref={audioRef} src="ressources/audios/Espagnol/Espagnol_Diapo_15.mp3" />
+      <audio ref={audioRef} preload="auto" />
       
-      {/* En-tête avec logo et bouton audio */}
       <header className="energie-dangereuse-header">
-        <button className="audio-button" onClick={handleAudioClick}>
+        <button className="audio-button" onClick={speakQuestion}>
           <img src="/ressources/audio.png" alt="Audio" className="audio-icon" />
-        </button>
+        </button> 
         <div className="logo-container">
-          <img src="/ressources/logo.png" alt="Logo Bouygues" className="logo" />
+          <img src="/ressources/logo.png" alt="Logo" className="logo" />
         </div>
       </header>
 
-      {/* Contenu principal */}
       <main className="energie-dangereuse-content">
         <div className="content-wrapper">
           <div className="image-section">
-            <img src="/ressources/energie.png" alt="Énergie dangereuse" className="energie-image" />
+            <img src="/ressources/energie.png" alt="Energía" className="energie-image" />
           </div>
           <div className="text-section">
-            <h1>Energía peligrosa</h1>
+            <h1>{titleTexts.es}</h1>
             <div className="description">
               <p>
                 Riesgo de lesión debido a fuentes de energía no controladas (eléctrica, hidráulica, neumática, térmica, etc.)
@@ -53,7 +65,6 @@ const EnergieDangereuseEspagnol: React.FC = () => {
         </div>
       </main>
 
-      {/* Bouton retour */}
       <button className="back-button" onClick={handleBackClick}>
         ← Atrás
       </button>

@@ -1,49 +1,65 @@
 import React, { useRef } from 'react';
-import { useNavigate, useLocation } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import './ambiance-sociale.css';
 
 const AmbianceSocialePortugais: React.FC = () => {
   const navigate = useNavigate();
-  const location = useLocation();
   const audioRef = useRef<HTMLAudioElement>(null);
-  const handleBackClick = () => {
-    const returnLang = location.state?.returnLang || 'pt';
-    navigate(`/riskeval?lang=${returnLang}`);
+
+  const titleTexts: Record<string, string> = {
+    pt: 'Ambiente social',
   };
 
+  // Harmonisation du chemin vers le dossier Portugais (index 13)
+  const getAudioPath = (index = 13) => {
+    return `/ressources/audios/Portugais/Portugais_Diapo_${index}.mp3`;
+  };
 
-  const handleAudioClick = () => {
+  const handleBackClick = () => {
+    navigate(`/riskeval?lang=pt`);
+  };
+
+  const speakQuestion = () => {
     if (audioRef.current) {
-      if (audioRef.current.paused) {
-        audioRef.current.play();
-      } else {
-        audioRef.current.pause();
-      }
+      // Attribution de la source audio
+      audioRef.current.src = getAudioPath(13);
+      
+      audioRef.current.play().catch((error) => {
+        console.error('Erro de áudio:', error);
+        
+        // Fallback com síntese de voz (pt-PT)
+        if ('speechSynthesis' in window) {
+          const text = titleTexts.pt;
+          const utterance = new SpeechSynthesisUtterance(text);
+          utterance.lang = 'pt-PT';
+          window.speechSynthesis.cancel(); // Limpa leituras anteriores
+          window.speechSynthesis.speak(utterance);
+        }
+      });
     }
   };
 
   return (
     <div className="ambiance-sociale-container">
-      <audio ref={audioRef} src="ressources/audios/Portugais/diapo-13.mp3" />
+      {/* Elemento de áudio preparado para interação */}
+      <audio ref={audioRef} preload="auto" />
       
-      {/* En-tête avec logo et bouton audio */}
       <header className="ambiance-sociale-header">
-        <button className="audio-button" onClick={handleAudioClick}>
-          <img src="/ressources/audio.png" alt="Audio" className="audio-icon" />
-        </button>
+        <button className="audio-button" onClick={speakQuestion}>
+          <img src="/ressources/audio.png" alt="Áudio" className="audio-icon" />
+        </button> 
         <div className="logo-container">
-          <img src="/ressources/logo.png" alt="Logo Bouygues" className="logo" />
+          <img src="/ressources/logo.png" alt="Logo" className="logo" />
         </div>
       </header>
 
-      {/* Contenu principal */}
       <main className="ambiance-sociale-content">
         <div className="content-wrapper">
           <div className="image-section">
-            <img src="/ressources/social.png" alt="Ambiance sociale" className="social-image" />
+            <img src="/ressources/social.png" alt="Ambiente social" className="social-image" />
           </div>
           <div className="text-section">
-            <h1>Ambiente social</h1>
+            <h1>{titleTexts.pt}</h1>
             <div className="description">
               <p>
                 Risco de tensão, estresse ou conflito entre trabalhadores, que pode prejudicar a segurança e o desempenho coletivo
@@ -53,7 +69,6 @@ const AmbianceSocialePortugais: React.FC = () => {
         </div>
       </main>
 
-      {/* Bouton retour */}
       <button className="back-button" onClick={handleBackClick}>
         ← Voltar
       </button>

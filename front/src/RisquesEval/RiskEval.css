@@ -4,7 +4,7 @@
   grid-template-columns: repeat(2, minmax(220px, 360px));
   gap: 18px 36px;
   margin-bottom: 12px;
-  align-items: stretch; /* Allow grid rows to stretch so children can fill height */
+  align-items: stretch;
   justify-content: center;
 }
 
@@ -74,7 +74,7 @@
   display: block;
 }
 
-.modal-actions .btn-back {
+.modal-actions {
   background: #f2f2f2;
   color: #333;
   margin-right: 8px;

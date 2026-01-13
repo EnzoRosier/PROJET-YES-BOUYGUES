@@ -1,49 +1,61 @@
 import React, { useRef } from 'react';
-import { useNavigate, useLocation } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import './autre-risque.css';
 
 const AutreRisqueEspagnol: React.FC = () => {
   const navigate = useNavigate();
-  const location = useLocation();
   const audioRef = useRef<HTMLAudioElement>(null);
-  const handleBackClick = () => {
-    const returnLang = location.state?.returnLang || 'es';
-    navigate(`/riskeval?lang=${returnLang}`);
+
+  const titleTexts: Record<string, string> = {
+    es: 'Otros',
   };
 
+  // Harmonisation du chemin vers le dossier Espagnol - Piste 16
+  const getAudioPath = () => `/ressources/audios/Espagnol/Espagnol_Diapo_16.mp3`;
 
-  const handleAudioClick = () => {
+  const handleBackClick = () => {
+    navigate(`/riskeval?lang=es`);
+  };
+
+  const speakQuestion = () => {
     if (audioRef.current) {
-      if (audioRef.current.paused) {
-        audioRef.current.play();
-      } else {
-        audioRef.current.pause();
-      }
+      audioRef.current.src = getAudioPath();
+      
+      audioRef.current.play().catch((error) => {
+        console.error("Error de audio detallado:", error);
+        
+        // Fallback con síntesis de voz (es-ES)
+        if ('speechSynthesis' in window) {
+          const text = titleTexts.es;
+          const utterance = new SpeechSynthesisUtterance(text);
+          utterance.lang = 'es-ES';
+          window.speechSynthesis.cancel(); // Limpia lecturas en curso
+          window.speechSynthesis.speak(utterance);
+        }
+      });
     }
   };
 
   return (
     <div className="autre-risque-container">
-      <audio ref={audioRef} src="ressources/audios/Espagnol/Espagnol_Diapo_16.mp3" />
+      <audio ref={audioRef} preload="auto" />
       
-      {/* En-tête avec logo et bouton audio */}
       <header className="autre-risque-header">
-        <button className="audio-button" onClick={handleAudioClick}>
+        <button className="audio-button" onClick={speakQuestion}>
           <img src="/ressources/audio.png" alt="Audio" className="audio-icon" />
-        </button>
+        </button> 
         <div className="logo-container">
-          <img src="/ressources/logo.png" alt="Logo Bouygues" className="logo" />
+          <img src="/ressources/logo.png" alt="Logo" className="logo" />
         </div>
       </header>
 
-      {/* Contenu principal */}
       <main className="autre-risque-content">
         <div className="content-wrapper">
           <div className="image-section">
-            <img src="/ressources/autre.png" alt="Autres risques" className="autre-image" />
+            <img src="/ressources/autre.png" alt="Otros" className="autre-image" />
           </div>
           <div className="text-section">
-            <h1>Otros</h1>
+            <h1>{titleTexts.es}</h1>
             <div className="description">
               <p>
                 Riesgos específicos no clasificados en otras partes (presencia de amianto, circulación en el sitio, 
@@ -54,7 +66,6 @@ const AutreRisqueEspagnol: React.FC = () => {
         </div>
       </main>
 
-      {/* Bouton retour */}
       <button className="back-button" onClick={handleBackClick}>
         ← Atrás
       </button>

@@ -1,49 +1,64 @@
 import React, { useRef } from 'react';
-import { useNavigate, useLocation } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import './equipement-travail.css';
 
 const EquipementTravailPolonais: React.FC = () => {
   const navigate = useNavigate();
-  const location = useLocation();
   const audioRef = useRef<HTMLAudioElement>(null);
-  const handleBackClick = () => {
-    const returnLang = location.state?.returnLang || 'pl';
-    navigate(`/riskeval?lang=${returnLang}`);
+
+  const titleTexts: Record<string, string> = {
+    pl: 'Sprzęt roboczy',
   };
 
+  const getAudioPath = (index = 14) => {
+    return `/ressources/audios/Polonais/Polonais_Diapo_${index}.mp3`;
+  };
 
-  const handleAudioClick = () => {
+  const handleBackClick = () => {
+    navigate(`/riskeval?lang=pl`);
+  };
+
+  const speakQuestion = () => {
     if (audioRef.current) {
-      if (audioRef.current.paused) {
-        audioRef.current.play();
-      } else {
-        audioRef.current.pause();
-      }
+      // On utilise l'élément du DOM directement
+      audioRef.current.src = getAudioPath(14);
+      
+      audioRef.current.play().catch((error) => {
+        console.error("Erreur audio détaillée :", error);
+        
+        // Fallback en cas d'échec du fichier
+        if ('speechSynthesis' in window) {
+          const text = titleTexts.pl;
+          const utterance = new SpeechSynthesisUtterance(text);
+          utterance.lang = 'pl-PL';
+          window.speechSynthesis.cancel();
+          window.speechSynthesis.speak(utterance);
+        }
+      });
     }
   };
 
   return (
     <div className="equipement-travail-container">
-      <audio ref={audioRef} src="ressources/audios/Polonais/Polonais Diapo 15 audio.mp3" />
+      {/* L'élément audio est prêt, on lui donnera sa source au clic */}
+      <audio ref={audioRef} preload="auto" />
       
-      {/* En-tête avec logo et bouton audio */}
       <header className="equipement-travail-header">
-        <button className="audio-button" onClick={handleAudioClick}>
+        <button className="audio-button" onClick={speakQuestion}>
           <img src="/ressources/audio.png" alt="Audio" className="audio-icon" />
-        </button>
+        </button> 
         <div className="logo-container">
-          <img src="/ressources/logo.png" alt="Logo Bouygues" className="logo" />
+          <img src="/ressources/logo.png" alt="Logo" className="logo" />
         </div>
       </header>
 
-      {/* Contenu principal */}
       <main className="equipement-travail-content">
         <div className="content-wrapper">
           <div className="image-section">
-            <img src="/ressources/equipement.jpg" alt="Équipement de travail" className="equipement-image" />
+            <img src="/ressources/equipement.jpg" alt="Équipement" className="equipement-image" />
           </div>
           <div className="text-section">
-            <h1>Sprzęt roboczy</h1>
+            <h1>{titleTexts.pl}</h1>
             <div className="description">
               <p>
                 Ryzyko wypadku związanego z użytkowaniem, awarią lub niewłaściwą konserwacją maszyn i narzędzi
@@ -53,7 +68,6 @@ const EquipementTravailPolonais: React.FC = () => {
         </div>
       </main>
 
-      {/* Bouton retour */}
       <button className="back-button" onClick={handleBackClick}>
         ← Wstecz
       </button>

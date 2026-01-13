@@ -1,59 +1,71 @@
 import React, { useRef } from 'react';
-import { useNavigate, useLocation } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import './autre-risque.css';
 
 const AutreRisqueArabe: React.FC = () => {
   const navigate = useNavigate();
-  const location = useLocation();
   const audioRef = useRef<HTMLAudioElement>(null);
-  const handleBackClick = () => {
-    const returnLang = location.state?.returnLang || 'ar';
-    navigate(`/riskeval?lang=${returnLang}`);
+
+  const titleTexts: Record<string, string> = {
+    ar: 'مخاطر أخرى',
   };
 
+  // Harmonisation du chemin vers le dossier Arabe Littéraire - Piste 16
+  const getAudioPath = () => '/ressources/audios/Arabe Littéraire/diapo 16.mp3';
 
-  const handleAudioClick = () => {
+  const handleBackClick = () => {
+    navigate(`/riskeval?lang=ar`);
+  };
+
+  const speakQuestion = () => {
     if (audioRef.current) {
-      if (audioRef.current.paused) {
-        audioRef.current.play();
-      } else {
-        audioRef.current.pause();
-      }
+      audioRef.current.src = getAudioPath();
+      
+      audioRef.current.play().catch((error) => {
+        console.error("خطأ في تشغيل الصوت:", error);
+        
+        // Fallback avec synthèse vocale (ar-SA)
+        if ('speechSynthesis' in window) {
+          const text = titleTexts.ar;
+          const utterance = new SpeechSynthesisUtterance(text);
+          utterance.lang = 'ar-SA';
+          window.speechSynthesis.cancel(); // تنظيف أي قراءات جارية
+          window.speechSynthesis.speak(utterance);
+        }
+      });
     }
   };
 
   return (
     <div className="autre-risque-container">
-      <audio ref={audioRef} src="ressources/audios/Arabe Littéraire/diapo 16.mp3" />
+      {/* عنصر الصوت جاهز للتفاعل */}
+      <audio ref={audioRef} preload="auto" />
       
-      {/* En-tête avec logo et bouton audio */}
       <header className="autre-risque-header">
-        <button className="audio-button" onClick={handleAudioClick}>
-          <img src="/ressources/audio.png" alt="Audio" className="audio-icon" />
-        </button>
+        <button className="audio-button" onClick={speakQuestion}>
+          <img src="/ressources/audio.png" alt="الصوت" className="audio-icon" />
+        </button> 
         <div className="logo-container">
-          <img src="/ressources/logo.png" alt="Logo Bouygues" className="logo" />
+          <img src="/ressources/logo.png" alt="الشعار" className="logo" />
         </div>
       </header>
 
-      {/* Contenu principal */}
       <main className="autre-risque-content">
         <div className="content-wrapper">
           <div className="image-section">
-            <img src="/ressources/autre.png" alt="Autres risques" className="autre-image" />
+            <img src="/ressources/autre.png" alt="مخاطر أخرى" className="autre-image" />
           </div>
           <div className="text-section">
-            <h1>آخر</h1>
+            <h1>{titleTexts.ar}</h1>
             <div className="description">
               <p>
-               مخاطر محددة غير مصنفة في مكان آخر (وجود الأسبستوس، حركة المرور في موقع البناء، المخاطر البيولوجية، إلخ).
+                مخاطر محددة غير مصنفة في مكان آخر (وجود الأسبستوس، حركة المرور في موقع البناء، المخاطر البيولوجية، إلخ).
               </p>
             </div>
           </div>
         </div>
       </main>
 
-      {/* Bouton retour */}
       <button className="back-button" onClick={handleBackClick}>
         ← خلف
       </button>

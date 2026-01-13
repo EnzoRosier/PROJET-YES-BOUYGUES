@@ -1,49 +1,65 @@
 import React, { useRef } from 'react';
-import { useNavigate, useLocation } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import './ambiance-sociale.css';
 
 const AmbianceSocialeAnglais: React.FC = () => {
   const navigate = useNavigate();
-  const location = useLocation();
   const audioRef = useRef<HTMLAudioElement>(null);
-  const handleBackClick = () => {
-    const returnLang = location.state?.returnLang || 'en';
-    navigate(`/riskeval?lang=${returnLang}`);
+
+  const titleTexts: Record<string, string> = {
+    en: 'Social environment',
   };
 
+  // Harmonisation du chemin vers le dossier Anglais (index 13)
+  const getAudioPath = (index = 13) => {
+    return `/ressources/audios/Anglais/Anglais_Diapo_${index}.mp3`;
+  };
 
-  const handleAudioClick = () => {
+  const handleBackClick = () => {
+    navigate(`/riskeval?lang=en`);
+  };
+
+  const speakQuestion = () => {
     if (audioRef.current) {
-      if (audioRef.current.paused) {
-        audioRef.current.play();
-      } else {
-        audioRef.current.pause();
-      }
+      // Attribution de la source audio
+      audioRef.current.src = getAudioPath(13);
+      
+      audioRef.current.play().catch((error) => {
+        console.error("Detailed audio error:", error);
+        
+        // Fallback avec synthèse vocale (en-GB)
+        if ('speechSynthesis' in window) {
+          const text = titleTexts.en;
+          const utterance = new SpeechSynthesisUtterance(text);
+          utterance.lang = 'en-GB';
+          window.speechSynthesis.cancel(); // Nettoie les lectures en cours
+          window.speechSynthesis.speak(utterance);
+        }
+      });
     }
   };
 
   return (
     <div className="ambiance-sociale-container">
-      <audio ref={audioRef} src="ressources/audios/Anglais/Anglais_Diapo_13.mp3" />
+      {/* L'élément audio est prêt, on lui donnera sa source au clic */}
+      <audio ref={audioRef} preload="auto" />
       
-      {/* En-tête avec logo et bouton audio */}
       <header className="ambiance-sociale-header">
-        <button className="audio-button" onClick={handleAudioClick}>
+        <button className="audio-button" onClick={speakQuestion}>
           <img src="/ressources/audio.png" alt="Audio" className="audio-icon" />
-        </button>
+        </button> 
         <div className="logo-container">
-          <img src="/ressources/logo.png" alt="Logo Bouygues" className="logo" />
+          <img src="/ressources/logo.png" alt="Logo" className="logo" />
         </div>
       </header>
 
-      {/* Contenu principal */}
       <main className="ambiance-sociale-content">
         <div className="content-wrapper">
           <div className="image-section">
-            <img src="/ressources/social.png" alt="Ambiance sociale" className="social-image" />
+            <img src="/ressources/social.png" alt="Social" className="social-image" />
           </div>
           <div className="text-section">
-            <h1>Social environment</h1>
+            <h1>{titleTexts.en}</h1>
             <div className="description">
               <p>
                 Risk of tension, stress or conflict between workers, which can harm safety and collective performance
@@ -53,7 +69,6 @@ const AmbianceSocialeAnglais: React.FC = () => {
         </div>
       </main>
 
-      {/* Bouton retour */}
       <button className="back-button" onClick={handleBackClick}>
         ← Back
       </button>

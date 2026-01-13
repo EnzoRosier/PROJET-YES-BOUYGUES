@@ -1,49 +1,61 @@
 import React, { useRef } from 'react';
-import { useNavigate, useLocation } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import './autre-risque.css';
 
 const AutreRisqueOurdou: React.FC = () => {
   const navigate = useNavigate();
-  const location = useLocation();
   const audioRef = useRef<HTMLAudioElement>(null);
-  const handleBackClick = () => {
-    const returnLang = location.state?.returnLang || 'ur';
-    navigate(`/riskeval?lang=${returnLang}`);
+
+  const titleTexts: Record<string, string> = {
+    ur: 'دوسرے',
   };
 
+  // Harmonisation du chemin vers le dossier Ourdou - Piste 16
+  const getAudioPath = () => '/ressources/audios/Ourdou/16p.m4a';
 
-  const handleAudioClick = () => {
+  const handleBackClick = () => {
+    navigate(`/riskeval?lang=ur`);
+  };
+
+  const speakQuestion = () => {
     if (audioRef.current) {
-      if (audioRef.current.paused) {
-        audioRef.current.play();
-      } else {
-        audioRef.current.pause();
-      }
+      audioRef.current.src = getAudioPath();
+      
+      audioRef.current.play().catch((error) => {
+        console.error("آڈیو چلانے میں غلطی:", error);
+        
+        // Fallback avec synthèse vocale Ourdou (ur-PK)
+        if ('speechSynthesis' in window) {
+          const text = titleTexts.ur;
+          const utterance = new SpeechSynthesisUtterance(text);
+          utterance.lang = 'ur-PK';
+          window.speechSynthesis.cancel(); // صاف کریں اگر پہلے سے کچھ چل رہا ہو
+          window.speechSynthesis.speak(utterance);
+        }
+      });
     }
   };
 
   return (
     <div className="autre-risque-container">
-      <audio ref={audioRef} src="ressources/audios/Ourdou/16p.m4a" />
+      <audio ref={audioRef} preload="auto" />
       
-      {/* En-tête avec logo et bouton audio */}
       <header className="autre-risque-header">
-        <button className="audio-button" onClick={handleAudioClick}>
-          <img src="/ressources/audio.png" alt="Audio" className="audio-icon" />
-        </button>
+        <button className="audio-button" onClick={speakQuestion}>
+          <img src="/ressources/audio.png" alt="آڈیو" className="audio-icon" />
+        </button> 
         <div className="logo-container">
-          <img src="/ressources/logo.png" alt="Logo Bouygues" className="logo" />
+          <img src="/ressources/logo.png" alt="لوگو" className="logo" />
         </div>
       </header>
 
-      {/* Contenu principal */}
       <main className="autre-risque-content">
         <div className="content-wrapper">
           <div className="image-section">
-            <img src="/ressources/autre.png" alt="Autres risques" className="autre-image" />
+            <img src="/ressources/autre.png" alt="دوسرے خطرات" className="autre-image" />
           </div>
           <div className="text-section">
-            <h1>دوسرے</h1>
+            <h1>{titleTexts.ur}</h1>
             <div className="description">
               <p>
                 مخصوص خطرات کی درجہ بندی کہیں اور نہیں کی گئی ہے (ایسبیسٹوس کی موجودگی، تعمیراتی جگہ پر ٹریفک، حیاتیاتی خطرات وغیرہ)
@@ -53,7 +65,6 @@ const AutreRisqueOurdou: React.FC = () => {
         </div>
       </main>
 
-      {/* Bouton retour */}
       <button className="back-button" onClick={handleBackClick}>
         ← پیچھے
       </button>

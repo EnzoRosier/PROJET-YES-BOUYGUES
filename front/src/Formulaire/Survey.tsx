@@ -237,7 +237,7 @@ export default function Survey() {
             </div>
           )}
         </div>
-        <Link to="../login"><button className="admin-btn">🔒</button></Link>
+        <Link to="../"><button className="home-btn">🏠</button></Link>
       </header>
 
       <main className="survey-main">
@@ -263,7 +263,6 @@ export default function Survey() {
           <button className="develop" onClick={() => setVisible(true)}>{uiTexts[currentLang]?.develop || 'Je développe'}</button>
         </div>
 
-        <Link to="../"><button className="back-btn" aria-label={uiTexts[currentLang]?.back || 'Retour'}>←</button></Link>
 
         {visible && (
           <PopupCommentaire 
