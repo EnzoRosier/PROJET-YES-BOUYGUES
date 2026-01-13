@@ -5,9 +5,9 @@ import { Link, useNavigate } from 'react-router-dom';
 import PopupCommentaire from '../popup-commentaire/popup-commentaire';
 
 const smiles = [
-  { id: 0, label: 'Très insatisfait', image: '/images/Smiley_Angry.png', color: '#e74c3c' }, // ID 0 -> MAUVAIS
-  { id: 1, label: 'Neutre', image: '/images/Smiley_Normal.png', color: '#f1c40f' },          // ID 1 -> MOYEN
-  { id: 2, label: 'Très satisfait', image: '/images/Smiley_Happy.png', color: '#2ecc71' },  // ID 2 -> BIEN
+  { id: 0, label: 'Très insatisfait', image: 'ressources/Smiley_Angry.png', color: '#e74c3c' }, // ID 0 -> MAUVAIS
+  { id: 1, label: 'Neutre', image: 'ressources/Smiley_Normal.png', color: '#f1c40f' },          // ID 1 -> MOYEN
+  { id: 2, label: 'Très satisfait', image: 'ressources/Smiley_Happy.png', color: '#2ecc71' },  // ID 2 -> BIEN
 ];
 
 const languages = [
@@ -126,13 +126,13 @@ export default function Survey() {
   // Map language code to the actual audio file path for question 2
   const getAudioPath = (lang: string, index = 2) => {
     const map: Record<string, string> = {
-      fr: `audio/Français/Français_Diapo_${index}.mp3`,
-      en: `audio/Anglais/Anglais_Diapo_${index}.mp3`,
-      es: `audio/Espagnol/Espagnol_Diapo_${index}.mp3`,
-      pt: `audio/Portugais/Portugais_Diapo_${index}.mp3`,
-      ar: `audio/Arabe Littéraire/Arabe_Diapo_${index}.mp3`,
-      ur: `audio/Ourdou/Ourdou_Diapo_${index}.mp3`,
-      pl: `audio/Polonais/Polonais_Diapo_${index}.mp3`,
+      fr: `ressources/audios/Français/Français_Diapo_${index}.mp3`,
+      en: `ressources/audios/Anglais/Anglais_Diapo_${index}.mp3`,
+      es: `ressources/audios/Espagnol/Espagnol_Diapo_${index}.mp3`,
+      pt: `ressources/audios/Portugais/Portugais_Diapo_${index}.mp3`,
+      ar: `ressources/audios/Arabe Littéraire/Arabe_Diapo_${index}.mp3`,
+      ur: `ressources/audios/Ourdou/Ourdou_Diapo_${index}.mp3`,
+      pl: `ressources/audios/Polonais/Polonais_Diapo_${index}.mp3`,
     };
     return map[lang] || map.fr;
   };
@@ -216,7 +216,7 @@ export default function Survey() {
 
   return (
     <div className="survey-root">
-      <img className="brand-badge" src="/images/Bouygues_bat.png" alt="Bouygues" />
+      <img className="brand-badge" src="ressources/Bouygues_bat.png" alt="Bouygues" />
       
       <header className="survey-header">
         <div className="lang-menu">
