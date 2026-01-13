@@ -1,13 +1,13 @@
 import React, { useRef } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
-import './risque-cohesion.css';
+import './risque-collision.css';
 
-const RisqueCohesionPolonais: React.FC = () => {
+const RisqueCohesionAnglais: React.FC = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const handleBackClick = () => {
-    const returnLang = location.state?.returnLang || 'pl';
+    const returnLang = location.state?.returnLang || 'en';
     navigate(`/riskeval?lang=${returnLang}`);
   };
 
@@ -19,7 +19,7 @@ const RisqueCohesionPolonais: React.FC = () => {
         return;
       }
     }
-    audioRef.current = new Audio('/audio/Polonais/Polonais Diapo 9 audio.mp3');
+    audioRef.current = new Audio('/audio/Anglais/Anglais_Diapo_9.mp3');
     audioRef.current.play().catch(error => {
       console.error("Erreur lors de la lecture de l'audio:", error);
     });
@@ -41,20 +41,20 @@ const RisqueCohesionPolonais: React.FC = () => {
             <img src="/ressources/cohesion.png" alt="Cohésion d'équipe" className="cohesion-image" />
           </div>
           <div className="text-section">
-            <h1>Ryzyko spójności</h1>
+            <h1>Risk of Cohesion</h1>
             <div className="description">
               <p>
-                Ryzyko związane z brakiem koordynacji lub komunikacji między zespołami, co może prowadzić do błędów lub wypadków
+                Risk related to a lack of coordination or communication between teams, which can lead to errors or accidents
               </p>
             </div>
           </div>
         </div>
       </main>
       <button className="back-button" onClick={handleBackClick}>
-        ← Wrócić
+        ← Back
       </button>
     </div>
   );
 };
 
-export default RisqueCohesionPolonais;
+export default RisqueCohesionAnglais;

@@ -11,7 +11,7 @@ const riskLabels: Record<string, string[]> = {
     'Risque de collision',
     'Risque de stabilité',
     'Environnement de travail',
-    'Equipement de production',
+    'Equipement de travail',
     'Ambiance Sociale',
     'Énergie dangereuse',
   ],
@@ -97,12 +97,11 @@ const questionTexts: Record<string, string> = {
   pl: 'Które z tych 8 zagrożeń jest związane z Twoim nastrojem ?',
 };
 
-// Mapping des index de risques vers les URLs (position dans le tableau riskLabels)
+// Mapping des index de risques vers les URLs 
 const riskIndexToUrl: string[] = [
-  '/risque-levage',        // 0: Risque de levage
-  '/risque-levage',        // 0: Risque de levage
+  '/risque-levage',        // 0: Risque de levage      
   '/travaux-hauteur',      // 1: Travaux en Hauteur
-  '/risque-cohesion',      // 2: Risque de collision
+  '/risque-collision',      // 2: Risque de collision
   '/risque-stabilite',     // 3: Risque de stabilité
   '/environnement-travail',// 4: Environnement de travail
   '/equipement-travail',   // 5: Equipement de production
@@ -467,7 +466,7 @@ export default function RiskEval() {
           </button> 
         </div>
 
-        <button className="back-btn" aria-label={uiTexts[currentLang]?.back || 'Retour'} onClick={() => navigate(-1)}>
+        <button className="back-btn" aria-label={uiTexts[currentLang]?.back || 'Retour'} onClick={() => navigate('/Formulaire')}>
           ←
         </button>
 

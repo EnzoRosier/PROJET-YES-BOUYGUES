@@ -83,7 +83,7 @@ export default function ModifierAdmin() {
             return;
         }
 
-        const confirmed = window.confirm('Confirmer l’ajout de cet administrateur ?');
+        const confirmed = window.confirm('Confirmer la modification de cet administrateur ?');
         if (!confirmed) return;
 
         console.log({

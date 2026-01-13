@@ -1,23 +1,32 @@
-import React from 'react';
+import React, { useRef } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
-import './risque-cohesion.css';
+import './risque-collision.css';
 
-const RisqueCohesion: React.FC = () => {
+const RisqueCohesionPortugais: React.FC = () => {
   const navigate = useNavigate();
   const location = useLocation();
-  
+  const audioRef = useRef<HTMLAudioElement | null>(null);
   const handleBackClick = () => {
-    const returnLang = location.state?.returnLang || 'fr';
+    const returnLang = location.state?.returnLang || 'pt';
     navigate(`/riskeval?lang=${returnLang}`);
   };
 
   const handleAudioClick = () => {
-    console.log("Audio button clicked");
+    if (audioRef.current) {
+      if (!audioRef.current.paused) {
+        audioRef.current.pause();
+        audioRef.current.currentTime = 0;
+        return;
+      }
+    }
+    audioRef.current = new Audio('/audio/Portugais/diapo 9.mp3');
+    audioRef.current.play().catch(error => {
+      console.error("Erreur lors de la lecture de l'audio:", error);
+    });
   };
 
   return (
     <div className="risque-cohesion-container">
-      {/* En-tête avec logo et bouton audio */}
       <header className="risque-cohesion-header">
         <button className="audio-button" onClick={handleAudioClick}>
           <img src="/ressources/audio.png" alt="Audio" className="audio-icon" />
@@ -26,30 +35,26 @@ const RisqueCohesion: React.FC = () => {
           <img src="/ressources/logo.png" alt="Logo Bouygues" className="logo" />
         </div>
       </header>
-
-      {/* Contenu principal */}
       <main className="risque-cohesion-content">
         <div className="content-wrapper">
           <div className="image-section">
             <img src="/ressources/cohesion.png" alt="Cohésion d'équipe" className="cohesion-image" />
           </div>
           <div className="text-section">
-            <h1>Risque de Cohésion</h1>
+            <h1>Risco de Coesão</h1>
             <div className="description">
               <p>
-               Risque lié à un manque de coordination ou de communication entre équipes, pouvant provoquer des erreurs ou accidents
+                Risco relacionado a uma falta de coordenação ou comunicação entre equipes, o que pode levar a erros ou acidentes
               </p>
             </div>
           </div>
         </div>
       </main>
-
-      {/* Bouton retour */}
       <button className="back-button" onClick={handleBackClick}>
-        ← Retour
+        ← Voltar
       </button>
     </div>
   );
 };
 
-export default RisqueCohesion;
+export default RisqueCohesionPortugais;

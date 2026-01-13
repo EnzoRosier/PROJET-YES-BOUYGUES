@@ -34,14 +34,14 @@ import {
   TravauxHauteurPortugais
 } from './travaux-hauteur';
 import {
-  RisqueCohesion,
-  RisqueCohesionAnglais,
-  RisqueCohesionArabe,
-  RisqueCohesionEspagnol,
-  RisqueCohesionOurdou,
-  RisqueCohesionPolonais,
-  RisqueCohesionPortugais
-} from './risque-cohesion';
+  RisqueCollision,
+  RisqueCollisionAnglais,
+  RisqueCollisionArabe,
+  RisqueCollisionEspagnol,
+  RisqueCollisionOurdou,
+  RisqueCollisionPolonais,
+  RisqueCollisionPortugais
+} from './risque-collision';
 import {
   RisqueStabilite,
   RisqueStabiliteAnglais,
@@ -128,14 +128,14 @@ function App() {
         <Route path="/risque-levage/pt" element={<RisqueLevagePortugais />} />
         
         {/* Risque Cohésion */}
-        <Route path="/risque-cohesion" element={<RisqueCohesion />} />
-        <Route path="/risque-cohesion/fr" element={<RisqueCohesion />} />
-        <Route path="/risque-cohesion/en" element={<RisqueCohesionAnglais />} />
-        <Route path="/risque-cohesion/ar" element={<RisqueCohesionArabe />} />
-        <Route path="/risque-cohesion/es" element={<RisqueCohesionEspagnol />} />
-        <Route path="/risque-cohesion/ur" element={<RisqueCohesionOurdou />} />
-        <Route path="/risque-cohesion/pl" element={<RisqueCohesionPolonais />} />
-        <Route path="/risque-cohesion/pt" element={<RisqueCohesionPortugais />} />
+        <Route path="/risque-collision" element={<RisqueCollision />} />
+        <Route path="/risque-collision/fr" element={<RisqueCollision />} />
+        <Route path="/risque-collision/en" element={<RisqueCollisionAnglais />} />
+        <Route path="/risque-collision/ar" element={<RisqueCollisionArabe />} />
+        <Route path="/risque-collision/es" element={<RisqueCollisionEspagnol />} />
+        <Route path="/risque-collision/ur" element={<RisqueCollisionOurdou />} />
+        <Route path="/risque-collision/pl" element={<RisqueCollisionPolonais />} />
+        <Route path="/risque-collision/pt" element={<RisqueCollisionPortugais />} />
         
         {/* Risque Stabilité */}
         <Route path="/risque-stabilite" element={<RisqueStabilite />} />
