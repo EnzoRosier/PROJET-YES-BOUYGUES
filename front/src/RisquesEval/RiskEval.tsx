@@ -466,7 +466,7 @@ export default function RiskEval() {
           </button> 
         </div>
 
-        <button className="back-btn" aria-label={uiTexts[currentLang]?.back || 'Retour'} onClick={() => navigate(-1)}>
+        <button className="back-btn" aria-label={uiTexts[currentLang]?.back || 'Retour'} onClick={() => navigate('/Formulaire')}>
           ←
         </button>
 
