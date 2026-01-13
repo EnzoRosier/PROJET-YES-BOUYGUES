@@ -12,7 +12,12 @@ export class VoteService {
     return this.voteReposisory.getVotes();
   }
 
-  public async getVoteById(id: string): Promise<VoteModel | undefined> {
+  public async getVoteById(id: string, req): Promise<VoteModel | undefined> {
+    const token = req.cookies?.access_token;
+        if (!token) {
+          throw new UnauthorizedException();
+    }
+    await this.adminService.getMeFromToken(token);
     return this.voteReposisory.getVoteById(id);
   }
 
@@ -20,11 +25,21 @@ export class VoteService {
     return this.voteReposisory.createVote(vote);
   }
 
-  public async getVoteWorksiteId(input: string): Promise<VoteModel[]> {
+  public async getVoteWorksiteId(input: string, req): Promise<VoteModel[]> {
+    const token = req.cookies?.access_token;
+        if (!token) {
+          throw new UnauthorizedException();
+    }
+    await this.adminService.getMeFromToken(token);
     return this.voteReposisory.getVoteWorksiteId(input);
   }
 
-  public async getStatOf(id: string, input: GetStatWorksiteDto): Promise<StatsWorksiteModel> {
+  public async getStatOf(id: string, input: GetStatWorksiteDto, req): Promise<StatsWorksiteModel> {
+    const token = req.cookies?.access_token;
+        if (!token) {
+          throw new UnauthorizedException();
+    }
+    await this.adminService.getMeFromToken(token);
     return this.voteReposisory.getStatOf(id, input);
   }
 
@@ -37,7 +52,12 @@ export class VoteService {
     return this.voteReposisory.respondToTicket(input)
   }
 
-  public async getTicketWorksiteId(input: string): Promise<VoteModel[]> {
+  public async getTicketWorksiteId(input: string, req): Promise<VoteModel[]> {
+    const token = req.cookies?.access_token;
+        if (!token) {
+          throw new UnauthorizedException();
+        }
+    await this.adminService.getMeFromToken(token);
     return this.voteReposisory.getTicketWorksiteId(input)
   }
 }

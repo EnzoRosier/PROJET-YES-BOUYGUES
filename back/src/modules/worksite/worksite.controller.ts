@@ -46,15 +46,17 @@ export class WorksiteController {
   @Post('changeRespo')
   public async changeRespoChantier(
     @Body() input: ChangeRespoChantierDto,
+    @Req() req
   ): Promise<WorksiteModel> {
-    return this.worksiteService.changeRespoChantier(input);
+    return this.worksiteService.changeRespoChantier(input, req);
   }
 
   @Get('resetAccident/:id')
   public async resetJourAccident(
     @Param('id') id: string,
+    @Req() req
   ): Promise<WorksiteModel | null> {
-    return this.worksiteService.resetJourAccident(id);
+    return this.worksiteService.resetJourAccident(id, req);
   }
 
   @Get(':id')

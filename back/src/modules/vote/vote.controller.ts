@@ -20,22 +20,24 @@ export class VoteController {
   }
 
   @Get('getByWorksite/:id')
-  public async getByWorksiteId(@Param('id') id: string): Promise<VoteModel[]> {
-    return this.voteService.getVoteWorksiteId(id);
+  public async getByWorksiteId(@Param('id') id: string, @Req() req): Promise<VoteModel[]> {
+    return this.voteService.getVoteWorksiteId(id, req);
   }
 
   @Post('getStatsOf/:id')
   public async getStatOf(
     @Param('id') id: string,
-    @Body() input: GetStatWorksiteDto): Promise<StatsWorksiteModel> {
-    return this.voteService.getStatOf(id, input);
+    @Body() input: GetStatWorksiteDto,
+    @Req() req): Promise<StatsWorksiteModel> {
+    return this.voteService.getStatOf(id, input, req);
   }
 
   @Get('ticket/:id')
   public async getTicketByWorksiteId(
     @Param('id') id: string,
+    @Req() req
   ): Promise<VoteModel[]> {
-    return this.voteService.getTicketWorksiteId(id);
+    return this.voteService.getTicketWorksiteId(id, req);
   }
 
   @Post('respond')
@@ -45,8 +47,8 @@ export class VoteController {
   }
 
   @Get(':id')
-  public async getVote(@Param('id') id: string): Promise<VoteModel | null> {
-    return this.voteService.getVoteById(id);
+  public async getVote(@Param('id') id: string, @Req() req): Promise<VoteModel | null> {
+    return this.voteService.getVoteById(id, req);
   }
 
   

@@ -68,15 +68,33 @@ export class WorksiteService implements OnModuleInit{
     return this.worksiteReposisory.createWorksite(admin);
   }
 
-  public changeRespoChantier(
+  public async changeRespoChantier(
     change: ChangeRespoChantierDto,
+    req
   ): Promise<WorksiteModel | undefined> {
+    const token = req.cookies?.access_token;
+    if (!token) {
+      throw new UnauthorizedException();
+    }
+    const infoMe = await this.adminService.getMeFromToken(token);
+    if (!infoMe.isSuperAdmin) {
+      throw new UnauthorizedException();
+    }
     return this.worksiteReposisory.changeRespoChantier(change);
   }
 
-  public resetJourAccident(
+  public async resetJourAccident(
     input: string,
+    req
   ): Promise<WorksiteModel | undefined> {
+    const token = req.cookies?.access_token;
+    if (!token) {
+      throw new UnauthorizedException();
+    }
+    const infoMe = await this.adminService.getMeFromToken(token);
+    if (!infoMe.isSuperAdmin) {
+      throw new UnauthorizedException();
+    }
     return this.worksiteReposisory.changeAccident(input, 0);
   }
 
