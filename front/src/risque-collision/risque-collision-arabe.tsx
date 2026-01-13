@@ -41,10 +41,10 @@ const RisqueCohesionArabe: React.FC = () => {
             <img src="/ressources/cohesion.png" alt="Cohésion d'équipe" className="cohesion-image" />
           </div>
           <div className="text-section">
-            <h1>خطر التماسك</h1>
+            <h1>خطر الاصطدام</h1>
             <div className="description">
               <p>
-                خطر مرتبط بنقص التنسيق أو التواصل بين الفرق، مما قد يؤدي إلى أخطاء أو حوادث
+               بسبب الحركة المتزامنة للآلات والمركبات والمشاة في المناطق المحظورة أحيانًا، مما قد يؤدي إلى حدوث صدمات كهربائية في حالة عدم الرؤية أو التنسيق. 
               </p>
             </div>
           </div>

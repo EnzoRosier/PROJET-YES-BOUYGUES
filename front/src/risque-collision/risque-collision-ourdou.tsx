@@ -19,7 +19,7 @@ const RisqueCohesionOurdou: React.FC = () => {
         return;
       }
     }
-    audioRef.current = new Audio('/audio/Ourdou/9.m4a');
+    audioRef.current = new Audio('/audio/Ourdou/9.mp3');
     audioRef.current.play().catch(error => {
       console.error("Erreur lors de la lecture de l'audio:", error);
     });
@@ -41,10 +41,10 @@ const RisqueCohesionOurdou: React.FC = () => {
             <img src="/ressources/cohesion.png" alt="Cohésion d'équipe" className="cohesion-image" />
           </div>
           <div className="text-section">
-            <h1>ہم آہنگی کا خطرہ</h1>
+            <h1>تصادم کا خطرہ</h1>
             <div className="description">
               <p>
-                ٹیموں کے درمیان ہم آہنگی یا مواصلات کی کمی سے منسلک خطرہ، جو غلطیوں یا حادثات کا باعث بن سکتا ہے۔
+               بعض اوقات محدود علاقوں میں مشینری، گاڑیوں اور پیدل چلنے والوں کی بیک وقت نقل و حرکت کی وجہ سے، کمزور مرئیت یا ہم آہنگی کی کمی کی صورت میں تصادم ہو سکتا ہے۔
               </p>
             </div>
           </div>

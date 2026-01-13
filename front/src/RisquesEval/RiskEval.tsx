@@ -16,14 +16,14 @@ const riskLabels: Record<string, string[]> = {
     'Énergie dangereuse',
   ],
   en: [
-    'Lifting risk',
-    'Working at height',
+    'Risk of raising',
+    'Work at height',
     'Collision risk',
     'Stability risk',
     'Work environment',
     'Production equipment',
     'Social atmosphere',
-    'Hazardous energy',
+    'Dangerous energy',
   ],
   pt: [
     'Risco de elevação',
@@ -56,7 +56,7 @@ const riskLabels: Record<string, string[]> = {
     'طاقة خطرة',
   ],
   es: [
-    'Riesgo de izaje',
+    'Riesgo de elevar',
     'Trabajos en altura',
     'Riesgo de colisión',
     'Riesgo de estabilidad',

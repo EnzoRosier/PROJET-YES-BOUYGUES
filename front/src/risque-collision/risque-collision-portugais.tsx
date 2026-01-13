@@ -41,10 +41,10 @@ const RisqueCohesionPortugais: React.FC = () => {
             <img src="/ressources/cohesion.png" alt="Cohésion d'équipe" className="cohesion-image" />
           </div>
           <div className="text-section">
-            <h1>Risco de Coesão</h1>
+            <h1>Risco de colisão</h1>
             <div className="description">
               <p>
-                Risco relacionado a uma falta de coordenação ou comunicação entre equipes, o que pode levar a erros ou acidentes
+                Devido à circulação simultânea de máquinas, veículos e pedestres em áreas às vezes restritas, o que pode levar a choques em caso de falta de visibilidade ou coordenação. 
               </p>
             </div>
           </div>
