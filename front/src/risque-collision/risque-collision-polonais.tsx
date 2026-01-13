@@ -19,7 +19,7 @@ const RisqueCohesionPolonais: React.FC = () => {
         return;
       }
     }
-    audioRef.current = new Audio('/audio/Polonais/Polonais Diapo 9 audio.mp3');
+    audioRef.current = new Audio('ressources/audios/Polonais/Polonais Diapo 9 audio.mp3');
     audioRef.current.play().catch(error => {
       console.error("Erreur lors de la lecture de l'audio:", error);
     });

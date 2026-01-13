@@ -19,7 +19,7 @@ const TravauxHauteurArabe: React.FC = () => {
         return;
       }
     }
-    audioRef.current = new Audio('/audio/Arabe Littéraire/diapo 11.mp3');
+    audioRef.current = new Audio('ressources/audios/Arabe Littéraire/diapo 11.mp3');
     audioRef.current.play().catch(error => {
       console.error("Erreur lors de la lecture de l'audio:", error);
     });

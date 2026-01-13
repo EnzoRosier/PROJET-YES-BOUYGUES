@@ -19,7 +19,7 @@ const TravauxHauteurOurdou: React.FC = () => {
         return;
       }
     }
-    audioRef.current = new Audio('/audio/Ourdou/11.m4a');
+    audioRef.current = new Audio('ressources/audios/Ourdou/11.m4a');
     audioRef.current.play().catch(error => {
       console.error("Erreur lors de la lecture de l'audio:", error);
     });

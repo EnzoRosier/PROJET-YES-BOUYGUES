@@ -19,7 +19,7 @@ const RisqueStabiliteOurdou: React.FC = () => {
         return;
       }
     }
-    audioRef.current = new Audio('/audio/Ourdou/10.m4a');
+    audioRef.current = new Audio('ressources/audios/Ourdou/10.m4a');
     audioRef.current.play().catch(error => {
       console.error("Erreur lors de la lecture de l'audio:", error);
     });
