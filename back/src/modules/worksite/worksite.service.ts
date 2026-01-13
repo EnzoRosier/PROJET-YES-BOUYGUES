@@ -92,9 +92,6 @@ export class WorksiteService implements OnModuleInit{
       throw new UnauthorizedException();
     }
     const infoMe = await this.adminService.getMeFromToken(token);
-    if (!infoMe.isSuperAdmin) {
-      throw new UnauthorizedException();
-    }
     return this.worksiteReposisory.changeAccident(input, 0);
   }
 
