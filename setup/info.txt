@@ -1,0 +1,13 @@
+Requirement :
+    - Node Js avec npm choisis en tant que packet manager
+
+Pour setup la base de donnée il existe 2 configuration de bases : 
+
+    - CLEAN : Installe une base de donnée quasi vierge avec seulement un seul super admin. Connectez vous à ce compte, changer les informations de celui-ci et configurer le reste depuis le site.
+    INFORMATION DE CONNEXION:
+        - mail : admin@mail.com / mdp : Admin123 
+    
+    - TEST : Une base de donnée avec plusieurs admin, super admin, site et vote afin de pouvoir tester le projet
+    INFORMATIONS DE CONNEXIONS:
+
+Une des étapes du setup demande le renseignement d'un code jwt : ce code sert au chiffrage des mots de passe, rentrez une longue suite de caractère avec des majuscule, minuscule, symbole, chiffre... plus cette chaine est longue, aléatoire et complexe, plus le chiffrement des mdp sera sécurisé.
