@@ -33,6 +33,14 @@ Set-Location "$projectPath/../front"
 if (!(Test-Path "node_modules")) {
     Write-Host "Installation des dependances du site web..." -ForegroundColor Yellow
     npm install
+    npm run build
+}
+
+if (!(Get-Command serve -ErrorAction SilentlyContinue)) {
+    Write-Host "Installation de serve..."
+    npm install -g serve
+} else {
+    Write-Host "serve deje present"
 }
 
 Write-Host "INDIQUER CLE CHIFFRAGE JWT : " -ForegroundColor Yellow
