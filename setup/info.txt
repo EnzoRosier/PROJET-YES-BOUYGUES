@@ -11,3 +11,9 @@ Pour setup la base de donnée il existe 2 configuration de bases :
     INFORMATIONS DE CONNEXIONS:
 
 Une des étapes du setup demande le renseignement d'un code jwt : ce code sert au chiffrage des mots de passe, rentrez une longue suite de caractère avec des majuscule, minuscule, symbole, chiffre... plus cette chaine est longue, aléatoire et complexe, plus le chiffrement des mdp sera sécurisé.
+
+L'installation est fini !
+
+Vous pouvez maintenant lancer le script Start.ps1 qui va lancer le serveur et le site web !
+
+Pour éteindre le serveur et le site web faite la combinaison de touche CTRL + C dans chacun des terminaux
