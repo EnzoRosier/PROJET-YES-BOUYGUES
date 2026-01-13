@@ -55,17 +55,16 @@ export default function Survey() {
           console.warn('Failed to read worksite response body:', e);
         }
 
-        // Extract id from multiple possible shapes (id, worksiteId, value, nested value)
+        // Log the full response and extract id from the server's `value` field only (server returns { value: ... })
+        console.log('Worksite response body:', data);
+
         let id: string | null = null;
-        if (data) {
-          if (typeof data === 'string') {
-            id = data;
-          } else if (typeof data === 'object') {
-            id = data?.id ?? data?.worksiteId ?? null;
-            if (!id && data?.value) {
-              if (typeof data.value === 'string') id = data.value;
-              else if (typeof data.value === 'object') id = data.value.id ?? data.value.worksiteId ?? null;
-            }
+        if (data && typeof data === 'object' && Object.prototype.hasOwnProperty.call(data, 'value')) {
+          const val = data.value;
+          if (typeof val === 'string') {
+            id = val;
+          } else if (typeof val === 'object') {
+            id = val.id ?? val.worksiteId ?? null;
           }
         }
 
@@ -73,7 +72,7 @@ export default function Survey() {
 
         if (id && typeof id === 'string') {
           setWorksiteId(id);
-          return; // valid id, do not redirect
+          return;
         }
 
         // If no id found, redirect to login (after having awaited the response and parsed it)
@@ -123,7 +122,6 @@ export default function Survey() {
     };
   }, []);
 
-  // Map language code to the actual audio file path for question 2
   const getAudioPath = (lang: string, index = 2) => {
     const map: Record<string, string> = {
       fr: `ressources/audios/Français/Français_Diapo_${index}.mp3`,
@@ -204,6 +202,7 @@ export default function Survey() {
       });
 
       if (response.ok) {
+        console.log(`'Réponse enregistrée'} : ${response}`);
         // Preserve selected language when navigating to RiskEval
         navigate(`../riskeval?lang=${currentLang}`);
       } else {

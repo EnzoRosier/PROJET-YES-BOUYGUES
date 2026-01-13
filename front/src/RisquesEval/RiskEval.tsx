@@ -16,14 +16,14 @@ const riskLabels: Record<string, string[]> = {
     'Énergie dangereuse',
   ],
   en: [
-    'Lifting risk',
-    'Working at height',
+    'Risk of raising',
+    'Work at height',
     'Collision risk',
     'Stability risk',
     'Work environment',
     'Production equipment',
     'Social atmosphere',
-    'Hazardous energy',
+    'Dangerous energy',
   ],
   pt: [
     'Risco de elevação',
@@ -56,7 +56,7 @@ const riskLabels: Record<string, string[]> = {
     'طاقة خطرة',
   ],
   es: [
-    'Riesgo de izaje',
+    'Riesgo de elevar',
     'Trabajos en altura',
     'Riesgo de colisión',
     'Riesgo de estabilidad',
@@ -148,28 +148,27 @@ export default function RiskEval() {
           console.warn('Failed to read worksite response body:', e);
         }
 
-        // Extract id from multiple possible shapes (id, worksiteId, value, nested value)
+        // Log the full response and extract id from the server's `value` field only (server returns { value: ... })
+        console.log('Worksite response body:', data);
+
         let id: string | null = null;
-        if (data) {
-          if (typeof data === 'string') {
-            id = data;
-          } else if (typeof data === 'object') {
-            id = data?.id ?? data?.worksiteId ?? null;
-            if (!id && data?.value) {
-              if (typeof data.value === 'string') id = data.value;
-              else if (typeof data.value === 'object') id = data.value.id ?? data.value.worksiteId ?? null;
-            }
+        if (data && typeof data === 'object' && Object.prototype.hasOwnProperty.call(data, 'value')) {
+          const val = data.value;
+          if (typeof val === 'string') {
+            id = val;
+          } else if (typeof val === 'object') {
+            id = val.id ?? val.worksiteId ?? null;
           }
         }
 
-        console.debug('Extracted worksite id:', id);
+        console.log('Extracted worksite id:', id);
 
         if (id && typeof id === 'string') {
           setWorksiteId(id);
-          return; // valid id, do not redirect
+          return;
         }
 
-        // If no id found, redirect to login (after having awaited the response and parsed it)
+        // If no id found, redirect to login (after having awaited the response)
         console.warn('No worksite id returned or invalid response:', { status: res.status, data });
         navigate('/login');
       } catch (err) {
@@ -181,7 +180,7 @@ export default function RiskEval() {
   }, [navigate]);
   const ip = window.location.hostname;
   
-  // Récupérer la langue depuis l'URL au chargement
+  // Recover language from URL on mount
   useEffect(() => {
     const langFromUrl = searchParams.get('lang');
     if (langFromUrl && langCodeMapping[langFromUrl]) {
@@ -200,13 +199,13 @@ export default function RiskEval() {
 
   const getAudioPath = (lang: string, index = 2) => {
     const map: Record<string, string> = {
-      fr: `audio/Français/Français_Diapo_${index}.mp3`,
-      en: `audio/Anglais/Anglais_Diapo_${index}.mp3`,
-      es: `audio/Espagnol/Espagnol_Diapo_${index}.mp3`,
-      pt: `audio/Portugais/Portugais_Diapo_${index}.mp3`,
-      ar: `audio/Arabe Littéraire/Arabe_Diapo_${index}.mp3`,
-      ur: `audio/Ourdou/Ourdou_Diapo_${index}.mp3`,
-      pl: `audio/Polonais/Polonais_Diapo_${index}.mp3`,
+      fr: `ressources/Français/Français_Diapo_${index}.mp3`,
+      en: `ressources/Anglais/Anglais_Diapo_${index}.mp3`,
+      es: `ressources/Espagnol/Espagnol_Diapo_${index}.mp3`,
+      pt: `ressources/Portugais/Portugais_Diapo_${index}.mp3`,
+      ar: `ressources/Arabe Littéraire/Arabe_Diapo_${index}.mp3`,
+      ur: `ressources/Ourdou/Ourdou_Diapo_${index}.mp3`,
+      pl: `ressources/Polonais/Polonais_Diapo_${index}.mp3`,
     };
     return map[lang] || map.fr;
   };
@@ -216,7 +215,7 @@ export default function RiskEval() {
       audioRef.current.pause();
       audioRef.current.currentTime = 0;
     }
-    // Use DIAPO 4 for the risk page (different from Survey)
+    // Use audioPath 4 for the risk page (different from Survey)
     const audioPath = getAudioPath(lang, 4);
     const audio = new Audio(audioPath);
     audioRef.current = audio;
