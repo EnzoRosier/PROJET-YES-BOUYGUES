@@ -24,7 +24,7 @@ const AmbianceSocialePortugais: React.FC = () => {
 
   return (
     <div className="ambiance-sociale-container">
-      <audio ref={audioRef} src="/audio/Portugais/diapo-13.mp3" />
+      <audio ref={audioRef} src="ressources/audios/Portugais/diapo-13.mp3" />
       
       {/* En-tête avec logo et bouton audio */}
       <header className="ambiance-sociale-header">

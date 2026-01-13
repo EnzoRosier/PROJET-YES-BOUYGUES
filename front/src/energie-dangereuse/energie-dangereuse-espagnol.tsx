@@ -24,7 +24,7 @@ const EnergieDangereuseEspagnol: React.FC = () => {
 
   return (
     <div className="energie-dangereuse-container">
-      <audio ref={audioRef} src="/audio/Espagnol/Espagnol_Diapo_15.mp3" />
+      <audio ref={audioRef} src="ressources/audios/Espagnol/Espagnol_Diapo_15.mp3" />
       
       {/* En-tête avec logo et bouton audio */}
       <header className="energie-dangereuse-header">

@@ -56,7 +56,7 @@ const EnvironnementTravailPortugais: React.FC = () => {
       </button>
 
       {/* Audio element */}
-      <audio ref={audioRef} src="/audio/Portugais/diapo-12.mp3" />
+      <audio ref={audioRef} src="ressources/audios/Portugais/diapo-12.mp3" />
     </div>
   );
 };

@@ -19,7 +19,7 @@ const TravauxHauteurEspagnol: React.FC = () => {
         return;
       }
     }
-    audioRef.current = new Audio('/audio/Espagnol/Espagnol_Diapo_11.mp3');
+    audioRef.current = new Audio('ressources/audios/Espagnol/Espagnol_Diapo_11.mp3');
     audioRef.current.play().catch(error => {
       console.error("Erreur lors de la lecture de l'audio:", error);
     });

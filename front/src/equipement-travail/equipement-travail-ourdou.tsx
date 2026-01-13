@@ -24,7 +24,7 @@ const EquipementTravailOurdou: React.FC = () => {
 
   return (
     <div className="equipement-travail-container">
-      <audio ref={audioRef} src="/audio/Ourdou/14.m4a" />
+      <audio ref={audioRef} src="ressources/audios/Ourdou/14.m4a" />
       
       {/* En-tête avec logo et bouton audio */}
       <header className="equipement-travail-header">

@@ -56,7 +56,7 @@ const EnvironnementTravailOurdou: React.FC = () => {
       </button>
 
       {/* Audio element */}
-      <audio ref={audioRef} src="/audio/Ourdou/12.m4a" />
+      <audio ref={audioRef} src="ressources/audios/Ourdou/12.m4a" />
     </div>
   );
 };

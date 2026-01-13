@@ -199,13 +199,13 @@ export default function RiskEval() {
 
   const getAudioPath = (lang: string, index = 2) => {
     const map: Record<string, string> = {
-      fr: `ressources/Français/Français_Diapo_${index}.mp3`,
-      en: `ressources/Anglais/Anglais_Diapo_${index}.mp3`,
-      es: `ressources/Espagnol/Espagnol_Diapo_${index}.mp3`,
-      pt: `ressources/Portugais/Portugais_Diapo_${index}.mp3`,
-      ar: `ressources/Arabe Littéraire/Arabe_Diapo_${index}.mp3`,
-      ur: `ressources/Ourdou/Ourdou_Diapo_${index}.mp3`,
-      pl: `ressources/Polonais/Polonais_Diapo_${index}.mp3`,
+      fr: `ressources/audios/Français/Français_Diapo_${index}.mp3`,
+      en: `ressources/audios/Anglais/Anglais_Diapo_${index}.mp3`,
+      es: `ressources/audios/Espagnol/Espagnol_Diapo_${index}.mp3`,
+      pt: `ressources/audios/Portugais/Portugais_Diapo_${index}.mp3`,
+      ar: `ressources/audios/Arabe Littéraire/Arabe_Diapo_${index}.mp3`,
+      ur: `ressources/audios/Ourdou/Ourdou_Diapo_${index}.mp3`,
+      pl: `ressources/audios/Polonais/Polonais_Diapo_${index}.mp3`,
     };
     return map[lang] || map.fr;
   };
