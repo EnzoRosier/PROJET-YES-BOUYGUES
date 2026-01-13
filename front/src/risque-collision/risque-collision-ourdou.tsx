@@ -1,13 +1,13 @@
 import React, { useRef } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
-import './risque-cohesion.css';
+import './risque-collision.css';
 
-const RisqueCohesionEspagnol: React.FC = () => {
+const RisqueCohesionOurdou: React.FC = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const handleBackClick = () => {
-    const returnLang = location.state?.returnLang || 'es';
+    const returnLang = location.state?.returnLang || 'ur';
     navigate(`/riskeval?lang=${returnLang}`);
   };
 
@@ -19,7 +19,7 @@ const RisqueCohesionEspagnol: React.FC = () => {
         return;
       }
     }
-    audioRef.current = new Audio('/audio/Espagnol/Espagnol_Diapo_9.mp3');
+    audioRef.current = new Audio('/audio/Ourdou/9.m4a');
     audioRef.current.play().catch(error => {
       console.error("Erreur lors de la lecture de l'audio:", error);
     });
@@ -41,20 +41,20 @@ const RisqueCohesionEspagnol: React.FC = () => {
             <img src="/ressources/cohesion.png" alt="Cohésion d'équipe" className="cohesion-image" />
           </div>
           <div className="text-section">
-            <h1>Riesgo de Cohesión</h1>
+            <h1>ہم آہنگی کا خطرہ</h1>
             <div className="description">
               <p>
-                Riesgo relacionado con la falta de coordinación o comunicación entre equipos, lo que puede provocar errores o accidentes
+                ٹیموں کے درمیان ہم آہنگی یا مواصلات کی کمی سے منسلک خطرہ، جو غلطیوں یا حادثات کا باعث بن سکتا ہے۔
               </p>
             </div>
           </div>
         </div>
       </main>
       <button className="back-button" onClick={handleBackClick}>
-        ← Volver
+        ← پیچھے
       </button>
     </div>
   );
 };
 
-export default RisqueCohesionEspagnol;
+export default RisqueCohesionOurdou;
