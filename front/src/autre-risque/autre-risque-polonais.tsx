@@ -24,7 +24,7 @@ const AutreRisquePolonais: React.FC = () => {
 
   return (
     <div className="autre-risque-container">
-      <audio ref={audioRef} src="/audio/Polonais/Polonais Diapo 16 audio.mp3" />
+      <audio ref={audioRef} src="ressources/audios/Polonais/Polonais Diapo 16 audio.mp3" />
       
       {/* En-tête avec logo et bouton audio */}
       <header className="autre-risque-header">

@@ -22,7 +22,7 @@ const RisqueLevageOurdou: React.FC = () => {
     }
     
     // Créer et jouer le nouvel audio
-    audioRef.current = new Audio('/audio/Ourdou/8.m4a');
+    audioRef.current = new Audio('ressources/audios/Ourdou/8.m4a');
     audioRef.current.play().catch(error => {
       console.error("Erreur lors de la lecture de l'audio:", error);
     });

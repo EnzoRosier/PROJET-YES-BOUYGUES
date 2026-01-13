@@ -22,7 +22,7 @@ const RisqueLevageAnglais: React.FC = () => {
     }
     
     // Créer et jouer le nouvel audio
-    audioRef.current = new Audio('/audio/Anglais/Anglais_Diapo_8.mp3');
+    audioRef.current = new Audio('ressources/audios/Anglais/Anglais_Diapo_8.mp3');
     audioRef.current.play().catch(error => {
       console.error("Erreur lors de la lecture de l'audio:", error);
     });

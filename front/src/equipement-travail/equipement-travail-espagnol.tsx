@@ -24,7 +24,7 @@ const EquipementTravailEspagnol: React.FC = () => {
 
   return (
     <div className="equipement-travail-container">
-      <audio ref={audioRef} src="/audio/Espagnol/Espagnol_Diapo_14.mp3" />
+      <audio ref={audioRef} src="ressources/audios/Espagnol/Espagnol_Diapo_14.mp3" />
       
       {/* En-tête avec logo et bouton audio */}
       <header className="equipement-travail-header">

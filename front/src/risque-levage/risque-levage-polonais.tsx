@@ -22,7 +22,7 @@ const RisqueLevagePolonais: React.FC = () => {
     }
     
     // Créer et jouer le nouvel audio
-    audioRef.current = new Audio('/audio/Polonais/Polonais Diapo 8 audio.mp3');
+    audioRef.current = new Audio('ressources/audios/Polonais/Polonais Diapo 8 audio.mp3');
     audioRef.current.play().catch(error => {
       console.error("Erreur lors de la lecture de l'audio:", error);
     });

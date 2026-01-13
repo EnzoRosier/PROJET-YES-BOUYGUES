@@ -24,7 +24,7 @@ const EnergieDangereuseOurdou: React.FC = () => {
 
   return (
     <div className="energie-dangereuse-container">
-      <audio ref={audioRef} src="/audio/Ourdou/15.m4a" />
+      <audio ref={audioRef} src="ressources/audios/Ourdou/15.m4a" />
       
       {/* En-tête avec logo et bouton audio */}
       <header className="energie-dangereuse-header">
