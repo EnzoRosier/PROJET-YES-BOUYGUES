@@ -23,6 +23,26 @@ while ($ChoixDB -eq "not selected") {
     }
 }
 
+Set-Location "$projectPath/../back"
+if (!(Test-Path "node_modules")) {
+    Write-Host "Installation des dependances du serveur..." -ForegroundColor Yellow
+    npm install
+}
+
+Set-Location "$projectPath/../front"
+if (!(Test-Path "node_modules")) {
+    Write-Host "Installation des dependances du site web..." -ForegroundColor Yellow
+    npm install
+    npm run build
+}
+
+if (!(Get-Command serve -ErrorAction SilentlyContinue)) {
+    Write-Host "Installation de serve..."
+    npm install -g serve
+} else {
+    Write-Host "serve deje present"
+}
+
 Write-Host "INDIQUER CLE CHIFFRAGE JWT : " -ForegroundColor Yellow
 Write-Host "Entrez une chaine de caractere permettant le chiffrage des mots de passe" -ForegroundColor Yellow
 Write-Host "/!\ CETTE CHAINE DE CARACTERE DOIT RESTER SECRETE /!\" -ForegroundColor Red
