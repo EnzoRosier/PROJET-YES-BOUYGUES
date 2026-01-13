@@ -1,0 +1,122 @@
+/* tableau */
+.admin-table {
+    width: 100%;
+    border-collapse: collapse;
+    min-width: 600px;
+    border: 3px solid #E75113;
+}
+
+/* cellules */
+.admin-table th,
+.admin-table td {
+    padding: 1rem;
+    text-align: left;
+    border: 2px solid #E75113;
+}
+
+/* header */
+.admin-table thead {
+    background-color: #FFE3D6;
+}
+
+.admin-table th {
+    font-weight: bold;
+}
+
+/* lignes cliquables */
+.table-row {
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+}
+
+.table-row:hover {
+    background-color: #FFF1EA;
+}
+
+.logo-admin {
+    position: absolute;
+    top: 3%;      /* fixe en % par rapport au conteneur */
+    right: 3%;
+    width: 10%;
+    height: auto;
+    z-index: 10;  /* toujours devant le contenu */
+}
+.table-container {
+    width: 100%;
+    overflow-x: auto;
+    padding: 0.5rem;      /* espace autour du tableau */
+    box-sizing: border-box;
+    margin-top: 5%;     /* <-- ajoute cet espace pour descendre le tableau */
+}
+
+.admin-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 1.5rem;
+    margin-top: 2rem;
+}
+
+.add-btn,
+.delete-btn {
+    padding: 1.1rem 2.2rem;   /* taille */
+    font-size: 1.05rem;       /* texte plus lisible */
+    border-radius: 6px;
+    border: none;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.add-btn {
+    background-color: #E75113;
+    color: white;
+}
+
+.delete-btn {
+    background-color: #b00020;
+    color: white;
+}
+
+.bouton-aurevoir {
+    position: absolute;
+    top: 4%;
+    left: 4%;
+    width: 7%;
+    height: auto;
+    padding: 2%;
+    font-size: 1.5rem;
+    background-color: #555;
+    border-radius: 35px;
+    color: white;
+    cursor: pointer;
+    border: none;
+}
+
+/* Tablette */
+@media (max-width: 1024px) {
+    .bouton-aurevoir {
+        width: auto;
+        padding: 10px 18px;
+        font-size: 1.1rem;
+    }
+}
+
+/* Mobile */
+@media (max-width: 600px) {
+    .bouton-aurevoir {
+        top: 3%;
+        left: 3%;
+        padding: 8px 14px;
+        font-size: 1rem;
+        border-radius: 20px;
+    }
+}
+
+.admin-title {
+    text-align: center;
+    font-size: 2rem;
+    font-weight: 700;
+    margin: 2.5rem 0 1.5rem 0;
+    color: #E75113;
+    letter-spacing: 0.5px;
+}
+

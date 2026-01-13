@@ -1,8 +1,10 @@
 import { Injectable } from '@nestjs/common';
-import { AdminModel } from './admins.model';
-import { CreateAdminDto } from './admins.dto';
-import { DataSource } from 'typeorm';
+import { AdminModel, CreateAdminModel } from './admins.model';
+import { CreateAdminDto, UpdateAdminDto } from './admins.dto';
+import { DataSource, UpdateResult } from 'typeorm';
 import { AdminEntity } from '../database/entities/admin.entity';
+import * as bcrypt from 'bcrypt';
+import { WorksiteEntity } from '../database/entities/worksite.entity';
 
 @Injectable()
 export class AdminRepository {
@@ -14,27 +16,73 @@ export class AdminRepository {
 
   //liste des admins
   public async getAdmins(): Promise<AdminModel[]> {
-    return this.adminRepository.find();
+    return this.adminRepository.find({
+      relations: {
+        worksites: true,
+      }
+    });
   }
   //récupère un admin par son ID
   public async getAdminById(id: string): Promise<AdminModel | null> {
     return this.adminRepository.findOneOrFail({
       where: { id },
+      relations: {
+        worksites: true,
+      }
     });
   }
 
   //création d'un admin
-  public async createAdmin(admin: CreateAdminDto): Promise<AdminModel> {
-    // Maintenant on peut créer une nouvelle entrée d'un livre et la sauvegarder
+  public async createAdmin(admin: CreateAdminModel, worksistes: WorksiteEntity[]): Promise<AdminModel> {
+    // Maintenant on peut créer une nouvelle entrée d'un admin et la sauvegarder
+
+    const saltRounds=12;
+    const hashedPassword = await bcrypt.hash(admin.password, saltRounds);
+    //var hashedPassword = admin.password;
+
     const newAdmin = this.adminRepository.create({
-      mail: admin.mail,
-      password: admin.password,
+      mail: admin.mail.toLowerCase(),
+      password: hashedPassword,
       firstName: admin.firstName,
       lastName: admin.lastName,
       isSuperAdmin: admin.isSuperAdmin,
+      worksites: worksistes
     });
     const returnedAdmin = this.adminRepository.save(newAdmin);
 
     return returnedAdmin;
+  }
+  public async findByMail(mail: string) {
+    mail = mail.toLowerCase()
+    return this.adminRepository.findOne({
+      where: { mail },
+    });
+  }
+
+  async editAdmin(id: string, input: UpdateAdminDto, worksites: WorksiteEntity[]): Promise<AdminModel> {
+    if (input.password) {
+      const saltRounds=12;
+      const hashedPassword = await bcrypt.hash(input.password, saltRounds);
+      input.password = hashedPassword
+    }
+    let newAdmin = {
+      id: id,
+      mail: input.mail.toLowerCase(),
+      password: input.password,
+      firstName: input.firstName,
+      lastName: input.lastName,
+      isSuperAdmin: input.isSuperAdmin,
+      worksites: undefined
+    }
+    if (typeof worksites !== 'undefined') {
+      newAdmin.worksites = worksites
+    }
+
+    await this.adminRepository.save(newAdmin)
+    return await this.getAdminById(id)
+  }
+
+  async deleteAdmin(id: string) : Promise<void> {
+    await this.adminRepository.delete(id)
   }
 }

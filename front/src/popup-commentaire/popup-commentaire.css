@@ -1,0 +1,101 @@
+.popup-commentaire {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 80%;
+  max-width: 640px;
+  max-height: 80vh;
+  overflow: auto;
+  background-color: white;
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.2);
+  border-radius: 12px;
+  z-index: 3000; /* Ensure popup is above brand badge and other overlays */
+  padding: 20px;
+  box-sizing: border-box;
+}
+
+.titre-popup {
+  margin: 0 0 12px 0;
+  font-size: 1.3rem;
+  font-weight: 700;
+  color: #e36414;
+}
+
+.bouton-audio{
+  background-color: transparent;
+  border : none;
+  cursor : pointer;
+}
+
+.zone-texte {
+  width: 100%;
+  margin: 8px 0 16px 0;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  background-color: white;
+  padding: 12px;
+  box-sizing: border-box;
+}
+
+.zone-commentaire {
+  width: 100%;
+  min-height: 120px;
+  max-height: 50vh;
+  padding: 10px;
+  box-sizing: border-box;
+  border: none;
+  border-radius: 5px;
+  resize: vertical;
+  font-size: 16px;
+}
+
+.zone-commentaire:focus {
+  outline: none;
+}
+
+.bouton-upload {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  cursor: pointer;
+}
+
+.upload-file {
+  display : none;
+}
+
+.logo-popup {
+  position: absolute;
+  left: 16px;
+  bottom: 16px;
+  width: 100px;
+  height: auto;
+}
+
+.popup-footer {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  align-items: center;
+  margin-top: 12px;
+}
+
+.popup-close, .popup-validate {
+  padding: 10px 16px;
+  font-size: 14px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  box-shadow: 2px 2px 6px rgba(0,0,0,0.08);
+}
+
+.popup-close { background: #f44336; color: white; }
+.popup-validate { background: #e36414; color: white; }
+
+@media (max-width: 480px) {
+  .popup-commentaire { width: 92%; padding: 12px; }
+  .titre-popup { font-size: 1.1rem; }
+  .popup-close, .popup-validate { padding: 8px 12px; font-size: 13px; }
+  .logo-popup { width: 64px; left: 12px; bottom: 12px; }
+}

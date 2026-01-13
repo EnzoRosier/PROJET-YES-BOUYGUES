@@ -1,4 +1,12 @@
-import { IsBoolean, IsInt, IsOptional, IsString } from 'class-validator';
+import {
+  IsBoolean,
+  IsEmail,
+  IsInt,
+  IsOptional,
+  IsString,
+  MinLength,
+  IsArray,
+} from 'class-validator';
 
 // Creation d'un admin
 export declare class CreateAdminDto {
@@ -12,6 +20,9 @@ export declare class CreateAdminDto {
   lastName: string;
   @IsBoolean()
   isSuperAdmin: boolean;
+  @IsOptional()
+  @IsArray()
+  worksiteIds?: string[];
 }
 
 // Création de plusieurs admins
@@ -22,14 +33,32 @@ export declare class CreateAdminsDto {
   admins: CreateAdminDto[];
 }
 
-// Mise à jour d'un livre
+// Mise à jour d'un admin
 export declare class UpdateAdminDto {
   @IsString()
   @IsOptional()
   mail: string;
-  @IsInt()
+  @IsString()
   @IsOptional()
   password: string;
   @IsString()
-  adminId: string;
+  @IsOptional()
+  firstName: string;
+  @IsString()
+  @IsOptional()
+  lastName: string;
+  @IsBoolean()
+  @IsOptional()
+  isSuperAdmin: boolean;
+  @IsArray()
+  @IsOptional()
+  worksiteIds: string[];
+}
+//login
+export class LoginDto {
+  @IsEmail()
+  mail: string;
+  @IsString()
+  @MinLength(8)
+  password: string;
 }

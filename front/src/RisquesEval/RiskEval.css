@@ -1,0 +1,225 @@
+/* Styles specific to RiskEval component */
+.risk-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(220px, 360px));
+  gap: 18px 36px;
+  margin-bottom: 12px;
+  align-items: stretch; /* Allow grid rows to stretch so children can fill height */
+  justify-content: center;
+}
+
+/* Make the grid cell a flex container so the button fills the entire cell */
+.risk-grid > div {
+  display: flex;
+  align-items: stretch;
+}
+
+.risk-btn {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 14px 22px;
+  border-radius: 28px;
+  background: #e9e9e9;
+  border: none;
+  cursor: pointer;
+  font-weight: 700;
+  font-size: 18px;
+  color: #222;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.08);
+  transition: transform 140ms ease, background 120ms ease, color 120ms ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  min-height: 72px; /* Make all buttons the same height */
+  padding-right: 48px; /* Reserve space for embedded info icon */
+}
+
+.risk-btn .risk-label {
+  display: inline-block;
+  flex: 1 1 auto;
+  padding-right: 8px; /* keep text clear of the info icon */
+  white-space: normal;
+  word-break: break-word;
+}
+
+.risk-btn:hover { transform: translateY(-6px); }
+
+.risk-btn.selected {
+  background: #e36414;
+  color: #fff;
+  transform: translateY(-8px) scale(1.02);
+  box-shadow: 0 12px 30px rgba(0,0,0,0.16);
+}
+
+.other-btn {
+  padding: 10px 20px;
+  border-radius: 18px;
+  background: #e9e9e9;
+  border: none;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+/* Small styles for the 'Autres' modal input */
+.other-input {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 10px 12px;
+  border-radius: 8px;
+  border: 1px solid #ddd;
+  font-size: 16px;
+  margin-bottom: 12px;
+  max-width: 100%;
+  display: block;
+}
+
+.modal-actions .btn-back {
+  background: #f2f2f2;
+  color: #333;
+  margin-right: 8px;
+}
+
+.modal-actions .btn-confirm {
+  background: #e36414;
+  color: #fff;
+}
+
+/* Info icon embedded inside the risk button */
+.risk-btn {
+  position: relative;
+  padding-right: 48px; /* space for the info icon */
+}
+
+.info-icon {
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  background: #ffffff;
+  box-shadow: 0 3px 8px rgba(0,0,0,0.12);
+  cursor: pointer;
+  font-weight: 700;
+  color: #333;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  user-select: none;
+  transition: transform 120ms ease, background 120ms ease;
+}
+
+.info-icon:hover {
+  transform: translateY(-50%) translateY(-3px);
+  background: #f5f5f5;
+}
+
+/* Responsive adjustments */
+
+/* Tablet: two columns similar to desktop but narrower */
+@media (min-width: 601px) and (max-width: 960px) {
+  .risk-grid {
+    grid-template-columns: repeat(2, minmax(180px, 320px));
+    gap: 16px 24px;
+    padding: 0 32px;
+  }
+
+  .risk-btn {
+    font-size: 16px;
+    padding: 12px 16px;
+    border-radius: 20px;
+    min-height: 64px;
+  }
+
+  .question {
+    font-size: 32px;
+    margin: 0 12px 28px;
+  }
+
+  .other-btn {
+    width: 100%;
+    padding: 12px 16px;
+  }
+
+  .modal {
+    width: 86%;
+    max-width: 520px;
+  }
+}
+
+/* Mobile: single column and compact layout */
+@media (max-width: 600px) {
+  .risk-grid {
+    grid-template-columns: 1fr;
+    gap: 12px 12px;
+    padding: 0 16px;
+  }
+
+  .risk-btn {
+    font-size: 15px;
+    padding: 10px 12px;
+    border-radius: 16px;
+    min-height: 56px;
+  }
+
+  .info-icon { width: 24px; height: 24px; right: 8px; }
+
+  .question {
+    font-size: 20px;
+    margin: 0 8px 20px;
+  }
+
+  .other-btn { padding: 10px 12px; }
+
+  .modal {
+    width: 92%;
+    max-width: 420px;
+  }
+}
+
+@media (max-width: 480px) {
+  .risk-btn { border-radius: 14px; padding: 10px 12px; }
+  .question { font-size: 18px; margin-bottom: 18px; }
+}
+
+/* Place Bouygues logo under the back button on RiskEval and keep it in the page flow */
+.brand-badge{
+  position: fixed;
+  left: 18px;
+  bottom: 18px;
+  width: 175px;
+  height: auto;
+  z-index: 1500;
+  pointer-events: none;
+  opacity: 0.98;
+}
+
+/* Inline variant for RiskEval: default to the standard fixed badge on wide screens */
+.brand-badge.brand-badge--inline {
+  /* keep fixed position from .brand-badge for larger viewports */
+  display: inline-block;
+  width: 175px;
+  height: auto;
+  z-index: 1500;
+  pointer-events: none;
+  opacity: 0.98;
+}
+
+/* On small screens (<= 480px), center the logo and make it part of the page flow */
+@media (max-width: 480px) {
+  .brand-badge.brand-badge--inline {
+    position: static !important; /* not fixed, will not follow scroll */
+    display: block;
+    margin: 8px auto 24px !important; /* center horizontally and add spacing under */
+    width: clamp(32px, 40vw, 140px);
+    max-width: 90%;
+    height: auto;
+    transform: none !important;
+    left: auto !important;
+    align-self: center;
+  }
+}
+
+

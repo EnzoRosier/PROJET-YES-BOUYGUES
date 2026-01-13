@@ -1,3 +1,5 @@
+import { WorksiteEntity } from '../database/entities/worksite.entity';
+
 // modèle d'un admin
 export type AdminModel = {
   id: string;
@@ -6,6 +8,7 @@ export type AdminModel = {
   firstName: string;
   lastName: string;
   isSuperAdmin: boolean;
+  worksites?: WorksiteEntity[];
 };
 
 // modèle pour créer un admin
@@ -15,6 +18,15 @@ export type CreateAdminModel = {
   firstName: string;
   lastName: string;
   isSuperAdmin: boolean;
+  worksitesId?: string[];
+};
+
+// modèle pour créer un admin
+export type MeModel = {
+  id: string;
+  mail: string;
+  isSuperAdmin: boolean;
+  worksites: WorksiteEntity[];
 };
 
 // modèle pour mettre à jour un admin
