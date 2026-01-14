@@ -78,7 +78,7 @@
 
     .titre-accueil {
         font-size: 45px;
-        margin-top: 25%;
+        margin-top: 15%;
     }
 
     .logo-accueil {
@@ -117,12 +117,12 @@
 
     .titre-accueil {
         font-size: 36px;
-        margin-top: 35%;
+        margin-top: 25%;
         padding: 0 10px;
     }
 
     .logo-savety {
-        top: 18%;
+        top: 10%;
         left: 5%;
         width: 90%;
     }
@@ -159,7 +159,7 @@
 
     .titre-accueil {
         font-size: 28px;
-        margin-top: 45%;
+        margin-top: 25%;
     }
 
     .qrcode {
