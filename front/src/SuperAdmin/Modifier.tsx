@@ -131,7 +131,7 @@ export default function ModifierAdmin() {
         <div className="admin-liste">
             <img src="/ressources/Logo.png" alt="Logo" className="logo-admin" />
 
-            <button className="bouton-retour" onClick={() => navigate('/AdminsList')}>
+            <button className="bouton-retour" onClick={() => navigate('/AdminList')}>
                 Retour
             </button>
 
