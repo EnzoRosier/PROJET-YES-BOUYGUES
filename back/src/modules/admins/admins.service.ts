@@ -14,8 +14,10 @@ export class AdminService {
     private worksiteService: WorksiteService,
 
     private readonly jwtService: JwtService) {}
-
+  
+  //Recupere les admins
   public async getAdmins(req): Promise<AdminModel[]> {
+    //Check logged en super admin
     const token = req.cookies?.access_token;
     if (!token) {
       throw new UnauthorizedException();
@@ -27,7 +29,9 @@ export class AdminService {
     return this.adminRepository.getAdmins();
   }
 
+  //Recupere un admin avec son id
   public async getAdminById(id: string, token: string): Promise<AdminModel | undefined> {
+    //Check logged en superadmin
     const infoMe = await this.getMeFromToken(token);
     if (!infoMe.isSuperAdmin) {
       throw new UnauthorizedException();
@@ -35,12 +39,19 @@ export class AdminService {
     return this.adminRepository.getAdminById(id);
   }
 
-  public async createAdmin(Admin: CreateAdminDto): Promise<CreateAdminModel> {
-
+  //Cree un admin
+  public async createAdmin(Admin: CreateAdminDto, token:string): Promise<CreateAdminModel> {
+    //Check logged en super admin
+    const infoMe = await this.getMeFromToken(token);
+    if (!infoMe.isSuperAdmin) {
+      throw new UnauthorizedException();
+    }
     if (await this.adminRepository.findByMail(Admin.mail)) {
       throw new UnauthorizedException('mail already used');
     }
+
     let worksistes = []
+    //récup info worksite
     if (Admin.worksiteIds != undefined) {
       for (let i = 0; i < Admin.worksiteIds.length; i++) {
       const worksiteId = Admin.worksiteIds[i];
@@ -54,6 +65,7 @@ export class AdminService {
     return this.adminRepository.createAdmin(Admin, worksistes);
   }
 
+  //Permet de login
   async login(mail: string, password: string) {
     const admin = await this.adminRepository.findByMail(mail);
 
@@ -79,6 +91,7 @@ export class AdminService {
     };
   }
 
+  //Recup info grace a token
   async getMeFromToken(token: string): Promise<MeModel> {
     if (!token || typeof token !== 'string') {
       throw new UnauthorizedException('Token manquant ou invalide');
@@ -100,13 +113,16 @@ export class AdminService {
     };
   }
 
+  //Modifie un admin
   async editAdmin(id: string, input: UpdateAdminDto, token: string): Promise<AdminModel> {
+    //Check logged super admin
     const currInfo = await this.getMeFromToken(token)
     
     if (!currInfo.isSuperAdmin) {
       throw new UnauthorizedException();
     }
 
+    //Recup worksite
     let worksites = undefined
     if (typeof input.worksiteIds !== "undefined") {
       worksites = []
@@ -119,7 +135,9 @@ export class AdminService {
     return this.adminRepository.editAdmin(id, input, worksites)
   }
 
+  //Suppr un admin
   async deleteAdmin(id: string, token:string) : Promise<void> {
+    //Check logged super admin
     const currInfo = await this.getMeFromToken(token)
     
     if (!currInfo.isSuperAdmin) {

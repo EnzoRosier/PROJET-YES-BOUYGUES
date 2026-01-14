@@ -18,6 +18,8 @@ const DonutChart: React.FC<DonutChartProps> = ({
   showLegend = true
 }) => {
   const total = data.reduce((sum, item) => sum + item.value, 0);
+  const nonZeroItems = data.filter(item => item.value > 0);
+  const isSingleSegment = nonZeroItems.length === 1;
   const center = size / 2;
   const outerRadius = size / 2 - 10;
   const innerRadius = outerRadius - thickness;
@@ -25,6 +27,15 @@ const DonutChart: React.FC<DonutChartProps> = ({
   let cumulativePercentage = 0;
   
   const segments = data.map((item) => {
+    if (isSingleSegment && item.value > 0) {
+      return {
+        isFullCircle: true,
+        label: item.label,
+        color: item.color,
+        value: item.value,
+        percentage: '100.0'
+      };
+    }
     const percentage = item.value / total;
     const startAngle = cumulativePercentage * 2 * Math.PI;
     const endAngle = (cumulativePercentage + percentage) * 2 * Math.PI;
@@ -70,27 +81,39 @@ const DonutChart: React.FC<DonutChartProps> = ({
         {/* Dessiner tous les segments */}
         {segments.map((segment, index) => (
           <g key={index}>
-            <path
-              d={segment.pathData}
-              fill={segment.color}
-              stroke="white"
-              strokeWidth="2"
-              style={{ 
-                cursor: 'pointer', 
-                transition: 'opacity 0.3s, filter 0.3s',
-                filter: 'drop-shadow(0 2px 3px rgba(0,0,0,0.1))'
-              }}
-              onMouseEnter={(e) => {
-                e.currentTarget.style.opacity = '0.9';
-                e.currentTarget.style.filter = 'drop-shadow(0 3px 5px rgba(0,0,0,0.2))';
-              }}
-              onMouseLeave={(e) => {
-                e.currentTarget.style.opacity = '1';
-                e.currentTarget.style.filter = 'drop-shadow(0 2px 3px rgba(0,0,0,0.1))';
-              }}
-            />
+            {segment.isFullCircle ? (
+              <circle
+                cx={center}
+                cy={center}
+                r={outerRadius}
+                fill={segment.color}
+              />
+            ) : (
+              <path
+                d={segment.pathData}
+                fill={segment.color}
+                stroke="white"
+                strokeWidth="2"
+                style={{
+                  cursor: 'pointer',
+                  transition: 'opacity 0.3s, filter 0.3s',
+                  filter: 'drop-shadow(0 2px 3px rgba(0,0,0,0.1))'
+                }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.opacity = '0.9';
+                  e.currentTarget.style.filter =
+                    'drop-shadow(0 3px 5px rgba(0,0,0,0.2))';
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.opacity = '1';
+                  e.currentTarget.style.filter =
+                    'drop-shadow(0 2px 3px rgba(0,0,0,0.1))';
+                }}
+              />
+            )}
           </g>
-        ))}
+))}
+
         
         {/* Cercle blanc au centre (trou du donut) */}
         <circle

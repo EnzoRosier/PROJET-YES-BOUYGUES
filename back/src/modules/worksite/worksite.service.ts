@@ -17,6 +17,7 @@ export class WorksiteService implements OnModuleInit{
     private appConfigService: AppConfigService
   ) {}
 
+  //Cree app config au demarage
   async onModuleInit() {
     const exist = await this.appConfigService.getValue("initialized")
     if (!exist) {
@@ -25,7 +26,9 @@ export class WorksiteService implements OnModuleInit{
     }
   }
 
+  //Set worksite choisis
   async setCurrWorksite(input: SetCurrentWorksiteDto, req): Promise<AppConfigModel> {
+    //Check si logged super admin
     const token = req.cookies?.access_token;
     if (!token) {
       throw new UnauthorizedException();
@@ -37,26 +40,32 @@ export class WorksiteService implements OnModuleInit{
     return await this.appConfigService.set({key:"currWorksite", value:input.worksiteId})
   }
 
+  //Recupere worksite choisis
   async getCurrWorksite(): Promise<AppConfigModel> {
     return await this.appConfigService.getValue("currWorksite")
   }
 
+  //Recup tous les worksites
   public async getWorksites(): Promise<WorksiteModel[]> {
     return this.worksiteReposisory.getWorksites();
   }
 
+  //Recup worksite par son id
   public async getWorksiteById(id: string): Promise<WorksiteModel | undefined> {
     return this.worksiteReposisory.getWorksiteById(id);
   }
 
+  //recup entite par son id
   public async getWorksiteEntityRefById(id: string): Promise<WorksiteEntity | undefined> {
     return this.worksiteReposisory.getWorksiteEntityRefById(id);
   }
 
+  //Cree worksite
   public async createWorksite(
     admin: CreateWorksiteDto,
     req
   ): Promise<CreateWorksiteModel> {
+    //check logged super admin
     const token = req.cookies?.access_token;
     if (!token) {
       throw new UnauthorizedException();
@@ -68,10 +77,12 @@ export class WorksiteService implements OnModuleInit{
     return this.worksiteReposisory.createWorksite(admin);
   }
 
+  //Change respo
   public async changeRespoChantier(
     change: ChangeRespoChantierDto,
     req
   ): Promise<WorksiteModel | undefined> {
+    //Check logged super admin
     const token = req.cookies?.access_token;
     if (!token) {
       throw new UnauthorizedException();
@@ -83,6 +94,7 @@ export class WorksiteService implements OnModuleInit{
     return this.worksiteReposisory.changeRespoChantier(change);
   }
 
+  //Reset jours sans accident
   public async resetJourAccident(
     input: string,
     req
@@ -95,6 +107,7 @@ export class WorksiteService implements OnModuleInit{
     return this.worksiteReposisory.changeAccident(input, 0);
   }
 
+  //update jour sans accident tout les jours a 1h 
   @Cron(CronExpression.EVERY_DAY_AT_1AM)
   async updateJourAccident() {
     console.log("Update jour sans accident")

@@ -25,7 +25,7 @@ export class WorksiteRepository {
     });
   }
 
-  
+  //recup l'entite du worksite par son id
   public async getWorksiteEntityRefById(id: string): Promise<WorksiteEntity | null> {
     return this.worksiteRepository.findOneOrFail({
       where: { id },
@@ -37,6 +37,7 @@ export class WorksiteRepository {
   public async createWorksite(
     worksite: CreateWorksiteDto,
   ): Promise<WorksiteModel> {
+    //recup admins
     let admin = [];
     if (typeof worksite.adminIds !== 'undefined') {
       for (let i = 0; i < worksite.adminIds.length; i++) {
@@ -67,6 +68,7 @@ export class WorksiteRepository {
     return returnedAdmin;
   }
 
+  //change jour sans accident
   public async changeAccident(id: string, nb: number): Promise<WorksiteModel> {
     if (typeof id !== 'string') {
       throw new BadRequestException('worksiteID not specified');
@@ -81,6 +83,7 @@ export class WorksiteRepository {
     return returnedAdmin
   }
 
+  //Change responsable du chantier
   public async changeRespoChantier(
     change: ChangeRespoChantierDto,
   ): Promise<WorksiteModel> {
