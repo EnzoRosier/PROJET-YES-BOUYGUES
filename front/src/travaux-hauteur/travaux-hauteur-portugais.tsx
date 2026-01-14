@@ -1,47 +1,65 @@
 import React, { useRef } from 'react';
-import { useNavigate, useLocation } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import './travaux-hauteur.css';
 
 const TravauxHauteurPortugais: React.FC = () => {
   const navigate = useNavigate();
-  const location = useLocation();
   const audioRef = useRef<HTMLAudioElement | null>(null);
-  const handleBackClick = () => {
-    const returnLang = location.state?.returnLang || 'pt';
-    navigate(`/riskeval?lang=${returnLang}`);
+
+  const titleTexts: Record<string, string> = {
+    pt: 'Trabalho em altura',
   };
 
-  const handleAudioClick = () => {
+  // Harmonisation du chemin vers le dossier Portugais (index 11)
+  const getAudioPath = (index = 11) => {
+    return `/ressources/audios/Portugais/Portugais_Diapo_${index}.mp3`;
+  };
+
+  const handleBackClick = () => {
+    navigate(`/riskeval?lang=pt`);
+  };
+
+  const speakQuestion = () => {
     if (audioRef.current) {
-      if (!audioRef.current.paused) {
-        audioRef.current.pause();
-        audioRef.current.currentTime = 0;
-        return;
-      }
+      // Attribution de la source audio
+      audioRef.current.src = getAudioPath(11);
+      
+      audioRef.current.play().catch((error) => {
+        console.error("Erro detalhado de áudio:", error);
+        
+        // Fallback com síntese de voz (pt-PT)
+        if ('speechSynthesis' in window) {
+          const text = titleTexts.pt;
+          const utterance = new SpeechSynthesisUtterance(text);
+          utterance.lang = 'pt-PT';
+          window.speechSynthesis.cancel();
+          window.speechSynthesis.speak(utterance);
+        }
+      });
     }
-    audioRef.current = new Audio('ressources/audios/Portugais/diapo-11.mp3');
-    audioRef.current.play().catch(error => {
-      console.error("Erreur lors de la lecture de l'audio:", error);
-    });
   };
 
   return (
     <div className="travaux-hauteur-container">
+      {/* L'élément audio est prêt, on lui donnera sa source au clic */}
+      <audio ref={audioRef} preload="auto" />
+      
       <header className="travaux-hauteur-header">
-        <button className="audio-button" onClick={handleAudioClick}>
+        <button className="audio-button" onClick={speakQuestion}>
           <img src="/ressources/audio.png" alt="Audio" className="audio-icon" />
-        </button>
+        </button> 
         <div className="logo-container">
-          <img src="/ressources/logo.png" alt="Logo Bouygues" className="logo" />
+          <img src="/ressources/logo.png" alt="Logo" className="logo" />
         </div>
       </header>
+
       <main className="travaux-hauteur-content">
         <div className="content-wrapper">
           <div className="image-section">
-            <img src="/ressources/echaffaudage.png" alt="Échafaudage" className="echaffaudage-image" />
+            <img src="/ressources/echaffaudage.png" alt="Andaimes" className="echaffaudage-image" />
           </div>
           <div className="text-section">
-            <h1>Trabalho em altura</h1>
+            <h1>{titleTexts.pt}</h1>
             <div className="description">
               <p>
                 Risco de queda de pessoas ou material durante trabalhos em andaimes, telhados ou plataformas
@@ -50,6 +68,7 @@ const TravauxHauteurPortugais: React.FC = () => {
           </div>
         </div>
       </main>
+
       <button className="back-button" onClick={handleBackClick}>
         ← Voltar
       </button>

@@ -1,53 +1,65 @@
 import React, { useRef } from 'react';
-import { useNavigate, useLocation } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import './risque-levage.css';
 
 const RisqueLevageEspagnol: React.FC = () => {
   const navigate = useNavigate();
-  const location = useLocation();
-  const audioRef = useRef<HTMLAudioElement | null>(null);
-  const handleBackClick = () => {
-    const returnLang = location.state?.returnLang || 'es';
-    navigate(`/riskeval?lang=${returnLang}`);
+  const audioRef = useRef<HTMLAudioElement>(null);
+
+  const titleTexts: Record<string, string> = {
+    es: 'Riesgo de Elevación',
   };
 
-  const handleAudioClick = () => {
+  // Harmonisation du chemin vers le dossier Espagnol (index 8)
+  const getAudioPath = (index = 8) => {
+    return `/ressources/audios/Espagnol/Espagnol_Diapo_${index}.mp3`;
+  };
+
+  const handleBackClick = () => {
+    navigate(`/riskeval?lang=es`);
+  };
+
+  const speakQuestion = () => {
     if (audioRef.current) {
-      // Si l'audio est en train de jouer, on l'arrête
-      if (!audioRef.current.paused) {
-        audioRef.current.pause();
-        audioRef.current.currentTime = 0;
-        return;
-      }
+      // Attribution de la source audio
+      audioRef.current.src = getAudioPath(8);
+      
+      audioRef.current.play().catch((error) => {
+        console.error("Error de audio detallado:", error);
+        
+        // Fallback con síntesis de voz (es-ES)
+        if ('speechSynthesis' in window) {
+          const text = titleTexts.es;
+          const utterance = new SpeechSynthesisUtterance(text);
+          utterance.lang = 'es-ES';
+          window.speechSynthesis.cancel();
+          window.speechSynthesis.speak(utterance);
+        }
+      });
     }
-    
-    // Créer et jouer le nouvel audio
-    audioRef.current = new Audio('ressources/audios/Espagnol/Espagnol_Diapo_8.mp3');
-    audioRef.current.play().catch(error => {
-      console.error("Erreur lors de la lecture de l'audio:", error);
-    });
   };
 
   return (
     <div className="risque-levage-container">
-      {/* En-tête avec logo et bouton audio */}
+      {/* L'élément audio est prêt, on lui donnera sa source au clic */}
+      <audio ref={audioRef} preload="auto" />
+      
       <header className="risque-levage-header">
-        <button className="audio-button" onClick={handleAudioClick}>
+        <button className="audio-button" onClick={speakQuestion}>
           <img src="/ressources/audio.png" alt="Audio" className="audio-icon" />
-        </button>
+        </button> 
         <div className="logo-container">
-          <img src="/ressources/logo.png" alt="Logo Bouygues" className="logo" />
+          <img src="/ressources/logo.png" alt="Logo" className="logo" />
         </div>
       </header>
 
-      {/* Contenu principal */}
       <main className="risque-levage-content">
         <div className="content-wrapper">
           <div className="image-section">
-            <img src="/ressources/grue.png" alt="Grue" className="grue-image" />
+            <img src="/ressources/grue.png" alt="Elevación" className="grue-image" />
           </div>
           <div className="text-section">
-            <h1>Riesgo de levantar</h1>
+            <h1>{titleTexts.es}</h1>
             <div className="description">
               <p>
                 Peligro asociado a las operaciones de elevación (grúas, polipastos, carros, etc.) que pueden provocar la caída de objetos, aplastamientos o colisiones.
@@ -57,7 +69,6 @@ const RisqueLevageEspagnol: React.FC = () => {
         </div>
       </main>
 
-      {/* Bouton retour */}
       <button className="back-button" onClick={handleBackClick}>
         ← Volver
       </button>

@@ -77,18 +77,23 @@
 }
 
 .bouton-aurevoir {
-    position: absolute;
-    top: 4%;
-    left: 4%;
-    width: 7%;
-    height: auto;
-    padding: 2%;
-    font-size: 1.5rem;
+    position: fixed;
+    top: 1.5rem;
+    left: 1.5rem;
+
+    padding: clamp(0.6rem, 1.2vw, 0.9rem) clamp(1rem, 2vw, 1.6rem);
+    font-size: clamp(0.9rem, 1.4vw, 1.2rem);
+
     background-color: #555;
-    border-radius: 35px;
     color: white;
-    cursor: pointer;
     border: none;
+    border-radius: 999px;
+
+    cursor: pointer;
+    z-index: 1000;
+
+    white-space: nowrap;
+    line-height: 1;
 }
 
 /* Tablette */

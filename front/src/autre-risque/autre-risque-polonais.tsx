@@ -1,59 +1,70 @@
 import React, { useRef } from 'react';
-import { useNavigate, useLocation } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import './autre-risque.css';
 
 const AutreRisquePolonais: React.FC = () => {
   const navigate = useNavigate();
-  const location = useLocation();
   const audioRef = useRef<HTMLAudioElement>(null);
-  const handleBackClick = () => {
-    const returnLang = location.state?.returnLang || 'pl';
-    navigate(`/riskeval?lang=${returnLang}`);
+
+  const titleTexts: Record<string, string> = {
+    pl: 'Inne',
   };
 
+  // Harmonisation du chemin selon le format : Polonais_Diapo_16.mp3
+  const getAudioPath = () => `/ressources/audios/Polonais/Polonais_Diapo_16.mp3`;
 
-  const handleAudioClick = () => {
+  const handleBackClick = () => {
+    navigate(`/riskeval?lang=pl`);
+  };
+
+  const speakQuestion = () => {
     if (audioRef.current) {
-      if (audioRef.current.paused) {
-        audioRef.current.play();
-      } else {
-        audioRef.current.pause();
-      }
+      audioRef.current.src = getAudioPath();
+      
+      audioRef.current.play().catch((error) => {
+        console.error("Błąd odtwarzania dźwięku:", error);
+        
+        // Fallback z syntezą mowy (pl-PL)
+        if ('speechSynthesis' in window) {
+          const text = titleTexts.pl;
+          const utterance = new SpeechSynthesisUtterance(text);
+          utterance.lang = 'pl-PL';
+          window.speechSynthesis.cancel(); 
+          window.speechSynthesis.speak(utterance);
+        }
+      });
     }
   };
 
   return (
     <div className="autre-risque-container">
-      <audio ref={audioRef} src="ressources/audios/Polonais/Polonais Diapo 16 audio.mp3" />
+      <audio ref={audioRef} preload="auto" />
       
-      {/* En-tête avec logo et bouton audio */}
       <header className="autre-risque-header">
-        <button className="audio-button" onClick={handleAudioClick}>
+        <button className="audio-button" onClick={speakQuestion}>
           <img src="/ressources/audio.png" alt="Audio" className="audio-icon" />
-        </button>
+        </button> 
         <div className="logo-container">
-          <img src="/ressources/logo.png" alt="Logo Bouygues" className="logo" />
+          <img src="/ressources/logo.png" alt="Logo" className="logo" />
         </div>
       </header>
 
-      {/* Contenu principal */}
       <main className="autre-risque-content">
         <div className="content-wrapper">
           <div className="image-section">
-            <img src="/ressources/autre.png" alt="Autres risques" className="autre-image" />
+            <img src="/ressources/autre.png" alt="Inne" className="autre-image" />
           </div>
           <div className="text-section">
-            <h1>Innych</h1>
+            <h1>{titleTexts.pl}</h1>
             <div className="description">
               <p>
-                Ryzyko obrażeń z powodu niekontrolowanych źródeł energii (elektrycznej, hydraulicznej, pneumatycznej, termicznej itp)
+                Specyficzne zagrożenia niesklasyfikowane gdzie indziej (obecność azbestu, ruch na budowie, zagrożenia biologiczne itp.)
               </p>
             </div>
           </div>
         </div>
       </main>
 
-      {/* Bouton retour */}
       <button className="back-button" onClick={handleBackClick}>
         ← Wstecz
       </button>

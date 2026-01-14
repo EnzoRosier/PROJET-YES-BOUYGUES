@@ -83,7 +83,7 @@ export default function AdminTickets() {
             if (response.ok) {
                 console.log("Ticket cloturé avec succès");
                 getAllTickets(); // On rafraîchit la liste des tickets
-                navigate('/tickets'); // On retourne à la liste des tickets
+                navigate('/tickets', {state: {from: location.state?.from}}); // On retourne à la liste des tickets
             }
             else {
                 console.log("Erreur lors de la clôture du ticket");
@@ -120,7 +120,7 @@ export default function AdminTickets() {
         <div className="admin-tickets">
         {idTicket && dataTickets && ( // Si on a un id de ticket dans l'URL, on affiche le popup de détail du ticket
             <div className="admin-tickets-popup">
-                <div className="close-popup" onClick={() => navigate('/tickets')}>X</div>
+                <div className="close-popup" onClick={() => navigate('/tickets', {state: {from: location.state?.from}})}>X</div>
                 <h2>Détail du ticket {idTicket}</h2>
                 <div className="date-ticket">Le {dataTickets[idTicket]?.date}</div>
                 <div className="chantier-ticket">Chantier : {dataTickets[idTicket]?.worksite.nom}</div>
@@ -164,7 +164,7 @@ export default function AdminTickets() {
                 <tr
                     key={id}
                     className="table-tickets-row table-tickets-data-row"
-                    onClick={() => navigate(`/tickets/${id}`)}
+                    onClick={() => navigate(`/tickets/${id}`, {state: {from: location.state?.from}})}
                 >
                 <td className="table-tickets-cell">{id}</td>
                 <td className="table-tickets-cell">{infos.reponse}</td>
@@ -178,7 +178,7 @@ export default function AdminTickets() {
         <button className="bouton-retour-accueil-admin" onClick={() => {
             if (location.state?.from === "admin"){navigate('/admin')}
             else if(location.state?.from === "superadmin"){navigate('/super-admin')}
-            else{navigate('/admin')}
+            else{navigate('/Login')}
             }}>Retour</button>
         </div></div>
         );

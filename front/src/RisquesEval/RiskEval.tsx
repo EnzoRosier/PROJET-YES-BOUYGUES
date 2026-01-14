@@ -1,8 +1,9 @@
 import React, { useState, useEffect} from 'react';
-import { useNavigate, useSearchParams } from 'react-router-dom';
+import { Link, useNavigate, useSearchParams } from 'react-router-dom';
 import PopupCommentaire from '../popup-commentaire/popup-commentaire';
 import '../Formulaire/Survey.css';
 import './RiskEval.css';
+import useInactivityTimeout from '../hooks/useInactivityTimeout';
 
 const riskLabels: Record<string, string[]> = {
   fr: [
@@ -88,13 +89,13 @@ const languages = [
 ];
 
 const questionTexts: Record<string, string> = {
-  fr: "Lequel de ces 8 risques est associé à votre humeur ?",
-  en: 'Which of these 8 risks is associated with your mood ?',
-  es: '¿ Cuál de estos 8 riesgos está asociado con tu estado de ánimo ?',
-  pt: 'Qual destes 8 riscos está associado ao seu humor ?',
-  ar: 'أي من هذه المخاطر الثمانية يرتبط بحالتك المزاجية؟',
-  ur: 'ان 8 خطرات میں سے کون سا آپ کے مزاج سے وابستہ ہے؟',
-  pl: 'Które z tych 8 zagrożeń jest związane z Twoim nastrojem ?',
+  fr: "À quel risque, parmi les 8 cités, vous sentez-vous le plus vulnérable ?",
+  en: 'Which of the 8 risks do you feel most vulnerable to?',
+  es: '¿ A cuál de los ocho riesgos se siente más vulnerable ?',
+  pt: 'A qual dos oito riscos se sente mais vulnerável ?',
+  ar: 'أي من المخاطر الثمانية المذكورة تشعر بأنك أكثر عرضة لها؟',
+  ur: 'ان 8 ذکر کردہ 8 خطرات میں سے آپ کو کس کا سب سے زیادہ خطرہ محسوس ہوتا ہے؟',
+  pl: 'Na które z 8 wymienionych zagrożeń czujesz się najbardziej narażony ?',
 };
 
 // Mapping des index de risques vers les URLs 
@@ -128,12 +129,16 @@ export default function RiskEval() {
   const [currentLang, setCurrentLang] = useState('fr');
   const [worksiteId, setWorksiteId] = useState<string | null>(null);
   const audioRef = React.useRef<HTMLAudioElement | null>(null);
+  const ip = window.location.hostname;
+
+  // Redirect to home after 5 minutes (300000ms) of inactivity
+  useInactivityTimeout(5 * 60 * 1000);
 
   // Fetch current worksite id on mount; if missing redirect to admin login
   useEffect(() => {
     const fetchWorksite = async () => {
       try {
-        const res = await fetch('http://localhost:3001/worksite/currentWorksite');
+        const res = await fetch(`http://${ip}:3001/worksite/currentWorksite`);
 
         // Try to read body (JSON or text) regardless of res.ok so we can decide based on content
         let data: any = null;
@@ -178,7 +183,6 @@ export default function RiskEval() {
     };
     fetchWorksite();
   }, [navigate]);
-  const ip = window.location.hostname;
   
   // Recover language from URL on mount
   useEffect(() => {
@@ -193,6 +197,11 @@ export default function RiskEval() {
       if (audioRef.current) {
         audioRef.current.pause();
         audioRef.current = null;
+      }
+      // clear thank-you timer if component unmounts
+      if (thankYouTimerRef.current !== null) {
+        window.clearTimeout(thankYouTimerRef.current);
+        thankYouTimerRef.current = null;
       }
     };
   }, []);
@@ -240,6 +249,21 @@ export default function RiskEval() {
   const [otherText, setOtherText] = useState('');
   const [visible, setVisible] = useState(false);
   const [commentaire, setCommentaire] = useState('');
+
+  // Submission / Thank-you popup state
+  const [submitting, setSubmitting] = useState(false);
+  const [showThankYouModal, setShowThankYouModal] = useState(false);
+  const thankYouTimerRef = React.useRef<number | null>(null);
+
+  const thankYouTexts: Record<string, string> = {
+    fr: "Merci d'avoir répondu au questionnaire !",
+    en: "Thank you for answering the questionnaire!",
+    es: "¡Gracias por responder al cuestionario!",
+    pt: "Obrigado por responder ao questionário!",
+    ar: "شكراً لإجابتك على الاستبيان!",
+    ur: "سوالنامے کا جواب دینے کا شکریہ!",
+    pl: "Dziękujemy za odpowiedź na ankietę!",
+  };
 
   const modalTexts: Record<string, {title:string; message:string; ok:string}> = {
     fr: { title: 'Sélection requise', message: 'Veuillez sélectionner au moins un risque avant de confirmer.', ok: 'OK' },
@@ -323,6 +347,7 @@ export default function RiskEval() {
     }
 
     try {
+      setSubmitting(true);
       const response = await fetch(`http://${ip}:3001/vote/new`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -331,12 +356,20 @@ export default function RiskEval() {
 
       if (response.ok) {
         console.log(`${uiTexts[currentLang]?.success || 'Réponse enregistrée'} : ${reponse}`);
-        navigate(`../?lang=${currentLang}`);
+        // Show a thank-you popup then redirect to home after 3 seconds
+        setShowThankYouModal(true);
+        thankYouTimerRef.current = window.setTimeout(() => {
+          setShowThankYouModal(false);
+          setSubmitting(false);
+          navigate(`/?lang=${currentLang}`);
+        }, 3000);
       } else {
         console.error(uiTexts[currentLang]?.error || 'Erreur lors de l\'envoi');
+        setSubmitting(false);
       }
     } catch (error) {
       console.error('Erreur API:', error);
+      setSubmitting(false);
     }
   }; 
 
@@ -356,6 +389,7 @@ export default function RiskEval() {
     }
   };
 
+  const otherLabel = uiTexts[currentLang]?.other || 'Autres';
 
   return (
     <div className="survey-root">
@@ -384,14 +418,7 @@ export default function RiskEval() {
             </div>
           )}
         </div>
-
-        <button
-          className="admin-btn"
-          aria-label="Connexion administrateur"
-          onClick={() => console.log('Accéder à la connexion admin (à implémenter)')}
-        >
-          <span className="lock">🔒</span>
-        </button>
+        <Link to="../"><button className="home-btn">🏠</button></Link>
       </header>
 
       <main className="survey-main">
@@ -443,12 +470,26 @@ export default function RiskEval() {
           ))}
         </div>
 
-        <div style={{ marginTop: 12 }}>
+        <div style={{ marginTop: 12 }} role="listitem">
           <button
-            className="other-btn"
-            onClick={() => setShowOtherModal(true)}
+            className={`risk-btn ${selectedRisks.includes(otherLabel) ? 'selected' : ''}`}
+            onClick={() => toggleRisk(otherLabel)}
+            aria-pressed={selectedRisks.includes(otherLabel)}
+            aria-label={otherLabel}
           >
-            {uiTexts[currentLang]?.other || 'Autres'}
+            <span className="risk-label">{otherLabel}</span>
+
+            <span
+              role="button"
+              tabIndex={0}
+              className="info-icon"
+              aria-label={`Informations sur ${otherLabel}`}
+              title={`Plus d'informations sur ${otherLabel}`}
+              onClick={(e) => { e.stopPropagation(); navigate(`/autre-risque/${currentLang}`, { state: { returnLang: currentLang } }); }}
+              onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); e.stopPropagation(); navigate(`/autre-risque/${currentLang}`, { state: { returnLang: currentLang } }); } }}
+            >
+              i
+            </span>
           </button>
         </div>
 
@@ -456,6 +497,8 @@ export default function RiskEval() {
           <button
             className="confirm"
             onClick={() => handleConfirm()}
+            disabled={submitting || showThankYouModal}
+            aria-disabled={submitting || showThankYouModal}
           >
             {uiTexts[currentLang]?.confirm || 'Confirmer'}
           </button> 
@@ -464,10 +507,6 @@ export default function RiskEval() {
             {uiTexts[currentLang]?.develop || 'Je développe'}
           </button> 
         </div>
-
-        <button className="back-btn" aria-label={uiTexts[currentLang]?.back || 'Retour'} onClick={() => navigate('/Formulaire')}>
-          ←
-        </button>
 
         <img className="brand-badge brand-badge--inline" src="ressources/Bouygues_bat.png" alt="Bouygues" aria-hidden="true" />
 
@@ -546,6 +585,15 @@ export default function RiskEval() {
                 {otherModalTexts[currentLang]?.confirm || otherModalTexts.fr.confirm}
               </button>
             </div>
+          </div>
+        </div>
+      )}
+
+      {showThankYouModal && (
+        <div className="modal-overlay">
+          <div className="modal" role="dialog" aria-modal="true" aria-label="Merci">
+            <h3>{thankYouTexts[currentLang] || thankYouTexts.fr}</h3>
+            <p>{uiTexts[currentLang]?.success || 'Réponse enregistrée'}</p>
           </div>
         </div>
       )}

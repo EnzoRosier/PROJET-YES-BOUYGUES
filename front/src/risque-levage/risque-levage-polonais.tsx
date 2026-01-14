@@ -1,53 +1,65 @@
 import React, { useRef } from 'react';
-import { useNavigate, useLocation } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import './risque-levage.css';
 
 const RisqueLevagePolonais: React.FC = () => {
   const navigate = useNavigate();
-  const location = useLocation();
-  const audioRef = useRef<HTMLAudioElement | null>(null);
-  const handleBackClick = () => {
-    const returnLang = location.state?.returnLang || 'pl';
-    navigate(`/riskeval?lang=${returnLang}`);
+  const audioRef = useRef<HTMLAudioElement>(null);
+
+  const titleTexts: Record<string, string> = {
+    pl: 'Ryzyko związane z podnoszeniem',
   };
 
-  const handleAudioClick = () => {
+  // Harmonisation du chemin : racine "/" + structure de nommage Polonaise
+  const getAudioPath = (index = 8) => {
+    return `/ressources/audios/Polonais/Polonais_Diapo_${index}.mp3`;
+  };
+
+  const handleBackClick = () => {
+    navigate(`/riskeval?lang=pl`);
+  };
+
+  const speakQuestion = () => {
     if (audioRef.current) {
-      // Si l'audio est en train de jouer, on l'arrête
-      if (!audioRef.current.paused) {
-        audioRef.current.pause();
-        audioRef.current.currentTime = 0;
-        return;
-      }
+      // Attribution de la source audio
+      audioRef.current.src = getAudioPath(8);
+      
+      audioRef.current.play().catch((error) => {
+        console.error("Erreur audio détaillée :", error);
+        
+        // Fallback avec synthèse vocale en cas d'échec
+        if ('speechSynthesis' in window) {
+          const text = titleTexts.pl;
+          const utterance = new SpeechSynthesisUtterance(text);
+          utterance.lang = 'pl-PL';
+          window.speechSynthesis.cancel();
+          window.speechSynthesis.speak(utterance);
+        }
+      });
     }
-    
-    // Créer et jouer le nouvel audio
-    audioRef.current = new Audio('ressources/audios/Polonais/Polonais Diapo 8 audio.mp3');
-    audioRef.current.play().catch(error => {
-      console.error("Erreur lors de la lecture de l'audio:", error);
-    });
   };
 
   return (
     <div className="risque-levage-container">
-      {/* En-tête avec logo et bouton audio */}
+      {/* L'élément audio est prêt, on lui donnera sa source au clic */}
+      <audio ref={audioRef} preload="auto" />
+      
       <header className="risque-levage-header">
-        <button className="audio-button" onClick={handleAudioClick}>
+        <button className="audio-button" onClick={speakQuestion}>
           <img src="/ressources/audio.png" alt="Audio" className="audio-icon" />
-        </button>
+        </button> 
         <div className="logo-container">
-          <img src="/ressources/logo.png" alt="Logo Bouygues" className="logo" />
+          <img src="/ressources/logo.png" alt="Logo" className="logo" />
         </div>
       </header>
 
-      {/* Contenu principal */}
       <main className="risque-levage-content">
         <div className="content-wrapper">
           <div className="image-section">
-            <img src="/ressources/grue.png" alt="Grue" className="grue-image" />
+            <img src="/ressources/grue.png" alt="Podnoszenie" className="grue-image" />
           </div>
           <div className="text-section">
-            <h1>Ryzyko wzrostu</h1>
+            <h1>{titleTexts.pl}</h1>
             <div className="description">
               <p>
                 Niebezpieczeństwo związane z operacjami podnoszenia (dźwigi, wciągniki, wózki itp.), które może prowadzić do spadających przedmiotów, zmiażdżeń lub kolizji.
@@ -57,9 +69,8 @@ const RisqueLevagePolonais: React.FC = () => {
         </div>
       </main>
 
-      {/* Bouton retour */}
       <button className="back-button" onClick={handleBackClick}>
-        ← Wrócić
+        ← Wstecz
       </button>
     </div>
   );

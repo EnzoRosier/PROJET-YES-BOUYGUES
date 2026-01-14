@@ -1,40 +1,61 @@
-import React from 'react';
-import { useNavigate, useLocation } from 'react-router-dom';
+import React, { useRef } from 'react';
+import { useNavigate } from 'react-router-dom';
 import './risque-collision.css';
 
-const RisqueCohesion: React.FC = () => {
+const RisqueCollision: React.FC = () => {
   const navigate = useNavigate();
-  const location = useLocation();
-  
-  const handleBackClick = () => {
-    const returnLang = location.state?.returnLang || 'fr';
-    navigate(`/riskeval?lang=${returnLang}`);
+  const audioRef = useRef<HTMLAudioElement>(null);
+
+  const titleTexts: Record<string, string> = {
+    fr: 'Risque de Collision',
   };
 
-  const handleAudioClick = () => {
-    console.log("Audio button clicked");
+  // Harmonisation du chemin vers le dossier Français (Piste 9)
+  const getAudioPath = () => `/ressources/audios/Français/Français_Diapo_9.mp3`;
+
+  const handleBackClick = () => {
+    navigate(`/riskeval?lang=fr`);
+  };
+
+  const speakQuestion = () => {
+    if (audioRef.current) {
+      audioRef.current.src = getAudioPath();
+      
+      audioRef.current.play().catch((error) => {
+        console.error("Erreur audio détaillée :", error);
+        
+        if ('speechSynthesis' in window) {
+          const text = titleTexts.fr;
+          const utterance = new SpeechSynthesisUtterance(text);
+          utterance.lang = 'fr-FR';
+          window.speechSynthesis.cancel(); 
+          window.speechSynthesis.speak(utterance);
+        }
+      });
+    }
   };
 
   return (
+    /* Utilisation des classes "cohesion" pour correspondre à votre CSS fonctionnel */
     <div className="risque-cohesion-container">
-      {/* En-tête avec logo et bouton audio */}
+      <audio ref={audioRef} preload="auto" />
+      
       <header className="risque-cohesion-header">
-        <button className="audio-button" onClick={handleAudioClick}>
+        <button className="audio-button" onClick={speakQuestion}>
           <img src="/ressources/audio.png" alt="Audio" className="audio-icon" />
-        </button>
+        </button> 
         <div className="logo-container">
-          <img src="/ressources/logo.png" alt="Logo Bouygues" className="logo" />
+          <img src="/ressources/logo.png" alt="Logo" className="logo" />
         </div>
       </header>
 
-      {/* Contenu principal */}
       <main className="risque-cohesion-content">
         <div className="content-wrapper">
           <div className="image-section">
-            <img src="/ressources/cohesion.png" alt="Cohésion d'équipe" className="cohesion-image" />
+            <img src="/ressources/cohesion.png" alt="Collision" className="cohesion-image" />
           </div>
           <div className="text-section">
-            <h1>Risque de Collision</h1>
+            <h1>{titleTexts.fr}</h1>
             <div className="description">
               <p>
                 Dû à la circulation simultanée des engins, des véhicules et des piétons dans des zones parfois restreintes, ce qui peut entraîner des chocs en cas de manque de visibilité ou de coordination. 
@@ -44,7 +65,6 @@ const RisqueCohesion: React.FC = () => {
         </div>
       </main>
 
-      {/* Bouton retour */}
       <button className="back-button" onClick={handleBackClick}>
         ← Retour
       </button>
@@ -52,4 +72,4 @@ const RisqueCohesion: React.FC = () => {
   );
 };
 
-export default RisqueCohesion;
+export default RisqueCollision;

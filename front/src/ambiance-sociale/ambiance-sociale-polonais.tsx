@@ -1,49 +1,65 @@
 import React, { useRef } from 'react';
-import { useNavigate, useLocation } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import './ambiance-sociale.css';
 
 const AmbianceSocialePolonais: React.FC = () => {
   const navigate = useNavigate();
-  const location = useLocation();
   const audioRef = useRef<HTMLAudioElement>(null);
-  const handleBackClick = () => {
-    const returnLang = location.state?.returnLang || 'pl';
-    navigate(`/riskeval?lang=${returnLang}`);
+
+  const titleTexts: Record<string, string> = {
+    pl: 'Środowisko społeczne',
   };
 
+  // Harmonisation du chemin vers le dossier Polonais (index 13)
+  const getAudioPath = (index = 13) => {
+    return `/ressources/audios/Polonais/Polonais_Diapo_${index}.mp3`;
+  };
 
-  const handleAudioClick = () => {
+  const handleBackClick = () => {
+    navigate(`/riskeval?lang=pl`);
+  };
+
+  const speakQuestion = () => {
     if (audioRef.current) {
-      if (audioRef.current.paused) {
-        audioRef.current.play();
-      } else {
-        audioRef.current.pause();
-      }
+      // Attribution de la source audio
+      audioRef.current.src = getAudioPath(13);
+      
+      audioRef.current.play().catch((error) => {
+        console.error('Błąd audio :', error);
+        
+        // Fallback z syntezą mowy (pl-PL)
+        if ('speechSynthesis' in window) {
+          const text = titleTexts.pl;
+          const utterance = new SpeechSynthesisUtterance(text);
+          utterance.lang = 'pl-PL';
+          window.speechSynthesis.cancel(); // Czyści poprzednie nagrania
+          window.speechSynthesis.speak(utterance);
+        }
+      });
     }
   };
 
   return (
     <div className="ambiance-sociale-container">
-      <audio ref={audioRef} src="ressources/audios/Polonais/Polonais Diapo 13 audio.mp3" />
+      {/* Element audio przygotowany do interakcji */}
+      <audio ref={audioRef} preload="auto" />
       
-      {/* En-tête avec logo et bouton audio */}
       <header className="ambiance-sociale-header">
-        <button className="audio-button" onClick={handleAudioClick}>
+        <button className="audio-button" onClick={speakQuestion}>
           <img src="/ressources/audio.png" alt="Audio" className="audio-icon" />
-        </button>
+        </button> 
         <div className="logo-container">
-          <img src="/ressources/logo.png" alt="Logo Bouygues" className="logo" />
+          <img src="/ressources/logo.png" alt="Logo" className="logo" />
         </div>
       </header>
 
-      {/* Contenu principal */}
       <main className="ambiance-sociale-content">
         <div className="content-wrapper">
           <div className="image-section">
-            <img src="/ressources/social.png" alt="Ambiance sociale" className="social-image" />
+            <img src="/ressources/social.png" alt="Środowisko społeczne" className="social-image" />
           </div>
           <div className="text-section">
-            <h1>Środowisko społeczne</h1>
+            <h1>{titleTexts.pl}</h1>
             <div className="description">
               <p>
                 Ryzyko napięć, stresu lub konfliktów między pracownikami, które mogą zaszkodzić bezpieczeństwu i wydajności zespołowej
@@ -53,7 +69,6 @@ const AmbianceSocialePolonais: React.FC = () => {
         </div>
       </main>
 
-      {/* Bouton retour */}
       <button className="back-button" onClick={handleBackClick}>
         ← Wstecz
       </button>
