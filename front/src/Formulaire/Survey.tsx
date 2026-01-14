@@ -35,12 +35,14 @@ export default function Survey() {
   const [langOpen, setLangOpen] = useState(false);
   const [currentLang, setCurrentLang] = useState('fr');
   const [worksiteId, setWorksiteId] = useState<string | null>(null);
+  const ip = window.location.hostname;
+
 
   // Fetch current worksite id on mount; if missing, redirect to admin login
   useEffect(() => {
     const fetchWorksite = async () => {
       try {
-        const res = await fetch('http://localhost:3001/worksite/currentWorksite');
+        const res = await fetch(`http://${ip}:3001/worksite/currentWorksite`);
 
         // Try to read body (JSON or text) regardless of res.ok so we can decide based on content
         let data: any = null;
@@ -111,7 +113,6 @@ export default function Survey() {
 
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const navigate = useNavigate();
-  const ip = window.location.hostname;
 
   useEffect(() => {
     return () => {
@@ -185,7 +186,6 @@ export default function Survey() {
       commentaire: commentaire,
       date: today,
       worksiteId: worksiteId,
-      dateCloture: ""
     };
 
     if (!worksiteId) {
@@ -202,7 +202,7 @@ export default function Survey() {
       });
 
       if (response.ok) {
-        console.log(`'Réponse enregistrée'} : ${response}`);
+        console.log("Réponse enregistrée :", response);
         // Preserve selected language when navigating to RiskEval
         navigate(`../riskeval?lang=${currentLang}`);
       } else {
