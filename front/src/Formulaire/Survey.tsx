@@ -186,7 +186,6 @@ export default function Survey() {
       commentaire: commentaire,
       date: today,
       worksiteId: worksiteId,
-      dateCloture: ""
     };
 
     if (!worksiteId) {
@@ -203,7 +202,7 @@ export default function Survey() {
       });
 
       if (response.ok) {
-        console.log(`'Réponse enregistrée'} : ${response}`);
+        console.log("Réponse enregistrée :", response);
         // Preserve selected language when navigating to RiskEval
         navigate(`../riskeval?lang=${currentLang}`);
       } else {
