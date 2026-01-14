@@ -22,7 +22,7 @@ export class VoteRepository {
     return this.voteRepository.find();
   }
 
-  //récupère un worksite par son ID
+  //récupère un vote par son ID
   public async getVoteById(id: string): Promise<VoteModel | null> {
     return this.voteRepository.findOneOrFail({
       where: { id },
@@ -89,6 +89,7 @@ export class VoteRepository {
     return returnedVote;
   }
 
+  //repond au ticket
   public async respondToTicket(input: RespondVoteDto): Promise<VoteModel> {
     const vote = await this.voteRepository.findOne({
       where:{id:input.idVote}
@@ -102,7 +103,7 @@ export class VoteRepository {
     return this.voteRepository.save(vote)
   }
 
-  //récupère tout les vote d'un worksite
+  //récupère tout les stats d'un worksite
   public async getStatOf(id: string, input: GetStatWorksiteDto): Promise<StatsWorksiteModel> {
     const worksite = await this.worksiteRepository.findOne({
       where: { id: id },

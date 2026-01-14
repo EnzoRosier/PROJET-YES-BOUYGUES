@@ -38,6 +38,7 @@ export declare class ChangeRespoChantierDto {
   idAdmin: string;
 }
 
+//reset jour sans accident
 export declare class ResetJourAccidentDto {
   @IsString()
   idWorksite: string;
@@ -76,6 +77,7 @@ export declare class UpdateAdminDto {
   adminIds: string[];
 }
 
+//Set curr worksite
 export declare class SetCurrentWorksiteDto {
   @IsString()
   worksiteId: string;

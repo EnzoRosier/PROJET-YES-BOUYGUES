@@ -13,6 +13,7 @@ import { UpdateResult } from 'typeorm';
 export class AdminController {
   constructor(private readonly adminService: AdminService) {}
 
+  //Requete qui liste tous les admins
   @Get()
   public async listAdmins(
     @Req() req
@@ -24,21 +25,20 @@ export class AdminController {
     return this.adminService.getAdmins(req);
   }
 
+  //Requete cree un utilisateur
   @Post()
   public async createAdmin(
-    @Body() input: CreateAdminDto,
-  ): Promise<CreateAdminModel> {
-    return this.adminService.createAdmin(input);
-  }
-
-  @Post()
-  public async updateAdmin(
     @Req() req,
     @Body() input: CreateAdminDto,
   ): Promise<CreateAdminModel> {
-    return this.adminService.createAdmin(input);
+    const token = req.cookies?.access_token;
+    if (!token) {
+      throw new UnauthorizedException();
+    }
+    return this.adminService.createAdmin(input, token);
   }
 
+  //Requete qui permet de se connecter en tant qu'administrateur
   @Post('login')
   @Throttle({ default: { limit: 3, ttl: 60000 } })
   async login(
@@ -58,6 +58,7 @@ export class AdminController {
     return { success: true };
   }
 
+  //Requete qui renvoie les infos en fonction d'un token
   @Get('me')
   async me(@Req() req): Promise<MeModel> {
     const token = req.cookies?.access_token;
@@ -67,6 +68,7 @@ export class AdminController {
     return this.adminService.getMeFromToken(token);
   }
 
+  //Requete qui supprime un administrateur
   @Post('delete/:id')
   public async deleteAdmin(@Param('id') id: string, @Req() req): Promise<void> {
     const token = req.cookies?.access_token;
@@ -76,6 +78,7 @@ export class AdminController {
     return this.adminService.deleteAdmin(id, token);
   }
 
+  //REquete qui met un jour un administrateur
   @Post('edit/:id')
   public async editAdmin(@Param('id') id: string, @Req() req, @Body() input: UpdateAdminDto): Promise<AdminModel | null> {
     const token = req.cookies?.access_token;
@@ -85,6 +88,7 @@ export class AdminController {
     return this.adminService.editAdmin(id,input, token);
   }
 
+  //Requete pour recupere les infos d'un admin avec son Id
   @Get(':id')
   public async getAdmin(@Param('id') id: string, @Req() req): Promise<AdminModel | null> {
     const token = req.cookies?.access_token;

@@ -34,8 +34,8 @@ export class AdminRepository {
 
   //création d'un admin
   public async createAdmin(admin: CreateAdminModel, worksistes: WorksiteEntity[]): Promise<AdminModel> {
-    // Maintenant on peut créer une nouvelle entrée d'un admin et la sauvegarder
-
+    
+    //cryptage
     const saltRounds=12;
     const hashedPassword = await bcrypt.hash(admin.password, saltRounds);
     //var hashedPassword = admin.password;
@@ -52,6 +52,8 @@ export class AdminRepository {
 
     return returnedAdmin;
   }
+
+  //trouve un admin par son mail
   public async findByMail(mail: string) {
     mail = mail.toLowerCase()
     return this.adminRepository.findOne({
@@ -59,7 +61,9 @@ export class AdminRepository {
     });
   }
 
+  //Change infos compte admin
   async editAdmin(id: string, input: UpdateAdminDto, worksites: WorksiteEntity[]): Promise<AdminModel> {
+    //Crypte le mdp si jamais il doit etre modif
     if (input.password) {
       const saltRounds=12;
       const hashedPassword = await bcrypt.hash(input.password, saltRounds);
@@ -82,6 +86,7 @@ export class AdminRepository {
     return await this.getAdminById(id)
   }
 
+  //Suprr un admin
   async deleteAdmin(id: string) : Promise<void> {
     await this.adminRepository.delete(id)
   }

@@ -21,7 +21,7 @@ export type CreateAdminModel = {
   worksitesId?: string[];
 };
 
-// modèle pour créer un admin
+// modèle pour info avec token
 export type MeModel = {
   id: string;
   mail: string;
