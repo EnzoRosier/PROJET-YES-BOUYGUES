@@ -112,9 +112,7 @@ const DonutChart: React.FC<DonutChartProps> = ({
               />
             )}
           </g>
-))}
-
-        
+))}        
         {/* Cercle blanc au centre (trou du donut) */}
         <circle
           cx={center}

@@ -6,18 +6,13 @@ import html2canvas from 'html2canvas';
 import jsPDF from 'jspdf';
 
 export default function Stats() {
+  //initialisation des graphes et variables
   const location = useLocation();
-  // @ts-ignore (Si idChantier pose problème de type, sinon laissez tel quel)
   const idChantier = location.state?.idChantier || null;
   const navigate = useNavigate();
   const ip = window.location.hostname;
-  
-  // CORRECTION 1 : Typage précis de la référence (HTMLDivElement)
   const statsRef = useRef<HTMLDivElement>(null);
-  
-  // CORRECTION 2 : Typage du state (peut être null OU boolean)
   const [loggedIn, setLoggedIn] = useState<boolean | null>(null);
-  
   const [donutChartData, setDonutChartData] = useState([
     { label: 'Satisfait', value: 0, color: '#34A853' },
     { label: 'Neutre', value: 0, color: '#FBBC05' },
@@ -49,6 +44,7 @@ export default function Stats() {
   const totalRisksLastWeek = useRef(0);
   const worksiteName = useRef<string>('');
   
+  //Fonction d'export des stats sous format PDF
   const handleExportPDF = async () => {
     const input = statsRef.current;
     if (!input) return;
@@ -78,7 +74,7 @@ export default function Stats() {
     }
   };
 
-  // CORRECTION 3 : Ajout du type ': Date'
+  //Fonction de formatage de date en YYYY-MM-DD
   const formatDateYYYYMMDD = (date: Date) => {
     const year = date.getFullYear();
     const month = String(date.getMonth() + 1).padStart(2, '0');
@@ -86,7 +82,7 @@ export default function Stats() {
     return `${year}-${month}-${day}`;
   };
   
-  // CORRECTION 4 : Ajout du type ': string'
+  //Fonction de calcul de la date de récupération des données en fonction de la période sélectionnée
   const calculateStartDate = (range: string) => {
     const today = new Date();
     const start = new Date();
@@ -108,6 +104,7 @@ export default function Stats() {
     return formatDateYYYYMMDD(start);
   };
   
+  //Fonction de vérification de la connexion admin 
   const checkLoggedIn = async () => {
     try {
       const response = await fetch(`http://${ip}:3001/admins/me`, {
@@ -117,10 +114,10 @@ export default function Stats() {
       if (response.ok) {
         const me = await response.json();
         if(me != null){
-          setLoggedIn(true); // Maintenant TypeScript accepte 'true'
+          setLoggedIn(true); 
         }
       } else {
-        setLoggedIn(false); // Et 'false'
+        setLoggedIn(false); 
       }
     } catch (error) {
       console.log('Erreur lors de la vérification de la connexion');
@@ -128,6 +125,7 @@ export default function Stats() {
     }
   };
 
+  //Fonction pour récupérer le nom du chantier
   const getWorksiteInfos = async () => {
     if (!idChantier) return;
     try {
@@ -145,7 +143,8 @@ export default function Stats() {
       console.error("Erreur lors de la récupération des infos chantier :", error);
     }
   };
-  // CORRECTION 5 : Valeur par défaut typée
+
+  //Fonction pour récupérer les stats du chantier pour les diagrammes
   const getWorksiteStats = async (period: string = 'week') => {
     if (!idChantier) return;
     try {
@@ -165,7 +164,6 @@ export default function Stats() {
       );
       
       if (response.ok) {
-        // Typage générique 'any' pour la réponse API pour éviter les erreurs de structure
         const stats: any = await response.json();
         console.log("Statistiques reçues :", stats);
         
@@ -217,6 +215,8 @@ export default function Stats() {
     }
   };
   
+
+  //Use effects pour charger les données au premier chargement de la page
   useEffect(() => {
     checkLoggedIn();
     if (idChantier) {
@@ -228,15 +228,13 @@ export default function Stats() {
   useEffect(() => {
     getWorksiteInfos();
   }, []);
-  // CORRECTION 6 : Typage string
   const handlePeriodChange = (period: string) => {
     setDateRange(period);
     getWorksiteStats(period);
   };
   
-  // CORRECTION 7 : Typage du tableau de données (any[] pour faire simple)
+  //Fonction de calcul de l'échelle adaptative pour l'affichage du graphique en barres
   const calculateAdaptiveScale = (data: any[]) => {
-    // CORRECTION 8 : Typage de l'item dans le map
     const maxValue = Math.max(...data.map((item: any) => item.value));
     const intervals = [1, 2, 5, 10, 20, 25, 50, 100];
     let scaleMax = 100;
@@ -259,6 +257,7 @@ export default function Stats() {
     return (<Navigate to="/login" replace />);
   } 
   
+  //Contenu principal de la page stats
   return (
     <div className="stats" ref={statsRef}>
       <header className="stats-header">
@@ -270,6 +269,7 @@ export default function Stats() {
         </div>
       </header>
       
+      {/*Boutons de sélection de la période*/}
       <div className="period-selector">
         <button 
           className={`period-btn ${dateRange === 'week' ? 'active' : ''}`}
@@ -294,6 +294,7 @@ export default function Stats() {
       <div className="stats-content">
         <section className="chart-section">
           <div className="chart-container">            
+            {/* Diagramme en donut pour les humeurs */}
             <div className="chart-wrapper">
               <h3>Répartition des humeurs ({dateRange === 'week' ? '7j' : dateRange === '2weeks' ? '14j' : '30j'})</h3>
               <DonutChart 
@@ -304,6 +305,7 @@ export default function Stats() {
               />
             </div>
             
+            {/* Graphique en barres pour les risques signalés */}
             <div className="mini-chart">
               <h3>Répartition des risques signalés ({dateRange === 'week' ? '7j' : dateRange === '2weeks' ? '14j' : '30j'})</h3>
               <div className="bar-chart-with-axis">
@@ -351,6 +353,7 @@ export default function Stats() {
           </div>
         </section>
         
+        {/*Boutons de retour et d'export PDF*/}
         <button className="bouton-retour-stats" onClick={() => { 
             if (location.state?.from === "admin") navigate('/admin');
             else if(location.state?.from === "superadmin") navigate('/super-admin');
