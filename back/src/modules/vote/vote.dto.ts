@@ -38,6 +38,7 @@ export declare class GetAllVotesWorksiteDto {
   idWorksite: string;
 }
 
+//recup stat worksite
 export declare class GetStatWorksiteDto {
   @IsDate()
   date: Date;

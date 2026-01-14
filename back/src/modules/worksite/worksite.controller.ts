@@ -9,11 +9,13 @@ import { AppConfigModel } from '../appconfig/appconfig.model';
 export class WorksiteController {
   constructor(private readonly worksiteService: WorksiteService) {}
 
+  //REquete qui Recup list des worksite
   @Get()
   public async listWorksite(): Promise<WorksiteModel[]> {
     return this.worksiteService.getWorksites();
   }
-
+  
+  //REquete pour cree un worksite
   @Post('new')
   public async createWorksite(
     @Body() input: CreateWorksiteDto,
@@ -26,6 +28,7 @@ export class WorksiteController {
     return this.worksiteService.createWorksite(input, req);
   }
 
+  //REquete qui set le worksite choisis
   @Post('currentWorksite')
   public async setCurrWorksite(
     @Body() input: SetCurrentWorksiteDto,
@@ -38,11 +41,13 @@ export class WorksiteController {
     return this.worksiteService.setCurrWorksite(input, req);
   }
 
+  //REquete qui recup le worksite choisis
   @Get('currentWorksite')
   public async getCurrWorksite(): Promise<AppConfigModel | null> {
     return this.worksiteService.getCurrWorksite();
   }
 
+  //Requete qui permet de changer les respos du site
   @Post('changeRespo')
   public async changeRespoChantier(
     @Body() input: ChangeRespoChantierDto,
@@ -51,6 +56,7 @@ export class WorksiteController {
     return this.worksiteService.changeRespoChantier(input, req);
   }
 
+  //REquete qui reset les jours sans accident d'un site
   @Get('resetAccident/:id')
   public async resetJourAccident(
     @Param('id') id: string,
@@ -59,6 +65,7 @@ export class WorksiteController {
     return this.worksiteService.resetJourAccident(id, req);
   }
 
+  //Requete qui recupere les infos d'un site grace a son id
   @Get(':id')
   public async getWorksiteById(
     @Param('id') id: string,

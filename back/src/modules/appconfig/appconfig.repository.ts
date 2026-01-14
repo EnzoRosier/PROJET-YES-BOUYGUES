@@ -10,22 +10,26 @@ export class AppConfigRepository {
 
   constructor(private readonly dataSource: DataSource) {}
 
+  //Récupere toute les app configs
   public async getAll(): Promise<AppConfigModel[]> {
     return this.appConfigRepository.find();
   }
 
+  //Recupere une app config grace a sa cle
   public async getValue(key: string): Promise<AppConfigModel | null> {
     return this.appConfigRepository.findOne({
       where: { key: key }
     });
   }
 
+  //Cree une app config
   public async create(
     newConfig: AppConfigModel
   ): Promise<AppConfigModel> {
     return await this.appConfigRepository.save(newConfig)
   }
 
+  //Change la valeur d'une app config
   public async set(
     newConfig: AppConfigModel
   ): Promise<AppConfigModel> {
