@@ -129,6 +129,7 @@ export default function RiskEval() {
   const [currentLang, setCurrentLang] = useState('fr');
   const [worksiteId, setWorksiteId] = useState<string | null>(null);
   const audioRef = React.useRef<HTMLAudioElement | null>(null);
+  const ip = window.location.hostname;
 
   // Redirect to home after 5 minutes (300000ms) of inactivity
   useInactivityTimeout(5 * 60 * 1000);
@@ -137,7 +138,7 @@ export default function RiskEval() {
   useEffect(() => {
     const fetchWorksite = async () => {
       try {
-        const res = await fetch('http://localhost:3001/worksite/currentWorksite');
+        const res = await fetch(`http://${ip}:3001/worksite/currentWorksite`);
 
         // Try to read body (JSON or text) regardless of res.ok so we can decide based on content
         let data: any = null;
@@ -182,7 +183,6 @@ export default function RiskEval() {
     };
     fetchWorksite();
   }, [navigate]);
-  const ip = window.location.hostname;
   
   // Recover language from URL on mount
   useEffect(() => {
