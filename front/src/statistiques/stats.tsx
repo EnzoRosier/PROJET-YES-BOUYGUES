@@ -1,7 +1,7 @@
 import './stats.css';
 import DonutChart from './donutDiag';
 import { Navigate, useLocation, useNavigate } from 'react-router-dom';
-import React, { useEffect, useState, useRef } from 'react';
+import { useEffect, useState, useRef, use } from 'react';
 import html2canvas from 'html2canvas';
 import jsPDF from 'jspdf';
 
@@ -47,6 +47,7 @@ export default function Stats() {
   
   const totalVotesLastWeek = useRef(0);
   const totalRisksLastWeek = useRef(0);
+  const worksiteName = useRef<string>('');
   
   const handleExportPDF = async () => {
     const input = statsRef.current;
@@ -126,11 +127,27 @@ export default function Stats() {
       setLoggedIn(false);
     }
   };
-  
+
+  const getWorksiteInfos = async () => {
+    if (!idChantier) return;
+    try {
+      const response = await fetch(`http://${ip}:3001/worksite/${idChantier}`, {
+        method: 'GET',
+        credentials: 'include',
+      });
+      if (response.ok) {
+        const worksite = await response.json();
+        console.log("Infos chantier :", worksite);
+        worksiteName.current = worksite.nom || '';
+      }
+    }
+    catch (error) {
+      console.error("Erreur lors de la récupération des infos chantier :", error);
+    }
+  };
   // CORRECTION 5 : Valeur par défaut typée
   const getWorksiteStats = async (period: string = 'week') => {
     if (!idChantier) return;
-    
     try {
       const startDate = calculateStartDate(period);
       
@@ -208,6 +225,9 @@ export default function Stats() {
     }
   }, [idChantier]);
   
+  useEffect(() => {
+    getWorksiteInfos();
+  }, []);
   // CORRECTION 6 : Typage string
   const handlePeriodChange = (period: string) => {
     setDateRange(period);
@@ -243,7 +263,7 @@ export default function Stats() {
     <div className="stats" ref={statsRef}>
       <header className="stats-header">
         <img src="/ressources/Logo.png" alt="Logo" className="logo" />
-        <h1>Statistiques du chantier</h1>
+        <h1>Statistiques du chantier {worksiteName.current}</h1>
         <div className="stats-recap">
           <h2>Nombre de votes sur la dernière semaine : {totalVotesLastWeek.current}</h2>
           <h2>Nombre de risques signalés sur la dernière semaine : {totalRisksLastWeek.current}</h2>
