@@ -135,7 +135,6 @@ export default function Stats() {
       });
       if (response.ok) {
         const worksite = await response.json();
-        console.log("Infos chantier :", worksite);
         worksiteName.current = worksite.nom || '';
       }
     }
@@ -150,7 +149,6 @@ export default function Stats() {
     try {
       const startDate = calculateStartDate(period);
       
-      console.log(`Récupération des stats à partir du ${startDate} (${period})`);
       const response = await fetch(
         `http://${ip}:3001/vote/getStatsOf/${idChantier}`, 
         {
@@ -165,7 +163,6 @@ export default function Stats() {
       
       if (response.ok) {
         const stats: any = await response.json();
-        console.log("Statistiques reçues :", stats);
         
         const bien = stats.questionHumeur?.bien || 0;
         const moyen = stats.questionHumeur?.moyen || 0;
@@ -220,7 +217,6 @@ export default function Stats() {
   useEffect(() => {
     checkLoggedIn();
     if (idChantier) {
-      console.log("Chargement des stats pour le chantier :", idChantier);
       getWorksiteStats('week');
     }
   }, [idChantier]);
