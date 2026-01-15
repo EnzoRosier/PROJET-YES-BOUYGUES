@@ -270,14 +270,17 @@
   opacity: 0.98;
 }
 
-@media (max-width: 480px) {
+@media (max-width: 425px) {
   .brand-badge {
-    width: 175px;
-    bottom: 12px;
-    left: 50%;
+    position: fixed; 
+    left: 50%; 
     transform: translateX(-50%);
+    bottom: 12px;
+    margin: 0;
+    width: 150px; 
   }
 }
+
 .modal h3 {
   margin: 0 0 8px 0;
   color: #e36414;
