@@ -21,6 +21,25 @@ function getLocalIp(): string | null {
   return null;
 }
 
+function getWifiIP() {
+  const interfaces = os.networkInterfaces();
+
+  for (const name in interfaces) {
+    if (/wi/i.test(name)) {
+      const addrs = interfaces[name];
+      if (!addrs) continue;
+
+      for (const addr of addrs) {
+        if (addr.family === 'IPv4' && !addr.internal) {
+          return addr.address; 
+        }
+      }
+    }
+  }
+
+  return null; 
+}
+
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
@@ -31,7 +50,7 @@ async function bootstrap() {
     origin: (origin, callback) => {
       if (!origin) return callback(null, true)
 
-      if (origin.startsWith(`http://${localIp}`) ||
+      if (origin.startsWith(`http://${getWifiIP()}`) ||
         origin.startsWith(`http://localhost`)) {
           return callback(null, true)
       }
